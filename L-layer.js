@@ -37,5 +37,7 @@ L.objects.Layer.prototype.isClicked = function(mouseX,mouseY)
     }
 };
 
-
-
+L.objects.Layer.prototype.addObject = function(object)
+{
+    this.objects.push(object);
+};
