@@ -51,7 +51,7 @@ L.objects.Sprite = function(textureName, options)
     this.alpha = (options && options.alpha) ? options.alpha : 1;
     this.blendMode = "";
     
-    this.onClick = function(){alert("Clicked!");};
+    this.onClick = function(){};
 
     this.currentAnimation = "default";
     this.currentFrame = 0;
@@ -78,6 +78,11 @@ L.objects.Sprite = function(textureName, options)
 
 L.objects.Sprite.prototype.draw = function(layer)
 {
+  this.autoDraw(layer);  
+};
+
+L.objects.Sprite.prototype.autoDraw = function(layer)
+{
     layer.globalAlpha = this.alpha;
     if (this.alpha > 0.0 && this.visible)
     {
@@ -97,8 +102,13 @@ L.objects.Sprite.prototype.draw = function(layer)
     }
 };
 
-
 L.objects.Sprite.prototype.update = function()
+{
+    this.autoUpdate();
+};
+
+
+L.objects.Sprite.prototype.autoUpdate = function()
 {
     //alert(this.landingTime);
     
