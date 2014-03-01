@@ -6,7 +6,7 @@
 
 
 
-Array.prototype.mapQuick = function(closure)
+Array.prototype.mapQuick = function(callback)
 {
 
 
@@ -14,7 +14,7 @@ Array.prototype.mapQuick = function(closure)
 
     for (var i = 0; i < length; i++)
     {
-	closure(this[i], i);
+	callback(this[i], i);
     }
     //return this;
 };
