@@ -3,7 +3,8 @@ var L;
 L.objects.Layer = function(targetContext)
 {
     this.sorted = false;
-    this.sortBy = "z";
+    this.sortBy = "energy";
+    this.sortOrder = 1;
     this.objects = [];
     this.targetContext = targetContext;
     this.layerAlpha = 1;

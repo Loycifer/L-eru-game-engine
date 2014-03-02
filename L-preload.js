@@ -1,10 +1,26 @@
-/* 
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
+
+Array.prototype.copy = function()
+{
+ 
+    return this.slice(0);
+};
+
+Array.prototype.copy2 = function()
+{
 
 
+
+    var length = this.length;
+    var arrayCopy = [];
+    for (var i = 0; i < length; i++)
+    {
+	if (this[i].isArray)
+	{
+	    arrayCopy[i] = this[i].copy2();
+	} 
+    }
+    return arrayCopy.slice(0);
+};
 
 Array.prototype.mapQuick = function(callback)
 {
@@ -76,25 +92,30 @@ Array.prototype.isClicked = function(mouseX, mouseY)
 
     var length = this.length;
 
-    for (var i = 0; i < length; i++)
+    for (var i = length-1; i >= 0; i--)
     {
+
+	if (this[i].isClicked(mouseX, mouseY))
+	{
+	    return true;
+	}
 	
-	this[i].isClicked(mouseX, mouseY);
+	
     }
     //return this;
 };
-
-Number.prototype.clamp = function(min, max) {
-  return Math.min(Math.max(this, min), max);
-};
-
-Number.prototype.isBetween = function (min, max)
-{
-  return (this === this.clamp(min,max));  
-};
-
-
-
+/*
+ Number.prototype.clamp = function(min, max) {
+ return Math.min(Math.max(this, min), max);
+ };
+ 
+ Number.prototype.isBetween = function (min, max)
+ {
+ return (this === this.clamp(min,max));  
+ };
+ 
+ 
+ */
 
 Math.degToRad = function(deg)
 {

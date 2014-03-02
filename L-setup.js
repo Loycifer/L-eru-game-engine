@@ -25,15 +25,19 @@ L.system.setup = function()
     L.system.canvasY = L.system.renderCanvas[0].offsetTop;
 
 
+    L.system.handleClick = function(e)
+    {
+	
+	var mouseX = e.pageX - L.system.canvasX;
+	var mouseY = e.pageY - L.system.canvasY;
+	L.system.currentScene.isClicked(mouseX, mouseY);
+    };
+
     L.system.renderCanvas[0].addEventListener
 	    (
 		    'click',
-		    function(e)
-		    {
-			var mouseX = e.pageX - L.system.canvasX;
-			var mouseY = e.pageY - L.system.canvasY;
-			L.system.currentScene.isClicked(mouseX, mouseY);
-		    }
-	    );
+		    L.system.handleClick
+
+		    );
 
 };

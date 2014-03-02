@@ -3,9 +3,9 @@ L.objects = {};
 L.objects.Sprite = function(textureName, options)
 {
     this.animations = {};
-    this.animations.default = {};
-    this.animations.default[0] = {img: L.texture[textureName], length: 1000};
-    if (this.animations.default[0].img)
+    this.animations.idle = {};
+    this.animations.idle[0] = {img: L.texture[textureName], length: 1000};
+    if (this.animations.idle[0].img)
     {
 	L.whisper("Created Sprite from texture \"" + textureName + "\".");
     }
@@ -13,8 +13,8 @@ L.objects.Sprite = function(textureName, options)
     this.y = (options && options.y) ? options.y : 0;
     this.z = (options && options.z) ? options.z : 0;
 
-    this.width = (options && options.width) ? options.width : this.animations.default[0].img.width;
-    this.height = (options && options.height) ? options.height : this.animations.default[0].img.height;
+    this.width = (options && options.width) ? options.width : this.animations.idle[0].img.width;
+    this.height = (options && options.height) ? options.height : this.animations.idle[0].img.height;
 
     this.center = {};
     this.center.x = this.width / 2;
@@ -27,10 +27,21 @@ L.objects.Sprite = function(textureName, options)
     this.offset = {};
     this.offset.x = 0;
     this.offset.y = 0;
-
+    
+    this.nudeTop = 0 - this.handle.y;
+    this.nudeLeft = 0 - this.handle.x;
+    this.nudeRight = this.nudeLeft + this.width;
+    this.nudeBottom = this.nudeTop + this.height;
+    this.nudeTopLeft = [this.nudeLeft,this.nudeTop];
+    this.nudeTopRight = [this.nudeRight, this.nudeTop];
+    this.nudeBottomLeft = [this.nudeLeft, this.nudeBottom];
+    this.nudeBottomRight = [this.nudeRight, this.nudeBottom];
+    this.nudeVertices = [this.nudeTopLeft, this.nudeTopRight, this.nudeBottomRight, this.nudeBottomLeft];
+    this.vertices = new Array(this.nudeVertices.length);
+    
     this.angle = (options && options.angle) ? options.angle : 0;
-    this.rotation = (options && options.rotation) ? options.rotation : 0;
-    this.speedX = 20;
+    this.rotation = (options && options.rotation) ? options.rotation : 0.1;
+    this.speedX = 0;
     this.speedY = 0;
     this.accelX = 0;
     this.accelY = 0;
@@ -44,16 +55,16 @@ L.objects.Sprite = function(textureName, options)
     this.wrapX = true;
     this.wrapY = false;
     this.boundingType = "rect";
-    this.vertices = [];
+    
 
 
     this.visible = true;
     this.alpha = (options && options.alpha) ? options.alpha : 1;
     this.blendMode = "";
     
-    this.onClick = function(){};
+    this.onClick = function(){alert("click");};
 
-    this.currentAnimation = "default";
+    this.currentAnimation = "idle";
     this.currentFrame = 0;
     this.animationTimer;
 
@@ -62,6 +73,8 @@ L.objects.Sprite = function(textureName, options)
 
     this.isClickable = true;
 
+
+//Predictive physics experimentation
     this.gravity = 0;
     this.g = 1000;
     this.direction = -Math.PI / 2;
@@ -88,18 +101,33 @@ L.objects.Sprite.prototype.autoDraw = function(layer)
     {
 	if (this.angle !== 0)
 	{
-	    var radians = this.angle * (Math.PI / 180);
+	    var radians = this.angle;
 	    layer.save();
 	    layer.translate(this.x, this.y);
 	    layer.rotate(-radians);
-	    layer.drawImage(this.animations.default[this.currentFrame].img, -this.handle.x, -this.handle.y);
+	    layer.drawImage(this.animations.idle[this.currentFrame].img, -this.handle.x, -this.handle.y);
 	    layer.restore();
 	    //layer.rotate(radians);
 	    //layer.translate(-this.x, -this.y);
 	} else {
-	    layer.drawImage(this.animations.default[this.currentFrame].img, this.x - this.handle.x, this.y - this.handle.y);
+	    layer.drawImage(this.animations.idle[this.currentFrame].img, this.x - this.handle.x, this.y - this.handle.y);
 	}
     }
+};
+
+L.objects.Sprite.prototype.drawBoundingBox = function(layer)
+{
+  layer.beginPath();
+  this.getVertices();
+  layer.moveTo(this.vertices[3][0], this.vertices[3][1]);
+  for (var i = 0; i < 4; i++)
+  {
+      layer.lineTo(this.vertices[i][0],this.vertices[i][1]);
+  }
+  layer.closePath();
+  layer.strokeStyle = "#FFFFFF";
+  layer.lineWidth = 2;
+  layer.stroke();
 };
 
 L.objects.Sprite.prototype.update = function()
@@ -109,6 +137,15 @@ L.objects.Sprite.prototype.update = function()
 
 
 L.objects.Sprite.prototype.autoUpdate = function()
+{
+    this.x += this.speedX * L.system.dt * L.system.timeScale;
+    this.y += this.speedY  * L.system.dt * L.system.timeScale;
+    this.speedX += this.accelX  * L.system.dt * L.system.timeScale;
+    this.speedY += this.accelY  * L.system.dt * L.system.timeScale;
+    this.angle+= this.rotation * L.system.dt * L.system.timeScale;
+};
+
+L.objects.Sprite.prototype.experimentalUpdate = function()
 {
     //alert(this.landingTime);
     
@@ -186,17 +223,19 @@ L.objects.Sprite.prototype.isClicked = function(mouseX, mouseY)
 {
     if (this.isClickable)
     {
-	if (
+	if ((  this.angle === 0 &&
 		mouseX >= this.x + this.offset.x - this.handle.x &&
 		mouseX <= this.x + this.width + this.offset.x - this.handle.x &&
 		mouseY >= this.y + this.offset.y - this.handle.y &&
 		mouseY <= this.y + this.height + this.offset.y - this.handle.y
-		)
+		) || (
+		this.angle !== 0 &&
+		this.jordanCurve(mouseX,mouseY)))
 	{
+	  this.onClick();
 
-	    this.onClick();
-	
-
+	    return true;
+	    
 	}
     }
 };
@@ -265,61 +304,70 @@ L.objects.Sprite.prototype.movey = function(y)
 L.objects.Sprite.prototype.getVertices = function()
 {
 
-    var left = -this.handle.x;
-    var top = -this.handle.y;
-    var right = left + this.width;
-    var bottom = top + this.height;
-    var xTransform = this.x;
-    var yTransform = this.y;
-    var vertices = [
-	{
-	    x: left,
-	    y: top
-	},
-	{
-	    x: right,
-	    y: top
-	},
-	{
-	    x: right,
-	    y: bottom
-	},
-	{
-	    x: left,
-	    y: bottom
-	}
-    ];
+    var xTransform = this.x + this.offset.x;
+    var yTransform = this.y + this.offset.y;
+ 
     if (this.angle !== 0)
     {
-	var rads = this.angle * (Math.PI / 180);
-	vertices.mapQuick(function(entry) {
-	    var old = {x: entry.x, y: entry.y};
-	    entry.x = old.x * Math.cos(-rads) - old.y * Math.sin(-rads);
-	    entry.y = old.x * Math.sin(-rads) + old.y * Math.cos(-rads);
-	});
+	var length = this.nudeVertices.length;
+	
+	for (var i =0; i < length; i++)
+	{
+	    this.vertices[i] = [
+		this.nudeVertices[i][0] * Math.cos(-this.angle) - this.nudeVertices[i][1] * Math.sin(-this.angle),
+		this.nudeVertices[i][0] * Math.sin(-this.angle) + this.nudeVertices[i][1] * Math.cos(-this.angle)
+	    ];
+	}
+    } 
+    else 
+    {
+	for (var i =0; i < length; i++)
+	{
+	    this.vertices[i] = [this.nudeVertices[i][0], this.nudeVertices[i][0]];
+	}
     }
-    vertices.mapQuick(function(entry) {
-	entry.x += xTransform;
-	entry.y += yTransform;
+
+    this.vertices.mapQuick(function(entry) {
+	entry[0] += xTransform;
+	entry[1] += yTransform;
     });
-    return vertices;
 
+    return this.vertices;
+};
 
+L.objects.Sprite.prototype.jordanCurve = function(x, y)
+{
+    var isInPoly = false;
+    var length = this.vertices.length;
+    this.getVertices();
+    for (var i = 0, j = length-1; i< length; j= i++)
+    {
+	if ((this.vertices[i][1] > y) !== (this.vertices[j][1] > y))
+	{
+	    if (x < ((this.vertices[j][0] - this.vertices[i][0]) * (y - this.vertices[i][1])/(this.vertices[j][1]-this.vertices[i][1]) + this.vertices[i][0]))
+	    {
+		isInPoly = !isInPoly;
+	    }
+	    
+	}
+    }
+    return isInPoly;
+    
 };
 
 
-/*
- * int pnpoly(int nvert, float *vertx, float *verty, float testx, float testy)
+
+  function pnpoly(nvert, vertx, verty,  testx,  testy)
  {
- int i, j, c = 0;
+ var i, j, c = 0;
  for (i = 0, j = nvert-1; i < nvert; j = i++) {
- if ( ((verty[i]>testy) != (verty[j]>testy)) &&
+ if ( ((verty[i]>testy) !== (verty[j]>testy)) &&
  (testx < (vertx[j]-vertx[i]) * (testy-verty[i]) / (verty[j]-verty[i]) + vertx[i]) )
  c = !c;
  }
  return c;
  }
- */
+ 
 
 L.Frame = function(textureName, length)
 {
@@ -332,42 +380,3 @@ L.Animation = function(frames)
 
 };
 
-
-/*
- * void Rect::calculateVertices()
- {
- //Let the compiler do some copy-pasting or other fun const optimizations.
- //Also, easier to read.
- const GLfloat WIDTH_SCALE = (m_width / 2) * m_scaleX;
- const GLfloat HEIGHT_SCALE = (m_height / 2) * m_scaleY;
- 
- const GLfloat LEFT = m_position.x - WIDTH_SCALE;
- const GLfloat RIGHT = m_position.x + WIDTH_SCALE;
- 
- const GLfloat TOP  = m_position.y + HEIGHT_SCALE;
- const GLfloat BOTTOM = m_position.y - HEIGHT_SCALE;
- 
- if(m_orientation == 0) // if no rotation
- {
- setVertices(
- &Vertex( LEFT, TOP, m_position.z), 
- &Vertex( RIGHT, TOP, m_position.z),
- &Vertex( RIGHT, BOTTOM, m_position.z),
- &Vertex( LEFT, BOTTOM, m_position.z) );
- }
- else
- {
- const GLfloat radians = (GLfloat)DEG_TO_RAD(m_orientation);
- const GLfloat cosn = (GLfloat)cos(radians);
- const GLfloat sinn = (GLfloat)sin(radians);
- 
- Vertex TL = Vertex( (LEFT  * cosn) - (TOP * sinn)   , (LEFT  * sinn) + (TOP *    cosn), m_position.z );
- Vertex TR = Vertex( (RIGHT * cosn) - (TOP * sinn)   , (RIGHT * sinn) + (TOP *    cosn), m_position.z );
- Vertex BR = Vertex( (RIGHT * cosn) - (BOTTOM * sinn), (RIGHT * sinn) + (BOTTOM * cosn), m_position.z );
- Vertex BL = Vertex( (LEFT  * cosn) - (BOTTOM * sinn), (LEFT  * sinn) + (BOTTOM * cosn), m_position.z);
- 
- setVertices( &TL, &TR, &BR, &BL );
- 
- }
- }
- */	

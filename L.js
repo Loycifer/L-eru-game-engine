@@ -7,7 +7,7 @@ var L = {};
 
 L.start = function() {
 
-
+window.removeEventListener('load', L.start);
     var game = new L_Game();
 
     game.settings();
@@ -25,8 +25,9 @@ L.start = function() {
 	}
 	L.system.then = L.system.now;
 	game.update();
-	requestAnimationFrame(gameLoop);
 	game.draw();
+	requestAnimationFrame(gameLoop);
+	
 	
     })();
 
@@ -149,3 +150,28 @@ L.music = {};
 
 //window.onload = L.start;
 window.addEventListener('load', L.start);
+
+
+
+
+window.onunload=function(){L = null;};
+
+/*
+var arraytest = [1,2,3,4,5,6,7,8,9,0,[1,2,3,4,5,6,7,8,9,0]];
+var targetarray = [];
+var starttime = window.performance.now();
+for (var i = 0; i < 1000; i++)
+{
+    targetarray = arraytest.copy();
+}
+var time1 = window.performance.now() - starttime;
+
+var starttime = window.performance.now();
+for (var i = 0; i < 1000; i++)
+{
+    targetarray = arraytest.copy2();
+}
+var time2 = window.performance.now() - starttime;
+
+alert(time1+","+time2);
+*/
