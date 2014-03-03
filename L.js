@@ -88,6 +88,7 @@ L.system.loadedResources = 0;
 
 L.system.width = 640;
 L.system.height = 480;
+L.system.canvasLocation = document.body;
 
 
 

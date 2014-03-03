@@ -1,7 +1,7 @@
 var L;
 L.objects.Scene = function(name)
 {
-   L.scenes[name] = this;
+    L.scenes[name] = this;
     this.layers = [];
 
 };
@@ -21,13 +21,13 @@ L.objects.Scene.prototype.addLayer = function(howMany)
     var number = howMany || 1;
     for (var i = 0; i < number; i++)
     {
-    this.layers.push(new L.objects.Layer(L.system.bufferContext[0]));
-}
+	this.layers.push(new L.objects.Layer(L.system.bufferContext[0]));
+    }
 };
 
-L.objects.Scene.prototype.isClicked = function(mouseX,mouseY)
+L.objects.Scene.prototype.isClicked = function(mouseX, mouseY)
 {
-       
-    this.layers.isClicked(mouseX,mouseY);
+
+    this.layers.isClicked(mouseX, mouseY);
 };
 
