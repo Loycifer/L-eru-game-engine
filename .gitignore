@@ -222,3 +222,5 @@ pip-log.txt
 /raz.min.js
 /game.js
 /L-full.js
+!/release/
+/release/L-eru.0.1a.js

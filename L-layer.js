@@ -2,31 +2,40 @@ var L;
 
 L.objects.Layer = function(targetContext)
 {
-    this.sorted = false;
-    this.sortBy = "energy";
-    this.sortOrder = 1;
+    this.sorted = true;
+    this.sortBy = ["z"];
+    this.sortOrder = [1];
     this.objects = [];
     this.targetContext = targetContext;
     this.layerAlpha = 1;
     this.isClickable = true;
 };
 
-
 L.objects.Layer.prototype.draw = function()
+{
+    this.autoDraw();
+};
+
+L.objects.Layer.prototype.autoDraw = function()
 {
     this.objects.draw(this.targetContext);
 };
 
-
 L.objects.Layer.prototype.update = function()
+{
+    this.autoUpdate();
+};
+
+L.objects.Layer.prototype.autoUpdate = function()
 {
     this.objects.mapQuick(function(object) {
 	object.update();
     });
     if (this.sorted)
     {
-	var sortBy = this.sortBy;
-	this.objects.sortBy(sortBy);
+	length = this.sortBy.length;
+	for (var i=0;i<length;i++)
+	this.objects.sortBy(this.sortBy[i], this.sortOrder[i]);
     }
 };
 

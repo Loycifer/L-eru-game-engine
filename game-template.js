@@ -35,9 +35,9 @@ function L_Game()
 
     this.resources = function() {
 	//This is where you load resources such as textures and audio
-	//Textures are stored in L.resources.texture[x], where x is the texture's name
-	//Souns and music are similarly stored in L.resources.sound[x] and
-	//L.resources.music[x]
+	//Textures are stored in L.texture[x], where x is the texture's name
+	//Souns and music are similarly stored in L.sound[x] and
+	//L.music[x]
 
 	//eg. L.loadTexture.fromFile("littleDude", "little-dude.png");
 

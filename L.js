@@ -1,13 +1,13 @@
 
 
 
-// L ('ɛrɥ)
+// L ('ɛrɥ) Game Engine
 var L = {};
 
 
 L.start = function() {
 
-window.removeEventListener('load', L.start);
+    window.removeEventListener('load', L.start);
     var game = new L_Game();
 
     game.settings();
@@ -27,8 +27,8 @@ window.removeEventListener('load', L.start);
 	game.update();
 	game.draw();
 	requestAnimationFrame(gameLoop);
-	
-	
+
+
     })();
 
 };
@@ -104,14 +104,17 @@ L.scenes = {};
  */
 
 L.texture = {};
-L.loadTexture = {};
-L.loadTexture.fromFile = function(name, file)
+L.load = {};
+L.load.texture = function(name, file)
 {
-
+    L.system.expectedResources += 1;
     var thisTexture = new Image();
+
     thisTexture.onload = function() {
+	L.system.loadedResources += 1;
     };
     thisTexture.onerror = function(e) {
+	L.shout("Oops! Your browser does not support this audio type.");
     };
 
     thisTexture.src = L.system.resourcePath + L.system.texturePath + file;
@@ -155,24 +158,26 @@ window.addEventListener('load', L.start);
 
 
 
-window.onunload=function(){L = null;};
+window.onunload = function() {
+    L = null;
+};
 
 /*
-var arraytest = [1,2,3,4,5,6,7,8,9,0,[1,2,3,4,5,6,7,8,9,0]];
-var targetarray = [];
-var starttime = window.performance.now();
-for (var i = 0; i < 1000; i++)
-{
-    targetarray = arraytest.copy();
-}
-var time1 = window.performance.now() - starttime;
-
-var starttime = window.performance.now();
-for (var i = 0; i < 1000; i++)
-{
-    targetarray = arraytest.copy2();
-}
-var time2 = window.performance.now() - starttime;
-
-alert(time1+","+time2);
-*/
+ var arraytest = [1,2,3,4,5,6,7,8,9,0,[1,2,3,4,5,6,7,8,9,0]];
+ var targetarray = [];
+ var starttime = window.performance.now();
+ for (var i = 0; i < 1000; i++)
+ {
+ targetarray = arraytest.copy();
+ }
+ var time1 = window.performance.now() - starttime;
+ 
+ var starttime = window.performance.now();
+ for (var i = 0; i < 1000; i++)
+ {
+ targetarray = arraytest.copy2();
+ }
+ var time2 = window.performance.now() - starttime;
+ 
+ alert(time1+","+time2);
+ */

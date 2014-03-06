@@ -40,7 +40,7 @@ L.objects.Sprite = function(textureName, options)
     this.vertices = new Array(this.nudeVertices.length);
     
     this.angle = (options && options.angle) ? options.angle : 0;
-    this.rotation = (options && options.rotation) ? options.rotation : 0.1;
+    this.rotation = (options && options.rotation) ? options.rotation : 0;
     this.speedX = 0;
     this.speedY = 0;
     this.accelX = 0;
@@ -138,10 +138,10 @@ L.objects.Sprite.prototype.update = function()
 
 L.objects.Sprite.prototype.autoUpdate = function()
 {
-    this.x += this.speedX * L.system.dt * L.system.timeScale;
-    this.y += this.speedY  * L.system.dt * L.system.timeScale;
     this.speedX += this.accelX  * L.system.dt * L.system.timeScale;
     this.speedY += this.accelY  * L.system.dt * L.system.timeScale;
+    this.x += this.speedX * L.system.dt * L.system.timeScale;
+    this.y += this.speedY  * L.system.dt * L.system.timeScale;
     this.angle+= this.rotation * L.system.dt * L.system.timeScale;
 };
 

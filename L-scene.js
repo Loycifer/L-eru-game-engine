@@ -8,10 +8,20 @@ L.objects.Scene = function(name)
 
 L.objects.Scene.prototype.update = function()
 {
+    this.autoUpdate();
+};
+
+L.objects.Scene.prototype.autoUpdate = function()
+{
     this.layers.update();
 };
 
 L.objects.Scene.prototype.draw = function()
+{
+    this.autoDraw();
+};
+
+L.objects.Scene.prototype.autoDraw = function()
 {
     this.layers.draw();
 };

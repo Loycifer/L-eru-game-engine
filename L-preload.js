@@ -35,22 +35,27 @@ Array.prototype.mapQuick = function(callback)
     //return this;
 };
 
-Array.prototype.sortBy = function(sorter)
+Array.prototype.sortBy = function(sorter, order)
 {
     var sortBy = sorter;
     var length = this.length;
+    if (order === undefined)
+    {
+	order = 1;
+    }
+    
 
     for (var i = 0; i < length; i++)
     {
 	if (this[i] instanceof Array)
 	{
-	    this[i].sortBy(sortBy);
+	    this[i].sortBy(sortBy, order);
 	}
     }
 
     this.sort(function(a, b) {
 
-	return a[sortBy] - b[sortBy];
+	return order * (a[sortBy] - b[sortBy]);
 
 
     });
