@@ -1,5 +1,552 @@
-var L;
+
+Array.prototype.copy = function()
+{
+ 
+    return this.slice(0);
+};
+
+Array.prototype.copy2 = function()
+{
+
+
+
+    var length = this.length;
+    var arrayCopy = [];
+    for (var i = 0; i < length; i++)
+    {
+	if (this[i].isArray)
+	{
+	    arrayCopy[i] = this[i].copy2();
+	} 
+    }
+    return arrayCopy.slice(0);
+};
+
+Array.prototype.mapQuick = function(callback)
+{
+
+
+    var length = this.length;
+
+    for (var i = 0; i < length; i++)
+    {
+	callback(this[i], i);
+    }
+    //return this;
+};
+
+Array.prototype.sortBy = function(sorter, order)
+{
+    var sortBy = sorter;
+    var length = this.length;
+    if (order === undefined)
+    {
+	order = 1;
+    }
+    
+
+    for (var i = 0; i < length; i++)
+    {
+	if (this[i] instanceof Array)
+	{
+	    this[i].sortBy(sortBy, order);
+	}
+    }
+
+    this.sort(function(a, b) {
+
+	return order * (a[sortBy] - b[sortBy]);
+
+
+    });
+};
+
+Array.prototype.draw = function(targetContext)
+{
+
+
+    var length = this.length;
+
+    for (var i = 0; i < length; i++)
+    {
+	if (this[i].draw)
+	{
+	    this[i].draw(targetContext);
+	}
+    }
+    //return this;
+};
+Array.prototype.update = function()
+{
+
+
+    var length = this.length;
+
+    for (var i = 0; i < length; i++)
+    {
+	if (this[i].update)
+	{
+	    this[i].update();
+	}
+    }
+    //return this;
+};
+Array.prototype.isClicked = function(mouseX, mouseY)
+{
+
+
+    var length = this.length;
+
+    for (var i = length-1; i >= 0; i--)
+    {
+
+	if (this[i].isClicked(mouseX, mouseY))
+	{
+	    return true;
+	}
+	
+	
+    }
+    //return this;
+};
+/*
+ Number.prototype.clamp = function(min, max) {
+ return Math.min(Math.max(this, min), max);
+ };
+ 
+ Number.prototype.isBetween = function (min, max)
+ {
+ return (this === this.clamp(min,max));  
+ };
+ 
+ 
+ */
+
+Math.degToRad = function(deg)
+{
+    return (deg * (Math.PI / 180));
+};
+
+Math.radToDeg = function(rad)
+{
+    return (rad * (180 / Math.PI));
+};
+
+Math.vectorX = function(speed, direction)
+{
+
+    switch (direction)
+    {
+	case 0:
+	    return speed;
+	    break;
+	case 180:
+	    return -speed;
+	    break;
+	case 90:
+	case -90:
+	    return 0;
+	    break;
+	default:
+	    return Math.cos(Math.degToRad(direction)) * speed;
+	    break;
+    }
+};
+Math.vectorY = function(speed, direction)
+{
+    switch (direction)
+    {
+	case 0:
+	case 180:
+	    return 0;
+	    break;
+	case 90:
+	    return -speed;
+	    break;
+	case -90:
+	    return speed;
+	    break;
+	default:
+	    return Math.sin(Math.degToRad(direction)) * speed;
+	    break;
+    }
+};
+
+Math.Vector = function(magnitude, direction)
+{
+    this.magnitude = magnitude;
+    this.direction = direction;
+};
+
+Math.Vector.prototype.addVector = function(vector)
+{
+    var d1 = Math.degToRad(this.direction);
+    var d2 = Math.degToRad(vector.direction);
+
+    var x1 = Math.cos(d1) * this.magnitude;
+    var x2 = Math.cos(d2) * vector.magnitude;
+
+    var y1 = -Math.sin(d1) * this.magnitude;
+    var y2 = -Math.sin(d2) * vector.magnitude;
+
+    var adj = x1 + x2;
+    var opp = y1 + y2;
+
+
+    var newDirection = Math.atan(opp / adj);
+    var newMagnitude = Math.sqrt((Math.pow(adj, 2) + Math.pow(opp, 2)));
+
+    this.magnitude = newMagnitude;
+    this.direction = newDirection;
+
+
+
+
+};
+
+
+
+
+
+// L ('ɛrɥ) Game Engine
+var L = {};
+
+
+L.start = function() {
+
+    window.removeEventListener('load', L.start);
+    var game = new L_Game();
+
+    game.settings();
+    L.system.setup();
+    //TODO stuff
+    game.resources();
+    game.initialise();
+
+    (function gameLoop() {
+	L.system.now = window.performance.now();
+	L.system.dt = (L.system.now - L.system.then) / 1000;
+	if (L.system.dt > 1 / 45)
+	{
+	    L.system.dt = 1 / 45;
+	}
+	L.system.then = L.system.now;
+	game.update();
+	game.draw();
+	requestAnimationFrame(gameLoop);
+
+
+    })();
+
+};
+
+
+
+/***********************************************************************
+ * Initialization
+ * 
+ */
+
+L.whisper = function(message)
+{
+    console.log(message);
+};
+
+L.shout = function(message)
+{
+    window.alert(message);
+};
+
+L.system = {};
+L.system.timeScale = 1;
+L.system.frameCap = 30;
+L.system.now, L.system.then = window.performance.now();
+L.system.dt = 0;
+L.system.checkAudio = function() // Checks for client-supported audio type
+{
+    var dummyAudio = document.createElement('audio');
+    if (dummyAudio.canPlayType('audio/wav'))
+    {
+	L.system.audioType = ".wav";
+	L.whisper("Using .wav files");
+    }
+    else if (dummyAudio.canPlayType('audio/mp4'))
+    {
+	L.system.audioType = ".m4a";
+	L.whisper("Using .m4a files");
+    }
+    else
+    {
+	L.shout("Your browser doesn't support .wav or .m4a files.");
+    }
+
+};
+
+(function() {
+    L.system.checkAudio();
+})();  //Autoruns checkAudio
+
+L.system.resourcePath = "resources/";		    // Holds path to resource folder
+L.system.soundPath = "sounds/";			    // Holds path to sound files
+L.system.texturePath = "textures/";		    // Holds path to image files
+L.system.expectedResources = 0;
+L.system.loadedResources = 0;
+
+
+L.system.width = 640;
+L.system.height = 480;
+L.system.canvasLocation = document.body;
+
+
+
+
+
+
+L.system.layerAlpha = 1;
+L.system.currentScene = {};
+L.scenes = {};
+/**********************************************************************
+ *  Resources
+ * 
+ */
+
+L.texture = {};
+L.load = {};
+L.load.texture = function(name, file)
+{
+    L.system.expectedResources += 1;
+    var thisTexture = new Image();
+
+    thisTexture.onload = function() {
+	L.system.loadedResources += 1;
+    };
+    thisTexture.onerror = function(e) {
+	L.shout("Oops! Your browser does not support this audio type.");
+    };
+
+    thisTexture.src = L.system.resourcePath + L.system.texturePath + file;
+
+    L.texture[name] = thisTexture;
+    //alert("hi");
+};
+
+
+
+L.sound = {};
+L.music = {};
+
+
+
+
+
+
+
+/*TODO
+ * Texture2D
+ * Sprites
+ * Audio
+ * Bone Movement
+ * Control Mapper
+ * Clickables
+ * Stage
+ * Layers
+ * Textbox
+ * Rotation
+ * 
+ * 
+ * 
+ * 
+ */
+
+
+//window.onload = L.start;
+window.addEventListener('load', L.start);
+
+
+
+
+window.onunload = function() {
+    L = null;
+};
+
+/*
+ var arraytest = [1,2,3,4,5,6,7,8,9,0,[1,2,3,4,5,6,7,8,9,0]];
+ var targetarray = [];
+ var starttime = window.performance.now();
+ for (var i = 0; i < 1000; i++)
+ {
+ targetarray = arraytest.copy();
+ }
+ var time1 = window.performance.now() - starttime;
+ 
+ var starttime = window.performance.now();
+ for (var i = 0; i < 1000; i++)
+ {
+ targetarray = arraytest.copy2();
+ }
+ var time2 = window.performance.now() - starttime;
+ 
+ alert(time1+","+time2);
+ */
+
+
+
+
+L.system.renderCanvas = [];
+L.system.renderContext = [];
+L.system.bufferCanvas = [];
+L.system.bufferContext = [];
+
+L.system.setup = function()
+{
+    var width = L.system.width;
+    var height = L.system.height;
+    L.system.renderCanvas[0] = document.createElement("canvas");
+    L.system.renderCanvas[0].width = width;
+    L.system.renderCanvas[0].height = height;
+    L.system.canvasLocation.appendChild(L.system.renderCanvas[0]);
+    L.system.renderContext[0] = L.system.renderCanvas[0].getContext("2d");
+
+    L.system.bufferCanvas[0] = document.createElement('canvas');
+    L.system.bufferCanvas[0].width = width;
+    L.system.bufferCanvas[0].height = height;
+    L.system.bufferContext[0] = L.system.bufferCanvas[0].getContext("2d");
+
+
+
+
+    L.system.canvasX = L.system.renderCanvas[0].offsetLeft;
+    L.system.canvasY = L.system.renderCanvas[0].offsetTop;
+
+
+    L.system.handleClick = function(e)
+    {
+
+	var mouseX = e.pageX - L.system.canvasX;
+	var mouseY = e.pageY - L.system.canvasY;
+	L.system.currentScene.isClicked(mouseX, mouseY);
+    };
+
+    L.system.renderCanvas[0].addEventListener
+	    (
+		    'click',
+		    L.system.handleClick
+
+		    );
+
+};
+
 L.objects = {};
+
+L.objects.Scene = function(name)
+{
+    L.scenes[name] = this;
+    this.layers = [];
+
+};
+
+L.objects.Scene.prototype.update = function()
+{
+    this.autoUpdate();
+};
+
+L.objects.Scene.prototype.autoUpdate = function()
+{
+    this.layers.update();
+};
+
+L.objects.Scene.prototype.draw = function()
+{
+    this.autoDraw();
+};
+
+L.objects.Scene.prototype.autoDraw = function()
+{
+    this.layers.draw();
+};
+
+L.objects.Scene.prototype.addLayer = function(howMany)
+{
+    var number = howMany || 1;
+    for (var i = 0; i < number; i++)
+    {
+	this.layers.push(new L.objects.Layer(L.system.bufferContext[0]));
+    }
+};
+
+L.objects.Scene.prototype.isClicked = function(mouseX, mouseY)
+{
+
+    this.layers.isClicked(mouseX, mouseY);
+};
+
+
+
+L.objects.Layer = function(targetContext)
+{
+    this.sorted = true;
+    this.sortBy = ["z"];
+    this.sortOrder = [1];
+    this.objects = [];
+    this.targetContext = targetContext;
+    this.layerAlpha = 1;
+    this.isClickable = true;
+};
+
+L.objects.Layer.prototype.draw = function()
+{
+    this.autoDraw();
+};
+
+L.objects.Layer.prototype.autoDraw = function()
+{
+    this.objects.draw(this.targetContext);
+};
+
+L.objects.Layer.prototype.update = function()
+{
+    this.autoUpdate();
+};
+
+L.objects.Layer.prototype.autoUpdate = function()
+{
+    this.objects.mapQuick(function(object) {
+	object.update();
+    });
+    if (this.sorted)
+    {
+	length = this.sortBy.length;
+	for (var i=0;i<length;i++)
+	this.objects.sortBy(this.sortBy[i], this.sortOrder[i]);
+    }
+};
+
+
+L.objects.Layer.prototype.isClicked = function(mouseX, mouseY)
+{
+
+    if (this.isClickable)
+    {
+	this.objects.isClicked(mouseX, mouseY);
+    }
+};
+
+L.objects.Layer.prototype.addObject = function(object)
+{
+    this.objects.push(object);
+};
+
+L.objects.Layer.prototype.addObjects = function(objects)
+{
+    var objectsLength = arguments.length;
+    for (var i = 0; i < objectsLength; i++)
+    {
+	this.addObject(arguments[i]);
+    }
+};
+
+
+
 L.objects.Sprite = function(textureName, options)
 {
     this.animations = {};
@@ -41,7 +588,6 @@ L.objects.Sprite = function(textureName, options)
     
     this.angle = (options && options.angle) ? options.angle : 0;
     this.rotation = (options && options.rotation) ? options.rotation : 0;
-    this.rotationAccel = 1;
     this.speedX = 0;
     this.speedY = 0;
     this.accelX = 0;
@@ -95,7 +641,7 @@ L.objects.Sprite.prototype.draw = function(layer)
   this.autoDraw(layer);  
 };
 
-L.objects.Sprite.prototype.autoDraw = function(layer, options)
+L.objects.Sprite.prototype.autoDraw = function(layer)
 {
     layer.globalAlpha = this.alpha;
     if (this.alpha > 0.0 && this.visible)
@@ -108,31 +654,13 @@ L.objects.Sprite.prototype.autoDraw = function(layer, options)
 	    layer.rotate(-radians);
 	    layer.drawImage(this.animations.idle[this.currentFrame].img, -this.handle.x, -this.handle.y);
 	    layer.restore();
+	    //layer.rotate(radians);
+	    //layer.translate(-this.x, -this.y);
 	} else {
 	    layer.drawImage(this.animations.idle[this.currentFrame].img, this.x - this.handle.x, this.y - this.handle.y);
 	}
     }
 };
-
-L.objects.Sprite.prototype.autoDrawCustom = function(layer, options)
-{
-    layer.globalAlpha = (options && options.opacity !== undefined)?options.opacity:this.alpha;
-    if (this.alpha > 0.0 && this.visible)
-    {
-	if (this.angle !== 0)
-	{
-	    layer.save();
-	    layer.translate(this.x, this.y);
-	    layer.rotate(-this.angle);
-	    layer.drawImage((options && options.texture !== undefined)?options.texture:this.animations.idle[this.currentFrame].img, -this.handle.x, -this.handle.y);
-	    layer.restore();
-	} else {
-	    layer.drawImage((options && options.texture !== undefined)?options.texture:this.animations.idle[this.currentFrame].img, this.x - this.handle.x, this.y - this.handle.y);
-	}
-    }
-};
-
-
 
 L.objects.Sprite.prototype.drawBoundingBox = function(layer)
 {
@@ -161,7 +689,6 @@ L.objects.Sprite.prototype.autoUpdate = function()
     this.speedY += this.accelY  * L.system.dt * L.system.timeScale;
     this.x += this.speedX * L.system.dt * L.system.timeScale;
     this.y += this.speedY  * L.system.dt * L.system.timeScale;
-    this.rotation += this.rotationAccel * L.system.dt * L.system.timeScale;
     this.angle+= this.rotation * L.system.dt * L.system.timeScale;
 };
 
