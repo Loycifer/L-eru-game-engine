@@ -13,7 +13,9 @@ L.objects.Scene.prototype.update = function()
 
 L.objects.Scene.prototype.autoUpdate = function()
 {
+    
     this.layers.update();
+   
 };
 
 L.objects.Scene.prototype.draw = function()

@@ -1,7 +1,7 @@
 
 Array.prototype.copy = function()
 {
- 
+
     return this.slice(0);
 };
 
@@ -17,7 +17,7 @@ Array.prototype.copy2 = function()
 	if (this[i].isArray)
 	{
 	    arrayCopy[i] = this[i].copy2();
-	} 
+	}
     }
     return arrayCopy.slice(0);
 };
@@ -43,7 +43,7 @@ Array.prototype.sortBy = function(sorter, order)
     {
 	order = 1;
     }
-    
+
 
     for (var i = 0; i < length; i++)
     {
@@ -54,8 +54,9 @@ Array.prototype.sortBy = function(sorter, order)
     }
 
     this.sort(function(a, b) {
-
-	return order * (a[sortBy] - b[sortBy]);
+	var current = a[sortBy];
+	var next = b[sortBy];
+	return order * (current - next);
 
 
     });
@@ -97,15 +98,15 @@ Array.prototype.isClicked = function(mouseX, mouseY)
 
     var length = this.length;
 
-    for (var i = length-1; i >= 0; i--)
+    for (var i = length - 1; i >= 0; i--)
     {
 
-	if (this[i].isClicked(mouseX, mouseY))
-	{
-	    return true;
-	}
+	    if (this[i].isClicked && this[i].isClicked(mouseX, mouseY))
+	    {
+		return true;
+	    }
 	
-	
+
     }
     //return this;
 };

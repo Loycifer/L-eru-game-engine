@@ -2,7 +2,7 @@ var L;
 
 L.objects.Layer = function(targetContext)
 {
-    this.sorted = true;
+    this.sorted = false;
     this.sortBy = ["z"];
     this.sortOrder = [1];
     this.objects = [];
@@ -19,24 +19,30 @@ L.objects.Layer.prototype.draw = function()
 L.objects.Layer.prototype.autoDraw = function()
 {
     this.objects.draw(this.targetContext);
+
 };
 
 L.objects.Layer.prototype.update = function()
 {
+
     this.autoUpdate();
 };
 
 L.objects.Layer.prototype.autoUpdate = function()
 {
-    this.objects.mapQuick(function(object) {
-	object.update();
-    });
+
+
+    this.objects.update();
+
     if (this.sorted)
     {
 	length = this.sortBy.length;
-	for (var i=0;i<length;i++)
-	this.objects.sortBy(this.sortBy[i], this.sortOrder[i]);
+	for (var i = 0; i < length; i++)
+	{
+	    this.objects.sortBy(this.sortBy[i], this.sortOrder[i]);
+	}
     }
+
 };
 
 

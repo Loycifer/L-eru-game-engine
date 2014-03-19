@@ -94,7 +94,7 @@ L.objects.Sprite.prototype.draw = function(layer)
   this.autoDraw(layer);  
 };
 
-L.objects.Sprite.prototype.autoDraw = function(layer)
+L.objects.Sprite.prototype.autoDraw = function(layer, options)
 {
     layer.globalAlpha = this.alpha;
     if (this.alpha > 0.0 && this.visible)
@@ -107,13 +107,31 @@ L.objects.Sprite.prototype.autoDraw = function(layer)
 	    layer.rotate(-radians);
 	    layer.drawImage(this.animations.idle[this.currentFrame].img, -this.handle.x, -this.handle.y);
 	    layer.restore();
-	    //layer.rotate(radians);
-	    //layer.translate(-this.x, -this.y);
 	} else {
 	    layer.drawImage(this.animations.idle[this.currentFrame].img, this.x - this.handle.x, this.y - this.handle.y);
 	}
     }
 };
+
+L.objects.Sprite.prototype.autoDrawCustom = function(layer, options)
+{
+    layer.globalAlpha = (options && options.opacity !== undefined)?options.opacity:this.alpha;
+    if (this.alpha > 0.0 && this.visible)
+    {
+	if (this.angle !== 0)
+	{
+	    layer.save();
+	    layer.translate(this.x, this.y);
+	    layer.rotate(-this.angle);
+	    layer.drawImage((options && options.texture !== undefined)?options.texture:this.animations.idle[this.currentFrame].img, -this.handle.x, -this.handle.y);
+	    layer.restore();
+	} else {
+	    layer.drawImage((options && options.texture !== undefined)?options.texture:this.animations.idle[this.currentFrame].img, this.x - this.handle.x, this.y - this.handle.y);
+	}
+    }
+};
+
+
 
 L.objects.Sprite.prototype.drawBoundingBox = function(layer)
 {
