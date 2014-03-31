@@ -25,7 +25,11 @@ L.objects.Scene.prototype.draw = function()
 
 L.objects.Scene.prototype.autoDraw = function()
 {
+    	L.system.bufferContext[0].fillStyle = "#000000";
+	L.system.bufferContext[0].fillRect(0, 0, L.system.width, L.system.height);
     this.layers.draw();
+    	L.system.renderContext[0].globalAlpha = 0.5;
+	L.system.renderContext[0].drawImage(L.system.bufferCanvas[0], 0, 0, L.system.width, L.system.height);
 };
 
 L.objects.Scene.prototype.addLayer = function(howMany)
@@ -43,3 +47,7 @@ L.objects.Scene.prototype.isClicked = function(mouseX, mouseY)
     this.layers.isClicked(mouseX, mouseY);
 };
 
+L.objects.Scene.prototype.fadeToColor = function(nextScene, fadeOut, pause, fadeIn, color, callback)
+{
+    L.transitions.fadeToColor.play(this, nextScene, fadeOut, pause, fadeIn, color, callback);
+};
