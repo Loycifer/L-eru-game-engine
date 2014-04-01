@@ -377,7 +377,7 @@ L.objects.Sprite.prototype.jordanCurve = function(x, y)
 
 
 
-  function pnpoly(nvert, vertx, verty,  testx,  testy)
+  /*function pnpoly(nvert, vertx, verty,  testx,  testy)
  {
  var i, j, c = 0;
  for (i = 0, j = nvert-1; i < nvert; j = i++) {
@@ -387,6 +387,7 @@ L.objects.Sprite.prototype.jordanCurve = function(x, y)
  }
  return c;
  }
+ */
  
 
 L.Frame = function(textureName, length)

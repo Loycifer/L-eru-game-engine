@@ -3,6 +3,8 @@ L.objects.Scene = function(name)
 {
     L.scenes[name] = this;
     this.layers = [];
+    this.bgcolor = "cornflowerblue";
+    this.motionBlur = 0.5;
 
 };
 
@@ -25,10 +27,10 @@ L.objects.Scene.prototype.draw = function()
 
 L.objects.Scene.prototype.autoDraw = function()
 {
-    	L.system.bufferContext[0].fillStyle = "#000000";
+    	L.system.bufferContext[0].fillStyle = this.bgcolor;
 	L.system.bufferContext[0].fillRect(0, 0, L.system.width, L.system.height);
-    this.layers.draw();
-    	L.system.renderContext[0].globalAlpha = 0.5;
+	this.layers.draw();
+    	L.system.renderContext[0].globalAlpha = this.motionBlur;
 	L.system.renderContext[0].drawImage(L.system.bufferCanvas[0], 0, 0, L.system.width, L.system.height);
 };
 
