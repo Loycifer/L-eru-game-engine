@@ -3,7 +3,7 @@ L.objects.Scene = function(name)
 {
     L.scenes[name] = this;
     this.layers = [];
-    this.bgcolor = "cornflowerblue";
+    this.bgFill = "cornflowerblue";
     this.motionBlur = 0.5;
 
 };
@@ -27,7 +27,7 @@ L.objects.Scene.prototype.draw = function()
 
 L.objects.Scene.prototype.autoDraw = function()
 {
-    	L.system.bufferContext[0].fillStyle = this.bgcolor;
+    	L.system.bufferContext[0].fillStyle = this.bgFill;
 	L.system.bufferContext[0].fillRect(0, 0, L.system.width, L.system.height);
 	this.layers.draw();
     	L.system.renderContext[0].globalAlpha = this.motionBlur;
@@ -49,7 +49,23 @@ L.objects.Scene.prototype.isClicked = function(mouseX, mouseY)
     this.layers.isClicked(mouseX, mouseY);
 };
 
-L.objects.Scene.prototype.fadeToColor = function(nextScene, fadeOut, pause, fadeIn, color, callback)
+
+L.objects.Scene.prototype.transition = {};
+	
+L.objects.Scene.prototype.transition.fadeToColor = function(nextScene, fadeOut, pause, fadeIn, color, callback)
 {
-    L.transitions.fadeToColor.play(this, nextScene, fadeOut, pause, fadeIn, color, callback);
+    
+    L.transitions.fadeToColor.play(L.system.currentScene, nextScene, fadeOut, pause, fadeIn, color, callback);
+};
+
+L.objects.Scene.prototype.transition.fadeToBlack = function(nextScene, fadeOut, pause, fadeIn, callback)
+{
+    
+    L.transitions.fadeToColor.play(L.system.currentScene, nextScene, fadeOut, pause, fadeIn, "#000000", callback);
+};
+
+L.objects.Scene.prototype.transition.instant = function(nextScene, callback)
+{
+    
+    L.transitions.fadeToColor.play(L.system.currentScene, nextScene, 0, 0, 0, "#000000", callback);
 };

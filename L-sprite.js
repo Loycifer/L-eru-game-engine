@@ -27,21 +27,21 @@ L.objects.Sprite = function(textureName, options)
     this.offset = {};
     this.offset.x = 0;
     this.offset.y = 0;
-    
+
     this.nudeTop = 0 - this.handle.y;
     this.nudeLeft = 0 - this.handle.x;
     this.nudeRight = this.nudeLeft + this.width;
     this.nudeBottom = this.nudeTop + this.height;
-    this.nudeTopLeft = [this.nudeLeft,this.nudeTop];
+    this.nudeTopLeft = [this.nudeLeft, this.nudeTop];
     this.nudeTopRight = [this.nudeRight, this.nudeTop];
     this.nudeBottomLeft = [this.nudeLeft, this.nudeBottom];
     this.nudeBottomRight = [this.nudeRight, this.nudeBottom];
     this.nudeVertices = [this.nudeTopLeft, this.nudeTopRight, this.nudeBottomRight, this.nudeBottomLeft];
     this.vertices = new Array(this.nudeVertices.length);
-    
+
     this.angle = (options && options.angle) ? options.angle : 0;
     this.rotation = (options && options.rotation) ? options.rotation : 0;
-    this.rotationAccel = 1;
+    this.rotationAccel = 0;
     this.speedX = 0;
     this.speedY = 0;
     this.accelX = 0;
@@ -56,14 +56,16 @@ L.objects.Sprite = function(textureName, options)
     this.wrapX = true;
     this.wrapY = false;
     this.boundingType = "rect";
-    
+
 
 
     this.visible = true;
     this.alpha = (options && options.alpha) ? options.alpha : 1;
     this.blendMode = "";
-    
-    this.onClick = function(){alert("click");};
+
+    this.onClick = function() {
+	alert("click");
+    };
 
     this.currentAnimation = "idle";
     this.currentFrame = 0;
@@ -92,10 +94,10 @@ L.objects.Sprite = function(textureName, options)
 
 L.objects.Sprite.prototype.draw = function(layer)
 {
-  this.autoDraw(layer);  
+    this.autoDraw(layer);
 };
 
-L.objects.Sprite.prototype.autoDraw = function(layer, options)
+L.objects.Sprite.prototype.autoDraw = function(layer)
 {
     layer.globalAlpha = this.alpha;
     if (this.alpha > 0.0 && this.visible)
@@ -116,7 +118,7 @@ L.objects.Sprite.prototype.autoDraw = function(layer, options)
 
 L.objects.Sprite.prototype.autoDrawCustom = function(layer, options)
 {
-    layer.globalAlpha = (options && options.opacity !== undefined)?options.opacity:this.alpha;
+    layer.globalAlpha = (options && options.opacity !== undefined) ? options.opacity : this.alpha;
     if (this.alpha > 0.0 && this.visible)
     {
 	if (this.angle !== 0)
@@ -124,10 +126,10 @@ L.objects.Sprite.prototype.autoDrawCustom = function(layer, options)
 	    layer.save();
 	    layer.translate(this.x, this.y);
 	    layer.rotate(-this.angle);
-	    layer.drawImage((options && options.texture !== undefined)?options.texture:this.animations.idle[this.currentFrame].img, -this.handle.x, -this.handle.y);
+	    layer.drawImage((options && options.texture !== undefined) ? options.texture : this.animations.idle[this.currentFrame].img, -this.handle.x, -this.handle.y);
 	    layer.restore();
 	} else {
-	    layer.drawImage((options && options.texture !== undefined)?options.texture:this.animations.idle[this.currentFrame].img, this.x - this.handle.x, this.y - this.handle.y);
+	    layer.drawImage((options && options.texture !== undefined) ? options.texture : this.animations.idle[this.currentFrame].img, this.x - this.handle.x, this.y - this.handle.y);
 	}
     }
 };
@@ -136,17 +138,17 @@ L.objects.Sprite.prototype.autoDrawCustom = function(layer, options)
 
 L.objects.Sprite.prototype.drawBoundingBox = function(layer)
 {
-  layer.beginPath();
-  this.getVertices();
-  layer.moveTo(this.vertices[3][0], this.vertices[3][1]);
-  for (var i = 0; i < 4; i++)
-  {
-      layer.lineTo(this.vertices[i][0],this.vertices[i][1]);
-  }
-  layer.closePath();
-  layer.strokeStyle = "#FFFFFF";
-  layer.lineWidth = 2;
-  layer.stroke();
+    layer.beginPath();
+    this.getVertices();
+    layer.moveTo(this.vertices[3][0], this.vertices[3][1]);
+    for (var i = 0; i < 4; i++)
+    {
+	layer.lineTo(this.vertices[i][0], this.vertices[i][1]);
+    }
+    layer.closePath();
+    layer.strokeStyle = "#FFFFFF";
+    layer.lineWidth = 2;
+    layer.stroke();
 };
 
 L.objects.Sprite.prototype.update = function()
@@ -157,83 +159,83 @@ L.objects.Sprite.prototype.update = function()
 
 L.objects.Sprite.prototype.autoUpdate = function()
 {
-    this.speedX += this.accelX  * L.system.dt * L.system.timeScale;
-    this.speedY += this.accelY  * L.system.dt * L.system.timeScale;
+    this.speedX += this.accelX * L.system.dt * L.system.timeScale;
+    this.speedY += this.accelY * L.system.dt * L.system.timeScale;
     this.x += this.speedX * L.system.dt * L.system.timeScale;
-    this.y += this.speedY  * L.system.dt * L.system.timeScale;
+    this.y += this.speedY * L.system.dt * L.system.timeScale;
     this.rotation += this.rotationAccel * L.system.dt * L.system.timeScale;
-    this.angle+= this.rotation * L.system.dt * L.system.timeScale;
+    this.angle += this.rotation * L.system.dt * L.system.timeScale;
 };
 
 L.objects.Sprite.prototype.experimentalUpdate = function()
 {
     //alert(this.landingTime);
-    
-     this.time += L.system.dt * L.system.timeScale;
-     if (this.time >= this.landingTime)
-     {
-     
-     if (this.energy < 1)
-     {
-     this.energy = 0;
-     }
-     //this.energy *= 1.01;
-     this.direction = Math.PI / 2;
-     this.y0 = 0;
-     this.v = Math.sqrt((this.g * 2 * this.energy) / (Math.pow(Math.sin(this.direction), 2)));
-     
-     
-     
-     
-     this.time -= this.landingTime;
-     
-     this.landingTime = (this.v * Math.sin(this.direction) + Math.sqrt(Math.pow((this.v * Math.sin(this.direction)), 2) + (2 * this.g * this.y0))) / this.g;
-     
-     }
-     
-     
-     if (this.landingTime < L.system.dt * L.system.timeScale)
-     {
-     this.y = 500;
-     } else {
-     this.y = 500 - this.y0 - (this.v * Math.sin(this.direction) * this.time - (this.g * this.time * this.time / 2));
-     }
-     if (this.y >= 500) {
-     this.y = 500;
-     }
-     
-     this.nextY = this.y;
-     
-     
-     
-     
-     this.nextSpeedX += this.accelX * L.system.dt * L.system.timeScale;
-     //  this.nextSpeedY += this.accelY * L.system.dt * L.system.timeScale;
-     
-     this.nextX += this.nextSpeedX * L.system.dt * L.system.timeScale;
-     //   this.nextY += this.nextSpeedY * L.system.dt * L.system.timeScale;
-     
-     
-     if (this.nextX >= 800)
-     {
-     this.nextSpeedX = -this.speedX;
-     this.speedX = -this.speedX;
-     this.nextX = 799;
-     }
-     if (this.nextX <= 49)
-     {
-     this.nextSpeedX = -this.speedX;
-     this.speedX = -this.speedX;
-     this.nextX = 50;
-     }
-     //    this.y = (this.nextY);
-     this.x = (this.nextX);
-     //   this.speedY = (this.nextSpeedY);
-     this.speedX = (this.nextSpeedX);
-     //  }
-     
-  //  this.x += 1;
-   // this.y += 1;
+
+    this.time += L.system.dt * L.system.timeScale;
+    if (this.time >= this.landingTime)
+    {
+
+	if (this.energy < 1)
+	{
+	    this.energy = 0;
+	}
+	//this.energy *= 1.01;
+	this.direction = Math.PI / 2;
+	this.y0 = 0;
+	this.v = Math.sqrt((this.g * 2 * this.energy) / (Math.pow(Math.sin(this.direction), 2)));
+
+
+
+
+	this.time -= this.landingTime;
+
+	this.landingTime = (this.v * Math.sin(this.direction) + Math.sqrt(Math.pow((this.v * Math.sin(this.direction)), 2) + (2 * this.g * this.y0))) / this.g;
+
+    }
+
+
+    if (this.landingTime < L.system.dt * L.system.timeScale)
+    {
+	this.y = 500;
+    } else {
+	this.y = 500 - this.y0 - (this.v * Math.sin(this.direction) * this.time - (this.g * this.time * this.time / 2));
+    }
+    if (this.y >= 500) {
+	this.y = 500;
+    }
+
+    this.nextY = this.y;
+
+
+
+
+    this.nextSpeedX += this.accelX * L.system.dt * L.system.timeScale;
+    //  this.nextSpeedY += this.accelY * L.system.dt * L.system.timeScale;
+
+    this.nextX += this.nextSpeedX * L.system.dt * L.system.timeScale;
+    //   this.nextY += this.nextSpeedY * L.system.dt * L.system.timeScale;
+
+
+    if (this.nextX >= 800)
+    {
+	this.nextSpeedX = -this.speedX;
+	this.speedX = -this.speedX;
+	this.nextX = 799;
+    }
+    if (this.nextX <= 49)
+    {
+	this.nextSpeedX = -this.speedX;
+	this.speedX = -this.speedX;
+	this.nextX = 50;
+    }
+    //    this.y = (this.nextY);
+    this.x = (this.nextX);
+    //   this.speedY = (this.nextSpeedY);
+    this.speedX = (this.nextSpeedX);
+    //  }
+
+    //  this.x += 1;
+    // this.y += 1;
 
 
 };
@@ -243,22 +245,43 @@ L.objects.Sprite.prototype.isClicked = function(mouseX, mouseY)
 {
     if (this.isClickable)
     {
-	if ((  this.angle === 0 &&
+	if ((this.angle === 0 &&
 		mouseX >= this.x + this.offset.x - this.handle.x &&
 		mouseX <= this.x + this.width + this.offset.x - this.handle.x &&
 		mouseY >= this.y + this.offset.y - this.handle.y &&
 		mouseY <= this.y + this.height + this.offset.y - this.handle.y
 		) || (
 		this.angle !== 0 &&
-		this.jordanCurve(mouseX,mouseY)))
+		this.jordanCurve(mouseX, mouseY)))
 	{
-	  this.onClick();
+	    if (this.isClickedPrecise(mouseX, mouseY))
+	    {
+		this.onClick();
 
-	    return true;
-	    
+		return true;
+	    }
 	}
     }
 };
+
+L.objects.Sprite.prototype.isClickedPrecise = function(mouseX, mouseY)
+{
+    var layer = L.system.pixelContext[0];
+
+    
+
+    layer.clearRect(-1, -1, 3, 3);
+    layer.save();
+    layer.translate(-mouseX, -mouseY);
+    this.autoDraw(layer);
+    layer.restore();
+    var pixelData = layer.getImageData(0, 0, 1, 1).data;
+    return (pixelData[3] !== 0);
+
+
+
+};
+
 L.objects.Sprite.prototype.getSpeedX = function()
 {
     return Math.vectorX(this.speed, this.direction);
@@ -326,22 +349,22 @@ L.objects.Sprite.prototype.getVertices = function()
 
     var xTransform = this.x + this.offset.x;
     var yTransform = this.y + this.offset.y;
- 
+
     if (this.angle !== 0)
     {
 	var length = this.nudeVertices.length;
-	
-	for (var i =0; i < length; i++)
+
+	for (var i = 0; i < length; i++)
 	{
 	    this.vertices[i] = [
 		this.nudeVertices[i][0] * Math.cos(-this.angle) - this.nudeVertices[i][1] * Math.sin(-this.angle),
 		this.nudeVertices[i][0] * Math.sin(-this.angle) + this.nudeVertices[i][1] * Math.cos(-this.angle)
 	    ];
 	}
-    } 
-    else 
+    }
+    else
     {
-	for (var i =0; i < length; i++)
+	for (var i = 0; i < length; i++)
 	{
 	    this.vertices[i] = [this.nudeVertices[i][0], this.nudeVertices[i][0]];
 	}
@@ -360,24 +383,24 @@ L.objects.Sprite.prototype.jordanCurve = function(x, y)
     var isInPoly = false;
     var length = this.vertices.length;
     this.getVertices();
-    for (var i = 0, j = length-1; i< length; j= i++)
+    for (var i = 0, j = length - 1; i < length; j = i++)
     {
 	if ((this.vertices[i][1] > y) !== (this.vertices[j][1] > y))
 	{
-	    if (x < ((this.vertices[j][0] - this.vertices[i][0]) * (y - this.vertices[i][1])/(this.vertices[j][1]-this.vertices[i][1]) + this.vertices[i][0]))
+	    if (x < ((this.vertices[j][0] - this.vertices[i][0]) * (y - this.vertices[i][1]) / (this.vertices[j][1] - this.vertices[i][1]) + this.vertices[i][0]))
 	    {
 		isInPoly = !isInPoly;
 	    }
-	    
+
 	}
     }
     return isInPoly;
-    
+
 };
 
 
 
-  /*function pnpoly(nvert, vertx, verty,  testx,  testy)
+/*function pnpoly(nvert, vertx, verty,  testx,  testy)
  {
  var i, j, c = 0;
  for (i = 0, j = nvert-1; i < nvert; j = i++) {
@@ -388,7 +411,7 @@ L.objects.Sprite.prototype.jordanCurve = function(x, y)
  return c;
  }
  */
- 
+
 
 L.Frame = function(textureName, length)
 {
