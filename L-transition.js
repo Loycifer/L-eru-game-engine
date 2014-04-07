@@ -1,10 +1,23 @@
 var L;
 L.transitions = {};
+
+L.transitions.instant = {};
+
+L.transitions.instant.play = function(lastScene, nextScene, callback)
+{
+    if (lastScene.exit) {lastScene.exit();}
+    if (callback) {callback(nextScene);}
+    
+    L.system.currentScene = nextScene;    
+};
+
+
+
+
 L.transitions.fadeToColor =
 	{
 	    lastScene: {},
 	    nextScreen: {},
-	    lengthInSeconds: 0,
 	    timer: 0,
 	    state: "start"
 	};

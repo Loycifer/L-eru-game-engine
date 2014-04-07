@@ -67,5 +67,5 @@ L.objects.Scene.prototype.transition.fadeToBlack = function(nextScene, fadeOut, 
 L.objects.Scene.prototype.transition.instant = function(nextScene, callback)
 {
     
-    L.transitions.fadeToColor.play(L.system.currentScene, nextScene, 0, 0, 0, "#000000", callback);
+    L.transitions.instant.play(L.system.currentScene, nextScene, callback);
 };
