@@ -181,3 +181,12 @@ window.onunload = function() {
  
  alert(time1+","+time2);
  */
+
+L.system.renderCanvas = [];
+L.system.renderContext = [];
+L.system.bufferCanvas = [];
+L.system.bufferContext = [];
+L.system.fxCanvas = [];
+L.system.fxContext = [];
+L.system.pixelCanvas = [];
+L.system.pixelContext = [];

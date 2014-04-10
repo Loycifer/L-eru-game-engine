@@ -1,14 +1,7 @@
 var L;
 
 
-L.system.renderCanvas = [];
-L.system.renderContext = [];
-L.system.bufferCanvas = [];
-L.system.bufferContext = [];
-L.system.fxCanvas = [];
-L.system.fxContext = [];
-L.system.pixelCanvas = [];
-L.system.pixelContext = [];
+
 
 L.system.setup = function()
 {

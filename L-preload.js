@@ -62,6 +62,12 @@ Array.prototype.sortBy = function(sorter, order)
     });
 };
 
+
+Array.prototype.getRandomElement = function()
+{
+  return Math.floor(Math.random() * this.length);
+};
+
 Array.prototype.draw = function(targetContext)
 {
 

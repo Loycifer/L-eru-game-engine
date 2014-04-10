@@ -3,7 +3,7 @@ L.objects.Scene = function(name)
 {
     L.scenes[name] = this;
     this.layers = [];
-    this.bgFill = "cornflowerblue";
+    this.bgFill = "blueviolet";
     this.motionBlur = 0.5;
     this.keymap = {};
 
