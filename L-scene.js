@@ -5,12 +5,18 @@ L.objects.Scene = function(name)
     this.layers = [];
     this.bgFill = "cornflowerblue";
     this.motionBlur = 0.5;
+    this.keymap = {};
 
 };
 
 L.objects.Scene.prototype.update = function()
 {
     this.autoUpdate();
+};
+
+L.objects.Scene.prototype.doKeyDown = function(event)
+{
+    this.keymap.doKeyDown(event);
 };
 
 L.objects.Scene.prototype.autoUpdate = function()

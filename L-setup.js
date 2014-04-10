@@ -24,12 +24,12 @@ L.system.setup = function()
     L.system.bufferCanvas[0].width = width;
     L.system.bufferCanvas[0].height = height;
     L.system.bufferContext[0] = L.system.bufferCanvas[0].getContext("2d");
-    
+
     L.system.fxCanvas[0] = document.createElement('canvas');
     L.system.fxCanvas[0].width = width;
     L.system.fxCanvas[0].height = height;
     L.system.fxContext[0] = L.system.bufferCanvas[0].getContext("2d");
-    
+
     L.system.pixelCanvas[0] = document.createElement('canvas');
     L.system.pixelCanvas[0].width = 1;
     L.system.pixelCanvas[0].height = 1;
@@ -56,5 +56,10 @@ L.system.setup = function()
 		    L.system.handleClick
 
 		    );
+
+    window.addEventListener("keydown", doKeyDown, true);
+    function doKeyDown(event) {
+	L.system.currentScene.doKeyDown(event);
+    }
 
 };

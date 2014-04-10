@@ -191,10 +191,10 @@ L.input.Keymap.prototype.doKeyDown = function(event)
 
 L.input.Keymap.prototype.bindKey = function(key, callback)
 {
-
+    this.bindKeyCode(L.input.keyCodeFromString(key),callback);
 };
 
 L.input.Keymap.prototype.bindKeyCode = function(keyCode, callback)
 {
-
+this.bindings[keyCode] = callback;
 };
