@@ -36,18 +36,18 @@ L.transitions.fadeToColor.play = function(lastScene, nextScene, fadeOut, pause, 
     L.system.currentScene = this;
 };
 
-L.transitions.fadeToColor.update = function()
+L.transitions.fadeToColor.update = function(dt)
 {
     switch (this.state)
     {
 	case "start":
 	    this.timer = this.fadeOut;
-	    this.lastScene.update();
+	    this.lastScene.update(dt);
 	    this.state = "fadeOut";
 	    break;
 	case "fadeOut":
-	    this.timer -= L.system.dt;
-	    this.lastScene.update();
+	    this.timer -= dt;
+	    this.lastScene.update(dt);
 	    if (this.timer <= 0)
 	    {
 		this.timer = this.pause;
@@ -56,7 +56,7 @@ L.transitions.fadeToColor.update = function()
 	    }
 	    break;
 	case "pause":
-	    this.timer -= L.system.dt;
+	    this.timer -= dt;
 	    if (this.timer <= 0)
 	    {
 		this.timer = this.fadeIn;
@@ -64,8 +64,8 @@ L.transitions.fadeToColor.update = function()
 	    }
 	    break;
 	case "fadeIn":
-	    this.timer -= L.system.dt;
-	    this.nextScene.update();
+	    this.timer -= dt;
+	    this.nextScene.update(dt);
 	    if (this.timer <= 0)
 	    {
 		L.system.currentScene = this.nextScene;

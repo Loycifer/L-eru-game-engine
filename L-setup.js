@@ -42,11 +42,24 @@ L.system.setup = function()
 	var mouseY = e.pageY - L.system.canvasY;
 	L.system.currentScene.isClicked(mouseX, mouseY);
     };
+    
+    L.system.setMouseCoords = function(e)
+    {
+	L.system.mouseX = e.pageX - L.system.canvasX;
+	L.system.mouseY = e.pageY - L.system.canvasY;
+    };
 
     L.system.renderCanvas[0].addEventListener
 	    (
 		    'click',
 		    L.system.handleClick
+
+		    );
+
+    L.system.renderCanvas[0].addEventListener
+	    (
+		    'mousemove',
+		    L.system.setMouseCoords
 
 		    );
 

@@ -19,11 +19,12 @@ L.start = function() {
     (function gameLoop() {
 	L.system.now = window.performance.now();
 	L.system.dt = (L.system.now - L.system.then) / 1000;
-	if (L.system.dt > 1 / 45)
+	if (L.system.dt > 1 / L.system.frameCap)
 	{
-	    L.system.dt = 1 / 45;
+	    L.system.dt = 1 / L.system.frameCap;
 	}
 	L.system.then = L.system.now;
+	
 	game.update(L.system.dt);
 	game.draw();
 	requestAnimationFrame(gameLoop);
@@ -52,7 +53,9 @@ L.shout = function(message)
 
 L.system = {};
 L.system.timeScale = 1;
-L.system.frameCap = 30;
+L.system.frameCap = 45;
+L.system.mouseX = 0;
+L.system.mouseY = 0;
 L.system.now, L.system.then = window.performance.now();
 L.system.dt = 0;
 L.system.checkAudio = function() // Checks for client-supported audio type

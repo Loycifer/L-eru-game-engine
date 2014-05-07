@@ -99,12 +99,12 @@ L.objects.Textbox.prototype.autoDraw = function(layer)
 };
 
 
-L.objects.Textbox.prototype.update = function()
+L.objects.Textbox.prototype.update = function(dt)
 {
-    this.autoUpdate();
+    this.autoUpdate(dt);
 };
 
-L.objects.Textbox.prototype.autoUpdate = function()
+L.objects.Textbox.prototype.autoUpdate = function(dt)
 {
     
 };

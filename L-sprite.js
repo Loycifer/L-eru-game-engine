@@ -151,27 +151,27 @@ L.objects.Sprite.prototype.drawBoundingBox = function(layer)
     layer.stroke();
 };
 
-L.objects.Sprite.prototype.update = function()
+L.objects.Sprite.prototype.update = function(dt)
 {
-    this.autoUpdate();
+    this.autoUpdate(dt);
 };
 
 
-L.objects.Sprite.prototype.autoUpdate = function()
+L.objects.Sprite.prototype.autoUpdate = function(dt)
 {
-    this.speedX += this.accelX * L.system.dt * L.system.timeScale;
-    this.speedY += this.accelY * L.system.dt * L.system.timeScale;
-    this.x += this.speedX * L.system.dt * L.system.timeScale;
-    this.y += this.speedY * L.system.dt * L.system.timeScale;
-    this.rotation += this.rotationAccel * L.system.dt * L.system.timeScale;
-    this.angle += this.rotation * L.system.dt * L.system.timeScale;
+    this.speedX += this.accelX * dt * L.system.timeScale;
+    this.speedY += this.accelY * dt * L.system.timeScale;
+    this.x += this.speedX * dt * L.system.timeScale;
+    this.y += this.speedY * dt * L.system.timeScale;
+    this.rotation += this.rotationAccel * dt * L.system.timeScale;
+    this.angle += this.rotation * dt * L.system.timeScale;
 };
 
-L.objects.Sprite.prototype.experimentalUpdate = function()
+L.objects.Sprite.prototype.experimentalUpdate = function(dt)
 {
     //alert(this.landingTime);
 
-    this.time += L.system.dt * L.system.timeScale;
+    this.time += dt * L.system.timeScale;
     if (this.time >= this.landingTime)
     {
 
@@ -194,7 +194,7 @@ L.objects.Sprite.prototype.experimentalUpdate = function()
     }
 
 
-    if (this.landingTime < L.system.dt * L.system.timeScale)
+    if (this.landingTime < dt * L.system.timeScale)
     {
 	this.y = 500;
     } else {
@@ -209,8 +209,8 @@ L.objects.Sprite.prototype.experimentalUpdate = function()
 
 
 
-    this.nextSpeedX += this.accelX * L.system.dt * L.system.timeScale;
-    //  this.nextSpeedY += this.accelY * L.system.dt * L.system.timeScale;
+    this.nextSpeedX += this.accelX * dt * L.system.timeScale;
+    //  this.nextSpeedY += this.accelY * dt * L.system.timeScale;
 
     this.nextX += this.nextSpeedX * L.system.dt * L.system.timeScale;
     //   this.nextY += this.nextSpeedY * L.system.dt * L.system.timeScale;
