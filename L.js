@@ -26,8 +26,9 @@ L.start = function() {
 	L.system.then = L.system.now;
 	
 	game.update(L.system.dt);
-	game.draw();
+	
 	requestAnimationFrame(gameLoop);
+	game.draw();
 
 
     })();
@@ -78,9 +79,9 @@ L.system.checkAudio = function() // Checks for client-supported audio type
 
 };
 
-(function() {
+
     L.system.checkAudio();
-})();  //Autoruns checkAudio
+
 
 L.system.resourcePath = "resources/";		    // Holds path to resource folder
 L.system.soundPath = "sounds/";			    // Holds path to sound files
@@ -117,7 +118,7 @@ L.load.texture = function(name, file)
 	L.system.loadedResources += 1;
     };
     thisTexture.onerror = function(e) {
-	L.shout("Oops! Your browser does not support this audio type.");
+	L.shout("Something went wrong loading " + name);
     };
 
     thisTexture.src = L.system.resourcePath + L.system.texturePath + file;

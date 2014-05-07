@@ -400,19 +400,6 @@ L.objects.Sprite.prototype.jordanCurve = function(x, y)
 
 
 
-/*function pnpoly(nvert, vertx, verty,  testx,  testy)
- {
- var i, j, c = 0;
- for (i = 0, j = nvert-1; i < nvert; j = i++) {
- if ( ((verty[i]>testy) !== (verty[j]>testy)) &&
- (testx < (vertx[j]-vertx[i]) * (testy-verty[i]) / (verty[j]-verty[i]) + vertx[i]) )
- c = !c;
- }
- return c;
- }
- */
-
-
 L.Frame = function(textureName, length)
 {
     this.img = L.texture[textureName];
