@@ -22,17 +22,17 @@ L.objects.Layer.prototype.autoDraw = function()
 
 };
 
-L.objects.Layer.prototype.update = function()
+L.objects.Layer.prototype.update = function(dt)
 {
 
-    this.autoUpdate();
+    this.autoUpdate(dt);
 };
 
-L.objects.Layer.prototype.autoUpdate = function()
+L.objects.Layer.prototype.autoUpdate = function(dt)
 {
 
 
-    this.objects.update();
+    this.objects.update(dt);
 
     if (this.sorted)
     {

@@ -68,6 +68,20 @@ Array.prototype.getRandomElement = function()
   return Math.floor(Math.random() * this.length);
 };
 
+Array.prototype.removeElement = function(element)
+{
+    alert(2);
+  var targetIndex = this.indexOf(element);
+  
+  if (targetIndex !== -1)
+  {
+      alert("removed " + this[targetIndex]);
+      this.splice(targetIndex, 1);
+      
+  }
+  return this;
+};
+
 Array.prototype.draw = function(targetContext)
 {
 
@@ -83,7 +97,7 @@ Array.prototype.draw = function(targetContext)
     }
     //return this;
 };
-Array.prototype.update = function()
+Array.prototype.update = function(dt)
 {
 
 
@@ -93,7 +107,7 @@ Array.prototype.update = function()
     {
 	if (this[i].update)
 	{
-	    this[i].update();
+	    this[i].update(dt);
 	}
     }
     //return this;

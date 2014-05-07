@@ -57,10 +57,10 @@ function L_Game()
     };
 
 
-    this.update = function()
+    this.update = function(dt)
     {
 	//This function can be left alone; it invokes every active object's update() automatically
-	L.system.currentScene.update();
+	L.system.currentScene.update(dt);
 	
     };
 

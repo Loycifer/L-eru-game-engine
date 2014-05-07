@@ -9,9 +9,9 @@ L.objects.Scene = function(name)
 
 };
 
-L.objects.Scene.prototype.update = function()
+L.objects.Scene.prototype.update = function(dt)
 {
-    this.autoUpdate();
+    this.autoUpdate(dt);
 };
 
 L.objects.Scene.prototype.doKeyDown = function(event)
@@ -19,10 +19,10 @@ L.objects.Scene.prototype.doKeyDown = function(event)
     this.keymap.doKeyDown(event);
 };
 
-L.objects.Scene.prototype.autoUpdate = function()
+L.objects.Scene.prototype.autoUpdate = function(dt)
 {
     
-    this.layers.update();
+    this.layers.update(dt);
    
 };
 

@@ -24,7 +24,7 @@ L.start = function() {
 	    L.system.dt = 1 / 45;
 	}
 	L.system.then = L.system.now;
-	game.update();
+	game.update(L.system.dt);
 	game.draw();
 	requestAnimationFrame(gameLoop);
 
