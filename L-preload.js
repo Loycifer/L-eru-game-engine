@@ -1,3 +1,17 @@
+//window.performance.now() polyfill
+
+if (window.performance === undefined)
+{
+    window.performance = {};
+}
+if (!window.performance.now)
+{
+    
+    window.performance.now = function() {
+	return Date.now();
+    };
+}
+
 
 Array.prototype.copy = function()
 {

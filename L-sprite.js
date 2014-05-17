@@ -2,6 +2,7 @@ var L;
 L.objects = {};
 L.objects.Sprite = function(textureName, options)
 {
+    var that = this;
     this.animations = {};
     this.animations.idle = {};
     this.animations.idle[0] = {img: L.texture[textureName], length: 1000};
@@ -16,9 +17,19 @@ L.objects.Sprite = function(textureName, options)
     this.width = (options && options.width) ? options.width : this.animations.idle[0].img.width;
     this.height = (options && options.height) ? options.height : this.animations.idle[0].img.height;
 
-    this.center = {};
-    this.center.x = this.width / 2;
-    this.center.y = this.height / 2;
+
+    this.center =
+	    {
+		get x()
+		{
+		    return that.width / 2;
+		},
+		get y()
+		{
+		    return that.height / 2;
+		}
+	    };
+
 
     this.handle = {};
     this.handle.x = (options && options.handle && (options.handle.x || options.handle.x === 0)) ? options.handle.x : this.center.x;
@@ -268,7 +279,7 @@ L.objects.Sprite.prototype.isClickedPrecise = function(mouseX, mouseY)
 {
     var layer = L.system.pixelContext[0];
 
-    
+
 
     layer.clearRect(-1, -1, 3, 3);
     layer.save();
