@@ -3,13 +3,22 @@ L.objects = {};
 L.objects.Sprite = function(textureName, options)
 {
     var that = this;
-    this.animations = {};
-    this.animations.idle = {};
-    this.animations.idle[0] = {img: L.texture[textureName], length: 1000};
+    this.animations =
+    {
+	idle: []
+    };
+
+    this.animations.idle[0] =
+    {
+	img: L.texture[textureName],
+	length: 1000
+    };
+
     if (this.animations.idle[0].img)
     {
-	L.whisper("Created Sprite from texture \"" + textureName + "\".");
+	L.log("Created Sprite from texture \"" + textureName + "\".");
     }
+
     this.x = (options && options.x) ? options.x : 0;
     this.y = (options && options.y) ? options.y : 0;
     this.z = (options && options.z) ? options.z : 0;
@@ -19,17 +28,14 @@ L.objects.Sprite = function(textureName, options)
 
 
     this.center =
-	    {
-		get x()
-		{
-		    return that.width / 2;
-		},
-		get y()
-		{
-		    return that.height / 2;
-		}
-	    };
-
+    {
+	get x() {
+	    return that.width / 2;
+	},
+	get y() {
+	    return that.height / 2;
+	}
+    };
 
     this.handle = {};
     this.handle.x = (options && options.handle && (options.handle.x || options.handle.x === 0)) ? options.handle.x : this.center.x;
@@ -75,7 +81,7 @@ L.objects.Sprite = function(textureName, options)
     this.blendMode = "";
 
     this.onClick = function() {
-	alert("click");
+
     };
 
     this.currentAnimation = "idle";
@@ -88,7 +94,7 @@ L.objects.Sprite = function(textureName, options)
     this.isClickable = true;
 
 
-//Predictive physics experimentation
+    //Predictive physics experimentation
     this.gravity = 0;
     this.g = 1000;
     this.direction = -Math.PI / 2;
@@ -257,13 +263,13 @@ L.objects.Sprite.prototype.isClicked = function(mouseX, mouseY)
     if (this.isClickable)
     {
 	if ((this.angle === 0 &&
-		mouseX >= this.x + this.offset.x - this.handle.x &&
-		mouseX <= this.x + this.width + this.offset.x - this.handle.x &&
-		mouseY >= this.y + this.offset.y - this.handle.y &&
-		mouseY <= this.y + this.height + this.offset.y - this.handle.y
-		) || (
-		this.angle !== 0 &&
-		this.jordanCurve(mouseX, mouseY)))
+	mouseX >= this.x + this.offset.x - this.handle.x &&
+	mouseX <= this.x + this.width + this.offset.x - this.handle.x &&
+	mouseY >= this.y + this.offset.y - this.handle.y &&
+	mouseY <= this.y + this.height + this.offset.y - this.handle.y
+	) || (
+	this.angle !== 0 &&
+	this.jordanCurve(mouseX, mouseY)))
 	{
 	    if (this.isClickedPrecise(mouseX, mouseY))
 	    {
@@ -310,8 +316,8 @@ L.objects.Sprite.prototype.applyForce = function(speed, direction)
     var y1 = this.getSpeedY();
     // var d1 = this.direction;
 
-    var x2 = Math.vectorX(speed, direction);// * L.system.dt* L.system.timeScale;
-    var y2 = Math.vectorY(speed, direction);// * L.system.dt * L.system.timeScale;
+    var x2 = Math.vectorX(speed, direction); // * L.system.dt* L.system.timeScale;
+    var y2 = Math.vectorY(speed, direction); // * L.system.dt * L.system.timeScale;
     //var d2 = direction;
 
 
@@ -320,7 +326,7 @@ L.objects.Sprite.prototype.applyForce = function(speed, direction)
 
     var length = Math.pow((Math.pow(adj, 2) + Math.pow(opp, 2)), 1 / 2);
     var angle = Math.radToDeg(Math.atan2(-opp, adj));
-//alert(length);
+    //alert(length);
     this.direction = angle;
     this.speed = length;
 
@@ -344,14 +350,20 @@ L.objects.Sprite.prototype.move = function(coords)
     this.y += coords.y;
 };
 
-L.objects.Sprite.prototype.movex = function(x)
+L.objects.Sprite.prototype.moveX = function(x)
 {
-    this.move({x: x, y: 0});
+    this.move({
+	x: x,
+	y: 0
+    });
 };
 
-L.objects.Sprite.prototype.movey = function(y)
+L.objects.Sprite.prototype.moveY = function(y)
 {
-    this.move({x: 0, y: y});
+    this.move({
+	x: 0,
+	y: y
+    });
 };
 
 
@@ -360,11 +372,10 @@ L.objects.Sprite.prototype.getVertices = function()
 
     var xTransform = this.x + this.offset.x;
     var yTransform = this.y + this.offset.y;
+    var length = this.nudeVertices.length;
 
     if (this.angle !== 0)
     {
-	var length = this.nudeVertices.length;
-
 	for (var i = 0; i < length; i++)
 	{
 	    this.vertices[i] = [
@@ -410,7 +421,6 @@ L.objects.Sprite.prototype.jordanCurve = function(x, y)
 };
 
 
-
 L.Frame = function(textureName, length)
 {
     this.img = L.texture[textureName];
@@ -421,4 +431,3 @@ L.Animation = function(frames)
 {
 
 };
-

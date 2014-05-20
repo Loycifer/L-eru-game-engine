@@ -6,7 +6,7 @@ if (window.performance === undefined)
 }
 if (!window.performance.now)
 {
-    
+
     window.performance.now = function() {
 	return Date.now();
     };
@@ -51,7 +51,6 @@ Array.prototype.mapQuick = function(callback)
 
 Array.prototype.sortBy = function(sorter, order)
 {
-    var sortBy = sorter;
     var length = this.length;
     if (order === undefined)
     {
@@ -63,14 +62,16 @@ Array.prototype.sortBy = function(sorter, order)
     {
 	if (this[i] instanceof Array)
 	{
-	    this[i].sortBy(sortBy, order);
+	    this[i].sortBy(sorter, order);
 	}
     }
 
     this.sort(function(a, b) {
-	var current = a[sortBy];
-	var next = b[sortBy];
+	var current = +a[sorter];
+	var next = +b[sorter];
 	return order * (current - next);
+
+
 
 
     });
@@ -79,21 +80,21 @@ Array.prototype.sortBy = function(sorter, order)
 
 Array.prototype.getRandomElement = function()
 {
-  return Math.floor(Math.random() * this.length);
+    return Math.floor(Math.random() * this.length);
 };
 
 Array.prototype.removeElement = function(element)
 {
     alert(2);
-  var targetIndex = this.indexOf(element);
-  
-  if (targetIndex !== -1)
-  {
-      alert("removed " + this[targetIndex]);
-      this.splice(targetIndex, 1);
-      
-  }
-  return this;
+    var targetIndex = this.indexOf(element);
+
+    if (targetIndex !== -1)
+    {
+	alert("removed " + this[targetIndex]);
+	this.splice(targetIndex, 1);
+
+    }
+    return this;
 };
 
 Array.prototype.draw = function(targetContext)
@@ -135,11 +136,11 @@ Array.prototype.isClicked = function(mouseX, mouseY)
     for (var i = length - 1; i >= 0; i--)
     {
 
-	    if (this[i].isClicked && this[i].isClicked(mouseX, mouseY))
-	    {
-		return true;
-	    }
-	
+	if (this[i].isClicked && this[i].isClicked(mouseX, mouseY))
+	{
+	    return true;
+	}
+
 
     }
     //return this;
@@ -148,13 +149,13 @@ Array.prototype.isClicked = function(mouseX, mouseY)
  Number.prototype.clamp = function(min, max) {
  return Math.min(Math.max(this, min), max);
  };
- 
+
  Number.prototype.isBetween = function (min, max)
  {
- return (this === this.clamp(min,max));  
+ return (this === this.clamp(min,max));
  };
- 
- 
+
+
  */
 
 Math.degToRad = function(deg)

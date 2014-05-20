@@ -12,7 +12,6 @@ L.start = function() {
 
     game.settings();
     L.system.setup();
-    //TODO stuff
     game.resources();
     game.initialise();
 
@@ -24,9 +23,9 @@ L.start = function() {
 	    L.system.dt = 1 / L.system.frameCap;
 	}
 	L.system.then = L.system.now;
-	
+
 	game.update(L.system.dt);
-	
+
 	requestAnimationFrame(gameLoop);
 	game.draw();
 
@@ -39,22 +38,31 @@ L.start = function() {
 
 /***********************************************************************
  * Initialization
- * 
+ *
  */
 
-L.whisper = function(message)
+L.log = function(message)
 {
-    console.log(message);
+    if (console && console.log)
+    {
+	console.log(message);
+    }
 };
 
-L.shout = function(message)
+L.alert = function(message)
 {
-    window.alert(message);
+    if (window && window.alert)
+    {
+	window.alert(message);
+    }
 };
 
 L.system = {};
+L.system.orientation = 'landscape';
+L.system.fullscreen = true;
+L.system.canvasRatio = 1;
 L.system.timeScale = 1;
-L.system.frameCap = 45;
+L.system.frameCap = 30;
 L.system.mouseX = 0;
 L.system.mouseY = 0;
 L.system.now, L.system.then = window.performance.now();
@@ -65,22 +73,22 @@ L.system.checkAudio = function() // Checks for client-supported audio type
     if (dummyAudio.canPlayType('audio/wav'))
     {
 	L.system.audioType = ".wav";
-	L.whisper("Using .wav files");
+	L.log("Using .wav files");
     }
     else if (dummyAudio.canPlayType('audio/mp4'))
     {
 	L.system.audioType = ".m4a";
-	L.whisper("Using .m4a files");
+	L.log("Using .m4a files");
     }
     else
     {
-	L.shout("Your browser doesn't support .wav or .m4a files.");
+	L.alert("Your browser doesn't support .wav or .m4a files.");
     }
 
 };
 
 
-    L.system.checkAudio();
+L.system.checkAudio();
 
 
 L.system.resourcePath = "resources/";		    // Holds path to resource folder
@@ -104,7 +112,7 @@ L.system.currentScene = {};
 L.scenes = {};
 /**********************************************************************
  *  Resources
- * 
+ *
  */
 
 L.texture = {};
@@ -118,7 +126,7 @@ L.load.texture = function(name, file)
 	L.system.loadedResources += 1;
     };
     thisTexture.onerror = function(e) {
-	L.shout("Something went wrong loading " + name);
+	L.alert("Something went wrong loading " + name);
     };
 
     thisTexture.src = L.system.resourcePath + L.system.texturePath + file;
@@ -149,10 +157,10 @@ L.music = {};
  * Layers
  * Textbox
  * Rotation
- * 
- * 
- * 
- * 
+ *
+ *
+ *
+ *
  */
 
 
@@ -163,7 +171,7 @@ window.addEventListener('load', L.start);
 
 
 //window.onunload = function() {
-  //  L = null;
+//  L = null;
 //};
 
 /*
@@ -175,14 +183,14 @@ window.addEventListener('load', L.start);
  targetarray = arraytest.copy();
  }
  var time1 = window.performance.now() - starttime;
- 
+
  var starttime = window.performance.now();
  for (var i = 0; i < 1000; i++)
  {
  targetarray = arraytest.copy2();
  }
  var time2 = window.performance.now() - starttime;
- 
+
  alert(time1+","+time2);
  */
 
