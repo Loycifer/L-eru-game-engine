@@ -43,6 +43,6 @@ function addFile(sources)
     xmlhttp.open("GET", sources[0] + ".js", true);
     xmlhttp.send();
 }
-files = ["L-preload", "L", "L-setup", "L-sprite", "L-layer", "L-scene", "L-textbox", "L-transition",
+files = ["L-preload", "L", "L-setup", "L-display", "L-sprite", "L-layer", "L-scene", "L-textbox", "L-transition",
     "L-keymap"];
 addFile(files);
