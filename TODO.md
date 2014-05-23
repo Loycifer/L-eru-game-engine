@@ -25,6 +25,9 @@
 - [X] Keymap
   - [X] Create string label for each button
   - [ ] Add proper handlers of shift, ctrl, alt, and caps
+- [X] Mouse input
+  - [ ] Refine mouse event handlers
+  - [ ] Create object which holds mouse state
 - [X] Transitions
   - [ ] Add callback applicable to previous scene
 - [ ] Skeletal animation
