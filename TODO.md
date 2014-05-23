@@ -14,6 +14,7 @@
   - [ ] Scroll Rate (requires camera completion)
   - [ ] Zoom Rate {requires camera completion)
 - [X] Sprites
+  - [ ] Add scaling to sprite logic
 - [ ] SoundFX & Music Objects
   - [ ] Getters and setters for volume etc.
 - [X] Textbox
@@ -32,4 +33,5 @@
   - [ ] Module for web browser games
   - [ ] Module for mobile HTML5 games
 
+##Bugfixes
 
