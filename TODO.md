@@ -33,6 +33,3 @@
   - [ ] Module for mobile HTML5 games
 
 
-
-
-##Bug Fixes
