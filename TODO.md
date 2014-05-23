@@ -6,6 +6,8 @@
   - [ ] Audio
   - [ ] Video
 - [X] Scenes
+  - [ ] New instance should have 1 layer
+  - [ ] .addObject method which adds object to layer 0 by default
 - [ ] SimpleScenes
   - [ ] Loadscreen
   - [ ] Image Slide
