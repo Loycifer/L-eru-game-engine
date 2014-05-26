@@ -35,7 +35,8 @@
 - [ ] Cameras
   - [ ] Camera Transitions
 - [ ] Save/Load module
-  - [ ] Module for web browser games
-  - [ ] Module for mobile HTML5 games
+  - [ ] Web Storage version
+  - [ ] IndexedDB version
+  - [ ] File API?
 
 ##Bugfixes
