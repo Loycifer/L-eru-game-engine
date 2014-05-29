@@ -17,11 +17,17 @@
   - [ ] Zoom Rate {requires camera completion)
 - [X] Sprites
   - [ ] Add scaling to sprite logic
+  - [ ] Bounding precision option
 - [ ] SoundFX & Music Objects
   - [ ] Getters and setters for volume etc.
 - [X] Textbox
   - [ ] Make multiline
   - [ ] Make .text getter and setter pair
+- [ ] PolySprites
+  - [ ] Rect & Square
+  - [ ] Circle & Ellipse
+  - [ ] N-sided equal poly
+  - [ ] Custom-vertex poly
 - [X] Keymap
   - [X] Create string label for each button
   - [ ] Add proper handlers of shift, ctrl, alt, and caps
