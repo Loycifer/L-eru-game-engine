@@ -21,8 +21,8 @@
 - [ ] SoundFX & Music Objects
   - [ ] Getters and setters for volume etc.
 - [X] Textbox
-  - [ ] Make multiline
-  - [ ] Make .text getter and setter pair
+  - [X] Make multiline
+  - [X] Make .text getter and setter pair
 - [ ] PolySprites
   - [ ] Rect & Square
   - [ ] Circle & Ellipse
