@@ -2,7 +2,6 @@ var L;
 L.objects = {};
 L.objects.Sprite = function(textureName, options)
 {
-    var that = this;
     this.animations =
     {
 	idle: []
@@ -26,16 +25,14 @@ L.objects.Sprite = function(textureName, options)
     this.width = (options && options.width) ? options.width : this.animations.idle[0].img.width;
     this.height = (options && options.height) ? options.height : this.animations.idle[0].img.height;
 
-
-    this.center =
-    {
-	get x() {
-	    return that.width / 2;
-	},
-	get y() {
-	    return that.height / 2;
-	}
-    };
+    Object.defineProperty(this, "center", {
+	get: function() {
+	    return {
+		x: this.width / 2,
+		y: this.height / 2
+	    };
+	}.bind(this)
+    });
 
     this.handle = {};
     this.handle.x = (options && options.handle && (options.handle.x || options.handle.x === 0)) ? options.handle.x : this.center.x;
@@ -94,7 +91,7 @@ L.objects.Sprite = function(textureName, options)
     this.isClickable = true;
 
 
-    //Predictive physics experimentation
+//Predictive physics experimentation
     this.gravity = 0;
     this.g = 1000;
     this.direction = -Math.PI / 2;
@@ -290,7 +287,7 @@ L.objects.Sprite.prototype.isClickedPrecise = function(mouseX, mouseY)
     layer.clearRect(-1, -1, 3, 3);
     layer.save();
     layer.translate(-mouseX, -mouseY);
-    this.autoDraw(layer);
+    this.draw(layer);
     layer.restore();
     var pixelData = layer.getImageData(0, 0, 1, 1).data;
     return (pixelData[3] !== 0);
