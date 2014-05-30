@@ -39,6 +39,6 @@ L.display.autoResize = function()
     L.system.renderCanvas[0].style.width = canvasWidth * L.system.canvasRatio + "px";
     L.system.renderCanvas[0].style.height = canvasHeight * L.system.canvasRatio + "px";
     document.body.style.width = "100%";//L.system.renderCanvas[0].style.width;
-    document.body.style.height = L.system.renderCanvas[0].style.height;
-
+    //document.body.style.height = canvasHeight * L.system.canvasRatio - 0 + "px";
+    document.body.style.height = Math.floor(windowHeight) + "px";
 };

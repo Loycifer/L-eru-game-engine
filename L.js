@@ -1,9 +1,8 @@
+/*
+ * L ('ɛrɥ) Game Engine Core
+ */
 
-
-
-// L ('ɛrɥ) Game Engine
 var L = {};
-
 
 L.start = function() {
 
@@ -28,18 +27,8 @@ L.start = function() {
 
 	requestAnimationFrame(gameLoop);
 	game.draw();
-
-
     })();
-
 };
-
-
-
-/***********************************************************************
- * Initialization
- *
- */
 
 L.log = function(message)
 {

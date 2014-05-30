@@ -15,23 +15,29 @@ function addFile(sources)
     {
 	if (xmlhttp.readyState === 4 && xmlhttp.status === 200)
 	{
-	    //var response = xmlhttp.responseText.replace("var L;", "");
-	    var response = xmlhttp.responseText;
-	    combinedFiles += "<pre><code>" + response + "</code></pre>";
+	    var response = xmlhttp.responseText.replace("var L;", "");
+	    //var response = xmlhttp.responseText;
+	    //combinedFiles += "<pre><code>" + response + "</code></pre>";
+	    combinedFiles += response;
 	    if (length > 1)
 	    {
 		sources.shift();
 
 		addFile(sources);
 	    } else {
-
-		output.innerHTML = "// L (eru) Game Engine instant build compiled at " + new Date().toUTCString() + "\n" + combinedFiles;
-		//var file = document.createElement('a');
-		//file.setAttribute('href', 'data:application/octet-stream,' + encodeURIComponent("combinedFiles"));
-		//file.setAttribute('download', "L-eru.combined.txt");
-		// document.body.appendChild(file);
-		//file.click();
-		//document.body.removeChild(file);
+		//combinedFiles = combinedFiles.replace(/\s{2,}/g, ' ');
+		var buildDate = new Date();
+		var dateVersion = buildDate.getFullYear() + "." + buildDate.getMonth() + "." + buildDate.getDate() + "." + buildDate.getHours() + "." + buildDate.getMinutes();
+		output.innerHTML = "// L ('eru) Game Engine Automatic Instant build compiled at " + buildDate.toUTCString() + "<br>"
+		+ "// For a stable release, check <a href='https://github.com/Loycifer/L-eru-game-engine/tree/master/release'>https://github.com/Loycifer/L-eru-game-engine/tree/master/release</a>" + "<br>"
+		+ "// Save this page as a plain-text file or copy the page's contents to your clipboard."
+		+ "<br><pre><code>" + combinedFiles + "</code></pre>";
+		/*var file = document.createElement('a');
+		 file.setAttribute('href', 'data:application/octet-stream,' + encodeURIComponent(combinedFiles.replace("  ", " ")));
+		 file.setAttribute('download', "L-eru.instant." + dateVersion + ".txt");
+		 document.body.appendChild(file);
+		 file.click();
+		 document.body.removeChild(file);*/
 	    }
 	}
 	else if (xmlhttp.status === 404)

@@ -1,29 +1,28 @@
-//window.performance.now() polyfill
+/*
+ * Preload
+ */
 
-if (window.performance === undefined)
+//window.performance.now() polyfill
+if (!window.performance)
 {
     window.performance = {};
 }
+
 if (!window.performance.now)
 {
-
     window.performance.now = function() {
 	return Date.now();
     };
 }
 
-
+//Array extended methods
 Array.prototype.copy = function()
 {
-
     return this.slice(0);
 };
 
 Array.prototype.copy2 = function()
 {
-
-
-
     var length = this.length;
     var arrayCopy = [];
     for (var i = 0; i < length; i++)
@@ -57,7 +56,6 @@ Array.prototype.sortBy = function(sorter, order)
 	order = 1;
     }
 
-
     for (var i = 0; i < length; i++)
     {
 	if (this[i] instanceof Array)
@@ -70,13 +68,8 @@ Array.prototype.sortBy = function(sorter, order)
 	var current = +a[sorter];
 	var next = +b[sorter];
 	return order * (current - next);
-
-
-
-
     });
 };
-
 
 Array.prototype.getRandomElement = function()
 {
@@ -92,15 +85,12 @@ Array.prototype.removeElement = function(element)
     {
 	alert("removed " + this[targetIndex]);
 	this.splice(targetIndex, 1);
-
     }
     return this;
 };
 
 Array.prototype.draw = function(targetContext)
 {
-
-
     var length = this.length;
 
     for (var i = 0; i < length; i++)
@@ -110,8 +100,8 @@ Array.prototype.draw = function(targetContext)
 	    this[i].draw(targetContext);
 	}
     }
-    //return this;
 };
+
 Array.prototype.update = function(dt)
 {
 
@@ -125,12 +115,10 @@ Array.prototype.update = function(dt)
 	    this[i].update(dt);
 	}
     }
-    //return this;
 };
+
 Array.prototype.isClicked = function(mouseX, mouseY)
 {
-
-
     var length = this.length;
 
     for (var i = length - 1; i >= 0; i--)
@@ -140,10 +128,7 @@ Array.prototype.isClicked = function(mouseX, mouseY)
 	{
 	    return true;
 	}
-
-
     }
-    //return this;
 };
 /*
  Number.prototype.clamp = function(min, max) {
@@ -155,9 +140,9 @@ Array.prototype.isClicked = function(mouseX, mouseY)
  return (this === this.clamp(min,max));
  };
 
-
  */
 
+//Math extended methods
 Math.degToRad = function(deg)
 {
     return (deg * (Math.PI / 180));
@@ -170,7 +155,6 @@ Math.radToDeg = function(rad)
 
 Math.vectorX = function(speed, direction)
 {
-
     switch (direction)
     {
 	case 0:
@@ -188,6 +172,7 @@ Math.vectorX = function(speed, direction)
 	    break;
     }
 };
+
 Math.vectorY = function(speed, direction)
 {
     switch (direction)
@@ -228,14 +213,9 @@ Math.Vector.prototype.addVector = function(vector)
     var adj = x1 + x2;
     var opp = y1 + y2;
 
-
     var newDirection = Math.atan(opp / adj);
     var newMagnitude = Math.sqrt((Math.pow(adj, 2) + Math.pow(opp, 2)));
 
     this.magnitude = newMagnitude;
     this.direction = newDirection;
-
-
-
-
 };
