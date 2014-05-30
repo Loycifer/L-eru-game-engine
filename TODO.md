@@ -46,5 +46,6 @@
   - [ ] Web Storage version
   - [ ] IndexedDB version
   - [ ] File API?
+- [ ] Move JordanCurve() to Math object
 
 ##Bugfixes
