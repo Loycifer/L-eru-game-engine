@@ -12,6 +12,7 @@
   - [ ] Loadscreen
   - [ ] Image Slide
   - [ ] Video
+  - [ ] State Machine Scene / Hub Scene
 - [X] Layers
   - [ ] Scroll Rate (requires camera completion)
   - [ ] Zoom Rate {requires camera completion)
