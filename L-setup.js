@@ -9,10 +9,14 @@ L.system.setup = function()
     var height = L.system.height;
     var aspectRatio = L.system.aspectRatio = width / height;
 
-    if (screen !== undefined & screen.lockOrientation) {
+    try {
 	screen.lockOrientation(L.system.orientation);
     }
-    ;
+    catch (e)
+    {
+	L.log("Warning: Screen orientation could not be locked.");
+    }
+
 
 
     L.system.renderCanvas[0] = document.createElement("canvas");
@@ -21,9 +25,7 @@ L.system.setup = function()
 
     L.system.canvasLocation.appendChild(L.system.renderCanvas[0]);
     L.system.renderContext[0] = L.system.renderCanvas[0].getContext("2d");
-    // L.system.renderCanvas[0].mozRequestFullscreen();
-    //L.system.canvasLocation.firstElementChild.requestFullscreen();
-    // L.system.renderCanvas[0].style.width = "100%";
+
 
 
 
@@ -64,7 +66,10 @@ L.system.setup = function()
 
 	var mouseX = (e.pageX - L.system.canvasX) / L.system.canvasRatio;
 	var mouseY = (e.pageY - L.system.canvasY) / L.system.canvasRatio;
-	L.system.currentScene.isClicked(mouseX, mouseY);
+	if (L.system.currentScene.isClicked)
+	{
+	    L.system.currentScene.isClicked(mouseX, mouseY);
+	}
     };
 
     L.system.setMouseCoords = function(e)
@@ -91,6 +96,10 @@ L.system.setup = function()
     }
 
     if (L.system.fullscreen) {
+	var CSSOptions = "margin: 0px; padding: 0px; border-width: 0px;	overflow:hidden;";
+	//document.body.style = CSSOptions;
+	//document.getElementsByTagName("html")[0].style = CSSOptions;
+	//L.system.renderCanvas[0].style = "margin:0px auto; transition-property: all; transition-duration: 1s; transition-timing-function: ease;" + CSSOptions;
 	L.display.autoResize();
 	window.addEventListener('resize', L.display.autoResize, true);
     }
