@@ -14,7 +14,7 @@ function L_Game()
     //eg. var WIDTH = 640;
 
     //Objects and Arrays
-    
+
 
     //Input Handling
     //eg. window.addEventListener("keydown", yourKeydownFunction, true);
@@ -25,9 +25,11 @@ function L_Game()
 
 
 	//This is where to adjust engine settings
-	//eg. L.system.width = WIDTH;
-	//    L.system.height = (L.system.Width/16) * 9;
-	//    L.system.useDoubleBuffer = true;
+	L.system.width = 900;
+	L.system.height = 600;
+	//L.system.canvasLocation = document.getElementById("YOURDIV");
+	L.system.fullscreen = true;
+	L.system.orientation = "landscape";
 
 
     };
@@ -61,7 +63,7 @@ function L_Game()
     {
 	//This function can be left alone; it invokes every active object's update() automatically
 	L.system.currentScene.update(dt);
-	
+
     };
 
 
