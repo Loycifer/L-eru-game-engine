@@ -4,7 +4,7 @@ L.objects.Scene = function(name)
     L.scenes[name] = this;
     this.layers = [new L.objects.Layer(L.system.bufferContext[0])];
     this.bgFill = "blueviolet";
-    this.motionBlur = 0.5;
+    this.motionBlur = 1;
     this.keymap = {};
 
 };
@@ -52,6 +52,11 @@ L.objects.Scene.prototype.addLayer = function(howMany)
 L.objects.Scene.prototype.addObject = function(object)
 {
     this.layers[0].addObject(object);
+};
+
+L.objects.Scene.prototype.addObjectToLayer = function(object, layer)
+{
+    this.layers[layer].addObject(object);
 };
 
 L.objects.Scene.prototype.isClicked = function(mouseX, mouseY)
