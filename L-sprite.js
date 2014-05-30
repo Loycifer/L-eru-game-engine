@@ -266,7 +266,7 @@ L.objects.Sprite.prototype.isClicked = function(mouseX, mouseY)
 	mouseY <= this.y + this.height + this.offset.y - this.handle.y
 	) || (
 	this.angle !== 0 &&
-	this.jordanCurve(mouseX, mouseY)))
+	Math.jordanCurve(mouseX, mouseY, this.getVertices())))
 	{
 	    if (this.isClickedPrecise(mouseX, mouseY))
 	    {
@@ -396,27 +396,6 @@ L.objects.Sprite.prototype.getVertices = function()
 
     return this.vertices;
 };
-
-L.objects.Sprite.prototype.jordanCurve = function(x, y)
-{
-    var isInPoly = false;
-    var length = this.vertices.length;
-    this.getVertices();
-    for (var i = 0, j = length - 1; i < length; j = i++)
-    {
-	if ((this.vertices[i][1] > y) !== (this.vertices[j][1] > y))
-	{
-	    if (x < ((this.vertices[j][0] - this.vertices[i][0]) * (y - this.vertices[i][1]) / (this.vertices[j][1] - this.vertices[i][1]) + this.vertices[i][0]))
-	    {
-		isInPoly = !isInPoly;
-	    }
-
-	}
-    }
-    return isInPoly;
-
-};
-
 
 L.Frame = function(textureName, length)
 {

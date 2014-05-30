@@ -143,6 +143,28 @@ Array.prototype.isClicked = function(mouseX, mouseY)
  */
 
 //Math extended methods
+
+Math.jordanCurve = function(x, y, vertices)
+{
+
+    var isInPoly = false;
+    //var vertices = this.getVertices();
+    var length = vertices.length;
+    //alert(vertices);
+    for (var i = 0, j = length - 1; i < length; j = i++)
+    {
+	if ((vertices[i][1] > y) !== (vertices[j][1] > y))
+	{
+	    if (x < ((vertices[j][0] - vertices[i][0]) * (y - vertices[i][1]) / (vertices[j][1] - vertices[i][1]) + vertices[i][0]))
+	    {
+		isInPoly = !isInPoly;
+	    }
+
+	}
+    }
+    return isInPoly;
+};
+
 Math.degToRad = function(deg)
 {
     return (deg * (Math.PI / 180));

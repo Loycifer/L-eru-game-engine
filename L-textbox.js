@@ -296,7 +296,7 @@ L.objects.Textbox.prototype.isClicked = function(mouseX, mouseY)
 	mouseY <= this.y + this.height + this.marginTop + this.marginBottom - this.handle.y + (this.fontSize * (this.textArray.length - 1) * this.lineSpacing)
 	) || (
 	this.angle !== 0 &&
-	this.jordanCurve(mouseX, mouseY)))
+	Math.jordanCurve(mouseX, mouseY, this.getVertices())))
 	{
 	    this.onClick();
 
@@ -337,25 +337,4 @@ L.objects.Textbox.prototype.getVertices = function()
 
     return vertices;
 
-};
-
-L.objects.Textbox.prototype.jordanCurve = function(x, y)
-{
-
-    var isInPoly = false;
-    var vertices = this.getVertices();
-    var length = vertices.length;
-    //alert(vertices);
-    for (var i = 0, j = length - 1; i < length; j = i++)
-    {
-	if ((vertices[i][1] > y) !== (vertices[j][1] > y))
-	{
-	    if (x < ((vertices[j][0] - vertices[i][0]) * (y - vertices[i][1]) / (vertices[j][1] - vertices[i][1]) + vertices[i][0]))
-	    {
-		isInPoly = !isInPoly;
-	    }
-
-	}
-    }
-    return isInPoly;
 };
