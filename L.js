@@ -4,6 +4,16 @@
 
 var L = {};
 
+/*
+ * Core Structuring
+ */
+
+L.system = {};
+L.objects = {};
+
+
+
+
 L.start = function() {
 
     window.removeEventListener('load', L.start);
@@ -56,28 +66,7 @@ L.system.mouseX = 0;
 L.system.mouseY = 0;
 L.system.now, L.system.then = window.performance.now();
 L.system.dt = 0;
-L.system.checkAudio = function() // Checks for client-supported audio type
-{
-    var dummyAudio = document.createElement('audio');
-    if (dummyAudio.canPlayType('audio/wav'))
-    {
-	L.system.audioType = ".wav";
-	L.log("Using .wav files");
-    }
-    else if (dummyAudio.canPlayType('audio/mp4'))
-    {
-	L.system.audioType = ".m4a";
-	L.log("Using .m4a files");
-    }
-    else
-    {
-	L.alert("Your browser doesn't support .wav or .m4a files.");
-    }
 
-};
-
-
-L.system.checkAudio();
 
 
 L.system.resourcePath = "resources/";		    // Holds path to resource folder
@@ -105,23 +94,27 @@ L.scenes = {};
  */
 
 L.texture = {};
+
 L.load = {};
-L.load.texture = function(name, file)
+
+L.load.texture = function(file, textureName)
 {
     L.system.expectedResources += 1;
     var thisTexture = new Image();
+    var name = (textureName === undefined) ? file.substr(0, file.lastIndexOf(".")) : textureName;
 
     thisTexture.onload = function() {
 	L.system.loadedResources += 1;
     };
-    thisTexture.onerror = function(e) {
-	L.alert("Something went wrong loading " + name);
+
+    thisTexture.onerror = function() {
+	L.alert("Something went wrong loading texture file " + file + ".");
     };
 
     thisTexture.src = L.system.resourcePath + L.system.texturePath + file;
 
     L.texture[name] = thisTexture;
-    //alert("hi");
+    return thisTexture;
 };
 
 
@@ -129,59 +122,10 @@ L.load.texture = function(name, file)
 L.sound = {};
 L.music = {};
 
-
-
-
-
-
-
-/*TODO
- * Texture2D
- * Sprites
- * Audio
- * Bone Movement
- * Control Mapper
- * Clickables
- * Stage
- * Layers
- * Textbox
- * Rotation
- *
- *
- *
- *
- */
-
-
 //window.onload = L.start;
 window.addEventListener('load', L.start);
 
 
-
-
-//window.onunload = function() {
-//  L = null;
-//};
-
-/*
- var arraytest = [1,2,3,4,5,6,7,8,9,0,[1,2,3,4,5,6,7,8,9,0]];
- var targetarray = [];
- var starttime = window.performance.now();
- for (var i = 0; i < 1000; i++)
- {
- targetarray = arraytest.copy();
- }
- var time1 = window.performance.now() - starttime;
-
- var starttime = window.performance.now();
- for (var i = 0; i < 1000; i++)
- {
- targetarray = arraytest.copy2();
- }
- var time2 = window.performance.now() - starttime;
-
- alert(time1+","+time2);
- */
 
 L.system.renderCanvas = [];
 L.system.renderContext = [];

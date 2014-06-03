@@ -2,11 +2,11 @@ var L;
 L.objects.Textbox = function(text, x, y, width, height, wordwrap)
 {
 
-    //this.text = [];
-    //this.text = text || "Textbox";
-    //this.width = width;
-    //this.height = height;
-    this.words = [];
+
+    this.width = (width === undefined) ? 200 : width;
+    this.height = height;
+
+    this.words = (text === undefined) ? [] : text.split(" ");
     this.textArray = [];
     Object.defineProperty(this, "text", {
 	set: function(text)
@@ -19,6 +19,7 @@ L.objects.Textbox = function(text, x, y, width, height, wordwrap)
 	    return this.words.join(" ");
 	}.bind(this)
     });
+
 
 
     this.x = x;
@@ -45,8 +46,7 @@ L.objects.Textbox = function(text, x, y, width, height, wordwrap)
     this.alignment = "left";
     this.alignmentY = "top";
 
-    this.width = 0;
-    this.height = 0;
+
 
     this.backgroundFill = "#FFFFFF";
     this.borderFill = "";
@@ -142,6 +142,7 @@ L.objects.Textbox.prototype.autoSize = function()
 {
     this.autoSizeX();
     this.autoSizeY();
+    this.wrapText();
 };
 
 L.objects.Textbox.prototype.autoSizeX = function()

@@ -1,5 +1,4 @@
 var L;
-L.objects = {};
 L.objects.Sprite = function(textureName, options)
 {
     this.animations =
