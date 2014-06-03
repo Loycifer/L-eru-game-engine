@@ -47,6 +47,7 @@
   - [ ] Web Storage version
   - [ ] IndexedDB version
   - [ ] File API?
-- [ ] Move JordanCurve() to Math object
+- [X] Move JordanCurve() to Math object
+- [ ] Add option to turn off image smoothing
 
 ##Bugfixes
