@@ -63,13 +63,17 @@ L.system.setup = function()
 
     L.system.handleClick = function(e)
     {
+	if (e.targetTouches) {
+	    var isTouch = true;
+	}
 
-	var mouseX = (e.pageX - L.system.canvasX) / L.system.canvasRatio;
-	var mouseY = (e.pageY - L.system.canvasY) / L.system.canvasRatio;
+	var mouseX = ((isTouch ? e.targetTouches[0].pageX : e.pageX) - L.system.canvasX) / L.system.canvasRatio;
+	var mouseY = ((isTouch ? e.targetTouches[0].pageY : e.pageY) - L.system.canvasY) / L.system.canvasRatio;
 	if (L.system.currentScene.isClicked)
 	{
-	    L.system.currentScene.isClicked(mouseX, mouseY);
+	    L.system.currentScene.isClicked(mouseX, mouseY, e);
 	}
+	e.preventDeafult();
     };
 
     L.system.setMouseCoords = function(e)
@@ -78,11 +82,30 @@ L.system.setup = function()
 	L.system.mouseY = (e.pageY - L.system.canvasY) / L.system.canvasRatio;
     };
 
-    L.system.renderCanvas[0].addEventListener
-    (
-    'click',
-    L.system.handleClick
-    );
+
+    if ('ontouchstart' in document.documentElement)
+    {
+	L.system.renderCanvas[0].addEventListener
+	(
+	'touchstart',
+	L.system.handleClick
+	);
+//
+//         jQueryDocument.on("touchstart", onTouchEvent);
+//        jQueryDocument.on("touchmove", onTouchEvent);
+//        jQueryDocument.on("touchend", onTouchEvent);
+    } else {
+
+
+
+
+
+	L.system.renderCanvas[0].addEventListener
+	(
+	'mousedown',
+	L.system.handleClick
+	);
+    }
 
     L.system.renderCanvas[0].addEventListener
     (
@@ -92,11 +115,14 @@ L.system.setup = function()
 
     window.addEventListener("keydown", doKeyDown, true);
     function doKeyDown(event) {
-	L.system.currentScene.doKeyDown(event);
+	if (L.system.currentScene.doKeyDown !== undefined)
+	{
+	    L.system.currentScene.doKeyDown(event);
+	}
     }
 
     if (L.system.fullscreen) {
-	var CSSOptions = "margin: 0px; padding: 0px; border-width: 0px;	overflow:hidden;";
+	//var CSSOptions = "margin: 0px; padding: 0px; border-width: 0px;	overflow:hidden;";
 	//document.body.style = CSSOptions;
 	//document.getElementsByTagName("html")[0].style = CSSOptions;
 	//L.system.renderCanvas[0].style = "margin:0px auto; transition-property: all; transition-duration: 1s; transition-timing-function: ease;" + CSSOptions;
