@@ -32,6 +32,7 @@
 - [X] Keymap
   - [X] Create string label for each button
   - [ ] Add proper handlers of shift, ctrl, alt, and caps
+  - [ ] Maybe add support for other keyboards
 - [X] Mouse input
   - [ ] Add option in setup for mouse/touch
   - [ ] Refine mouse event handlers
