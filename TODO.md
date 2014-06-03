@@ -18,7 +18,7 @@
   - [ ] Zoom Rate {requires camera completion)
 - [X] Sprites
   - [ ] Add scaling to sprite logic
-  - [ ] Bounding precision option
+  - [ ] Bounding precision option (rect, poly, circle, ellipse)
 - [ ] SoundFX & Music Objects
   - [ ] Getters and setters for volume etc.
 - [X] Textbox
