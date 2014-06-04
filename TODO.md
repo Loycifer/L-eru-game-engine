@@ -3,7 +3,7 @@
 ##Features
 - [ ] Resources
   - [X] Textures
-  - [ ] Audio
+  - [X] Audio
   - [ ] Video
 - [X] Scenes
   - [X] New instance should have 1 layer
@@ -20,7 +20,8 @@
   - [ ] Add scaling to sprite logic
   - [ ] Bounding precision option (rect, poly, circle, ellipse)
 - [ ] SoundFX & Music Objects
-  - [ ] Getters and setters for volume etc.
+  - [X] Setup audio graph
+  - [ ] Configure one-shots and loops
 - [X] Textbox
   - [X] Make multiline
   - [X] Make .text getter and setter pair
@@ -34,10 +35,10 @@
   - [ ] Add proper handlers of shift, ctrl, alt, and caps
   - [ ] Maybe add support for other keyboards
 - [X] Mouse input
-  - [ ] Add option in setup for mouse/touch
+  - [X] ~~Add option in setup for mouse/touch~~ Automatically detects input method
   - [ ] Refine mouse event handlers
   - [ ] Create object which holds mouse state
-  - [ ] Add touchscreen interface
+  - [X] Add touchscreen interface
 - [X] Transitions
   - [ ] Add callback applicable to previous scene
 - [ ] Skeletal animation
