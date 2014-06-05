@@ -17,6 +17,7 @@
   - [ ] Scroll Rate (requires camera completion)
   - [ ] Zoom Rate {requires camera completion)
 - [X] Sprites
+  - [ ] Implement sprite layers
   - [ ] Add scaling to sprite logic
   - [ ] Bounding precision option (rect, poly, circle, ellipse)
 - [ ] SoundFX & Music Objects
