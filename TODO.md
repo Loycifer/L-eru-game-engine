@@ -53,5 +53,6 @@
 - [X] Move JordanCurve() to Math object
 - [ ] Add option to turn off image smoothing
 - [ ] Move critical properties to object prototype
+- [ ] Moved scope of vars
 
 ##Bugfixes
