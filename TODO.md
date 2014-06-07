@@ -53,6 +53,7 @@
 - [X] Move JordanCurve() to Math object
 - [ ] Add option to turn off image smoothing
 - [ ] Move critical properties to object prototype
-- [ ] Moved scope of vars
+- [X] Move scope of user vars out of global context
+- [ ] Keepalive boolean for onblur handling
 
 ##Bugfixes
