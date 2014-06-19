@@ -3,6 +3,7 @@
 ##Features
 - [ ] Resources
   - [X] Textures
+    - [ ] Add support for TexturePacker JSON
   - [X] Audio
   - [ ] Video
 - [X] Scenes
@@ -20,6 +21,7 @@
   - [ ] Implement sprite layers
   - [ ] Add scaling to sprite logic
   - [ ] Bounding precision option (rect, poly, circle, ellipse)
+  - [ ] Add support for atlas source
 - [ ] SoundFX & Music Objects
   - [X] Setup audio graph
   - [ ] Configure one-shots and loops
