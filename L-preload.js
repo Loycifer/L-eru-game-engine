@@ -1,5 +1,5 @@
 /*
- * Preload
+ * Monkeypatches. Ook ook.
  */
 
 //window.performance.now() polyfill
@@ -16,24 +16,24 @@ if (!window.performance.now)
 }
 
 //Array extended methods
-Array.prototype.copy = function()
-{
-    return this.slice(0);
-};
-
-Array.prototype.copy2 = function()
-{
-    var length = this.length;
-    var arrayCopy = [];
-    for (var i = 0; i < length; i++)
-    {
-	if (this[i].isArray)
-	{
-	    arrayCopy[i] = this[i].copy2();
-	}
-    }
-    return arrayCopy.slice(0);
-};
+//Array.prototype.copy = function()
+//{
+//    return this.slice(0);
+//};
+//
+//Array.prototype.copy2 = function()
+//{
+//    var length = this.length;
+//    var arrayCopy = [];
+//    for (var i = 0; i < length; i++)
+//    {
+//	if (this[i].isArray)
+//	{
+//	    arrayCopy[i] = this[i].copy2();
+//	}
+//    }
+//    return arrayCopy.slice(0);
+//};
 
 Array.prototype.mapQuick = function(callback)
 {
@@ -95,7 +95,7 @@ Array.prototype.draw = function(targetContext)
 
     for (var i = 0; i < length; i++)
     {
-	if (this[i].draw)
+	if (this[i] && this[i].draw)
 	{
 	    this[i].draw(targetContext);
 	}
@@ -110,7 +110,7 @@ Array.prototype.update = function(dt)
 
     for (var i = 0; i < length; i++)
     {
-	if (this[i].update)
+	if (this[i] && this[i].update)
 	{
 	    this[i].update(dt);
 	}
