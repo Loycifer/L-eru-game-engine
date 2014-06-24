@@ -10,33 +10,40 @@ var L = {};
 
 L.system = {};
 L.objects = {};
-
+L.game = {};
 
 
 
 L.start = function() {
 
     window.removeEventListener('load', L.start);
-    var game = new L_Game();
+    var game = L.game;
+    var system = L.system;
+    L.globals = new game.globals();
+    game.globals = null;
 
     game.settings();
-    L.system.setup();
+    system.setup();
     game.resources();
     game.initialise();
 
     (function gameLoop() {
-	L.system.now = window.performance.now();
-	L.system.dt = (L.system.now - L.system.then) / 1000;
-	if (L.system.dt > 1 / L.system.frameCap)
+	var system = L.system;
+	var game = L.game;
+
+	var now = system.now = window.performance.now();
+	var dt = system.dt = (system.now - system.then) / 1000;
+	if (dt > 1 / system.frameCap)
 	{
-	    L.system.dt = 1 / L.system.frameCap;
+	    system.dt = 1 / system.frameCap;
 	}
-	L.system.then = L.system.now;
+	system.then = now;
+	game.update(system.dt);
 
-	game.update(L.system.dt);
-
-	requestAnimationFrame(gameLoop);
 	game.draw();
+	requestAnimationFrame(gameLoop);
+
+
     })();
 };
 
@@ -79,6 +86,18 @@ L.system.loadedResources = 0;
 L.system.width = 640;
 L.system.height = 480;
 L.system.canvasLocation = document.body;
+Object.defineProperty(L.system, "centerX", {
+    get: function()
+    {
+	return L.system.width / 2;
+    }
+});
+Object.defineProperty(L.system, "centerY", {
+    get: function()
+    {
+	return L.system.height / 2;
+    }
+});
 
 
 
@@ -87,6 +106,7 @@ L.system.canvasLocation = document.body;
 
 L.system.layerAlpha = 1;
 L.system.currentScene = {};
+L.system.previousScene = {};
 L.scenes = {};
 /**********************************************************************
  *  Resources
