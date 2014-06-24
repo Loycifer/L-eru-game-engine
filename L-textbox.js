@@ -22,8 +22,8 @@ L.objects.Textbox = function(text, x, y, width, height, wordwrap)
 
 
 
-    this.x = x;
-    this.y = y;
+    this.x = (x === undefined) ? 0 : x;
+    this.y = (y === undefined) ? 0 : y;
     this.alpha = 1;
     this.font = "Times";
     this.fontSize = 30;
@@ -188,12 +188,13 @@ L.objects.Textbox.prototype.wrapText = function()
 
 L.objects.Textbox.prototype.getTextWidth = function(text)
 {
-    L.system.bufferContext[0].font = this.fontSize + "px " + this.font;
+    var buffer = L.system.bufferContext[0];
+    buffer.font = this.fontSize + "px " + this.font;
     if (text === "")
     {
 	return 0;
     }
-    var metrics = L.system.bufferContext[0].measureText(text ? text : this.text);
+    var metrics = buffer.measureText(text ? text : this.text);
     return metrics.width;
 };
 
@@ -309,6 +310,7 @@ L.objects.Textbox.prototype.isClicked = function(mouseX, mouseY)
 
 L.objects.Textbox.prototype.getVertices = function()
 {
+    var Math = window.Math;
     var xTransform = this.x;// + this.offset.x;
     var yTransform = this.y;// + this.offset.y;
     var top = 0 - this.handle.y;
