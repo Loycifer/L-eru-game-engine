@@ -22,9 +22,11 @@ L.system.setup = function()
     L.system.renderCanvas[0] = document.createElement("canvas");
     L.system.renderCanvas[0].width = width;
     L.system.renderCanvas[0].height = height;
-
     L.system.canvasLocation.appendChild(L.system.renderCanvas[0]);
     L.system.renderContext[0] = L.system.renderCanvas[0].getContext("2d");
+//    L.system.renderContext[0].imageSmoothingEnabled = false;
+//    L.system.renderContext[0].webkitImageSmoothingEnabled = false;
+//    L.system.renderContext[0].mozImageSmoothingEnabled = false;
 
 
 
@@ -33,16 +35,20 @@ L.system.setup = function()
     L.system.bufferCanvas[0].width = width;
     L.system.bufferCanvas[0].height = height;
     L.system.bufferContext[0] = L.system.bufferCanvas[0].getContext("2d");
+//    L.system.bufferContext[0].imageSmoothingEnabled = false;
+//    L.system.bufferContext[0].webkitImageSmoothingEnabled = false;
+//    L.system.bufferContext[0].mozImageSmoothingEnabled = false;
+
 
     L.system.fxCanvas[0] = document.createElement('canvas');
     L.system.fxCanvas[0].width = width;
     L.system.fxCanvas[0].height = height;
-    L.system.fxContext[0] = L.system.bufferCanvas[0].getContext("2d");
+    L.system.fxContext[0] = L.system.fxCanvas[0].getContext("2d");
 
     L.system.pixelCanvas[0] = document.createElement('canvas');
     L.system.pixelCanvas[0].width = 1;
     L.system.pixelCanvas[0].height = 1;
-    L.system.pixelContext[0] = L.system.bufferCanvas[0].getContext("2d");
+    L.system.pixelContext[0] = L.system.pixelCanvas[0].getContext("2d");
 
 
 
@@ -73,7 +79,7 @@ L.system.setup = function()
 	{
 	    L.system.currentScene.isClicked(mouseX, mouseY, e);
 	}
-	e.preventDeafult();
+	e.preventDefault();
     };
 
     L.system.setMouseCoords = function(e)
