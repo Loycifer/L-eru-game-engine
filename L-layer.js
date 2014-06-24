@@ -46,12 +46,12 @@ L.objects.Layer.prototype.autoUpdate = function(dt)
 };
 
 
-L.objects.Layer.prototype.isClicked = function(mouseX, mouseY)
+L.objects.Layer.prototype.handleClick = function(mouseX, mouseY)
 {
 
     if (this.isClickable)
     {
-	this.objects.isClicked(mouseX, mouseY);
+	this.objects.handleClick(mouseX, mouseY);
     }
 };
 

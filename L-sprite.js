@@ -180,7 +180,7 @@ L.objects.Sprite.prototype.autoUpdate = function(dt)
     this.angle += this.rotation * dt * timeScale;
 };
 
-L.objects.Sprite.prototype.isClicked = function(mouseX, mouseY)
+L.objects.Sprite.prototype.handleClick = function(mouseX, mouseY)
 {
     if (this.isClickable)
     {

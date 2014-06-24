@@ -287,7 +287,7 @@ L.objects.Textbox.prototype.setMargins = function()
     return this;
 };
 
-L.objects.Textbox.prototype.isClicked = function(mouseX, mouseY)
+L.objects.Textbox.prototype.handleClick = function(mouseX, mouseY)
 {
     if (this.isClickable)
     {

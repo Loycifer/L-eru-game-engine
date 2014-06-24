@@ -117,14 +117,14 @@ Array.prototype.update = function(dt)
     }
 };
 
-Array.prototype.isClicked = function(mouseX, mouseY)
+Array.prototype.handleClick = function(mouseX, mouseY)
 {
     var length = this.length;
 
     for (var i = length - 1; i >= 0; i--)
     {
 
-	if (this[i].isClicked && this[i].isClicked(mouseX, mouseY))
+	if (this[i].handleClick && this[i].handleClick(mouseX, mouseY))
 	{
 	    return true;
 	}

@@ -75,9 +75,9 @@ L.system.setup = function()
 
 	var mouseX = ((isTouch ? e.targetTouches[0].pageX : e.pageX) - L.system.canvasX) / L.system.canvasRatio;
 	var mouseY = ((isTouch ? e.targetTouches[0].pageY : e.pageY) - L.system.canvasY) / L.system.canvasRatio;
-	if (L.system.currentScene.isClicked)
+	if (L.system.currentScene.handleClick)
 	{
-	    L.system.currentScene.isClicked(mouseX, mouseY, e);
+	    L.system.currentScene.handleClick(mouseX, mouseY, e);
 	}
 	e.preventDefault();
     };

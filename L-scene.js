@@ -73,10 +73,10 @@ L.objects.Scene.prototype.addObjectToLayer = function(object, layer)
     this.layers[layer].addObject(object);
 };
 
-L.objects.Scene.prototype.isClicked = function(mouseX, mouseY)
+L.objects.Scene.prototype.handleClick = function(mouseX, mouseY)
 {
 
-    this.layers.isClicked(mouseX, mouseY);
+    this.layers.handleClick(mouseX, mouseY);
 };
 
 
