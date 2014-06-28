@@ -220,18 +220,33 @@ L.input.Keymap = function()
 L.input.Keymap.prototype.doKeyDown = function(event)
 {
     var keyCode = event.keyCode;
-    if (this.bindings[keyCode])
+    var bindings = this.bindings;
+    if (bindings[keyCode] && bindings[keyCode]["keydown"])
     {
-	this.bindings[keyCode]();
+	bindings[keyCode]["keydown"]();
     }
 };
 
-L.input.Keymap.prototype.bindKey = function(key, callback)
+L.input.Keymap.prototype.doKeyUp = function(event)
 {
-    this.bindKeyCode(L.input.keyCodeFromString(key), callback);
+    var keyCode = event.keyCode;
+    var bindings = this.bindings;
+    if (bindings[keyCode] && bindings[keyCode]["keyup"])
+    {
+	bindings[keyCode]["keyup"]();
+    }
 };
 
-L.input.Keymap.prototype.bindKeyCode = function(keyCode, callback)
+L.input.Keymap.prototype.bindKey = function(key, event, callback)
 {
-    this.bindings[keyCode] = callback;
+    this.bindKeyCode(L.input.keyCodeFromString(key), event, callback);
+};
+
+L.input.Keymap.prototype.bindKeyCode = function(keyCode, event, callback)
+{
+    if (!this.bindings[keyCode])
+    {
+	this.bindings[keyCode] = {};
+    }
+    this.bindings[keyCode][event] = callback;
 };

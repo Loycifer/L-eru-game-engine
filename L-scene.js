@@ -22,6 +22,14 @@ L.objects.Scene.prototype.doKeyDown = function(event)
     }
 };
 
+L.objects.Scene.prototype.doKeyUp = function(event)
+{
+    if (this.keymap.doKeyUp !== undefined)
+    {
+	this.keymap.doKeyUp(event);
+    }
+};
+
 L.objects.Scene.prototype.autoUpdate = function(dt)
 {
 

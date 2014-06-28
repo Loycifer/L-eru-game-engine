@@ -127,6 +127,14 @@ L.system.setup = function()
 	}
     }
 
+    window.addEventListener("keyup", doKeyUp, true);
+    function doKeyUp(event) {
+	if (L.system.currentScene.doKeyUp !== undefined)
+	{
+	    L.system.currentScene.doKeyUp(event);
+	}
+    }
+
     if (L.system.fullscreen) {
 	//var CSSOptions = "margin: 0px; padding: 0px; border-width: 0px;	overflow:hidden;";
 	//document.body.style = CSSOptions;
