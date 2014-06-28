@@ -1,7 +1,8 @@
-var L;    //Do not remove this line or overwrite variable L
+var L;    //Do not remove this line or overwrite global variable L
 
 L.game.globals = function() {
-//This is where you should Declare Variables
+//This is where you should Declare Variables if you want them to be
+//accessible via the L.globals namespace
 //Since JavaScript is loosely typed, you may want to set variables with empty types
 //eg. this.score = 0; this.flags = []; this.name = "";
 
