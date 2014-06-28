@@ -10,7 +10,7 @@ L.objects.Circle.prototype.handle = {
     x: 0,
     y: 0
 };
-L.objects.Circle.prototype.r = 20;
+L.objects.Circle.prototype.radius = 20;
 L.objects.Circle.prototype.alpha = 1;
 
 L.objects.Circle.prototype.fillStyle = "#FFFFFF";
@@ -25,16 +25,17 @@ L.objects.Circle.prototype.draw = function(layer)
 L.objects.Circle.prototype.autoDraw = function(layer)
 {
     layer.beginPath();
-    layer.arc(this.x, this.y, this.r, 0, 2 * Math.PI);
-    if (this.fillStyle !== "")
+    var self = this;
+    layer.arc(self.x, self.y, self.radius, 0, 2 * Math.PI);
+    if (self.fillStyle !== "")
     {
-	layer.fillStyle = this.fillStyle;
+	layer.fillStyle = self.fillStyle;
 	layer.fill();
     }
-    if (this.strokeStyle !== "" && this.lineWidth !== 0)
+    if (self.strokeStyle !== "" && self.lineWidth !== 0)
     {
-	layer.strokeStyle = this.strokeStyle;
-	layer.lineWidth = this.lineWidth;
+	layer.strokeStyle = self.strokeStyle;
+	layer.lineWidth = self.lineWidth;
 	layer.stroke();
     }
 
