@@ -1,12 +1,13 @@
 var L;
 
-L.objects.Layer = function(targetContext)
+L.objects.Layer = function(name)
 {
+    this.name = name;
     this.sorted = false;
     this.sortBy = ["z"];
     this.sortOrder = [1];
     this.objects = [];
-    this.targetContext = targetContext;
+    this.targetContext = L.system.bufferContext[0];
     this.layerAlpha = 1;
     this.isClickable = true;
 };
@@ -60,7 +61,7 @@ L.objects.Layer.prototype.addObject = function(object)
     this.objects.push(object);
 };
 
-L.objects.Layer.prototype.addObjects = function(objects)
+L.objects.Layer.prototype.addObjects = function()
 {
     var objectsLength = arguments.length;
     for (var i = 0; i < objectsLength; i++)

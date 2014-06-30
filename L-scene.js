@@ -2,7 +2,10 @@ var L;
 L.objects.Scene = function(name)
 {
     L.scenes[name] = this;
-    this.layers = [new L.objects.Layer(L.system.bufferContext[0])];
+    this.layers = {
+	"background": new L.objects.Layer("background")
+    };
+    this.layerOrder = ["background"];
     this.bgFill = "blueviolet";
     this.motionBlur = 1;
     this.keymap = {};
@@ -32,39 +35,57 @@ L.objects.Scene.prototype.doKeyUp = function(event)
 
 L.objects.Scene.prototype.autoUpdate = function(dt)
 {
-
-    this.layers.update(dt);
+    var layerOrder = this.layerOrder;
+    var length = layerOrder.length;
+    for (var i = 0; i < length; i++)
+    {
+	this.layers[layerOrder[i]].update(dt);
+    }
 
 };
 
 L.objects.Scene.prototype.draw = function()
 {
+
     this.autoDraw();
 };
 
 L.objects.Scene.prototype.autoDraw = function()
 {
+
     var layer = L.system.bufferContext[0];
     layer.fillStyle = this.bgFill;
     layer.fillRect(0, 0, L.system.width, L.system.height);
-    this.layers.draw();
+    var layerOrder = this.layerOrder;
+    var length = layerOrder.length;
+    for (var i = 0; i < length; i++)
+    {
+	this.layers[layerOrder[i]].draw();
+    }
     L.system.bufferContext[0].globalAlpha = 1;
     L.system.renderContext[0].globalAlpha = this.motionBlur;
     L.system.renderContext[0].drawImage(L.system.bufferCanvas[0], 0, 0, L.system.width, L.system.height);
 };
 
-L.objects.Scene.prototype.addLayer = function(howMany)
+L.objects.Scene.prototype.addLayer = function(name)
 {
-    var number = howMany || 1;
-    for (var i = 0; i < number; i++)
-    {
-	this.layers.push(new L.objects.Layer(L.system.bufferContext[0]));
-    }
+
+    this.layers[name] = new L.objects.Layer(name);
+    this.layerOrder.push(name);
+
+};
+
+L.objects.Scene.prototype.addLayerObject = function(layer)
+{
+
+    this.layers[layer.name] = layer;
+    this.layerOrder.push(layer.name);
+
 };
 
 L.objects.Scene.prototype.addObject = function(object)
 {
-    this.layers[0].addObject(object);
+    this.layers["background"].addObject(object);
 };
 
 L.objects.Scene.prototype.addObjects = function(objects)
@@ -72,7 +93,7 @@ L.objects.Scene.prototype.addObjects = function(objects)
     var arrayLength = arguments.length;
     for (var i = 0; i < arrayLength; i++)
     {
-	this.layers[0].addObject(arguments[i]);
+	this.layers["background"].addObject(arguments[i]);
     }
 };
 
@@ -83,8 +104,12 @@ L.objects.Scene.prototype.addObjectToLayer = function(object, layer)
 
 L.objects.Scene.prototype.handleClick = function(mouseX, mouseY)
 {
-
-    this.layers.handleClick(mouseX, mouseY);
+    var layerOrder = this.layerOrder;
+    var length = layerOrder.length;
+    for (var i = 0; i < length; i++)
+    {
+	this.layers[layerOrder[i]].handleClick(mouseX, mouseY);
+    }
 };
 
 
