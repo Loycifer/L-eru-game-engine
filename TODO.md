@@ -7,8 +7,8 @@
   - [X] Audio
   - [ ] Video
 - [X] Scenes
-  - [X] New instance should have 1 layer called "background"
-  - [X] .addObject method which adds object to layer ~~0~~ "background" by default
+  - [X] New instance should have 1 layer *called "background"*
+  - [X] .addObject method which adds object to ~~layer 0~~ layer "background" by default
 - [ ] SimpleScenes
   - [ ] Loadscreen
   - [ ] Image Slide
