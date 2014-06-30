@@ -15,7 +15,7 @@
   - [ ] Video
   - [ ] State Machine Scene / Hub Scene
 - [X] Layers
-  - [ ] Change layers from numeric to named
+  - [X] Change layers from numeric to named
   - [ ] Scroll Rate (requires camera completion)
   - [ ] Zoom Rate {requires camera completion)
 - [X] Sprites
