@@ -38,6 +38,16 @@ L.objects.Sprite = function(textureName, options)
 	    };
 	}.bind(this)
     });
+    this.handle = {
+	x: 0,
+	y: 0
+    };
+    this.offset = {
+	x: 0,
+	y: 0
+    };
+
+
     this.nudeTop = 0 - this.handle.y;
     this.nudeLeft = 0 - this.handle.x;
     this.nudeRight = this.nudeLeft + this.width;
@@ -90,14 +100,7 @@ L.objects.Sprite.prototype.y = 0;
 L.objects.Sprite.prototype.z = 0;
 L.objects.Sprite.prototype.width = 0;
 L.objects.Sprite.prototype.height = 0;
-L.objects.Sprite.prototype.handle = {
-    x: 0,
-    y: 0
-};
-L.objects.Sprite.prototype.offset = {
-    x: 0,
-    y: 0
-};
+
 L.objects.Sprite.prototype.scale = 1;
 L.objects.Sprite.prototype.angle = 0;
 L.objects.Sprite.prototype.rotation = 0;

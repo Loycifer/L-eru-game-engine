@@ -39,9 +39,9 @@ L.start = function() {
 	}
 	system.then = now;
 	game.update(system.dt);
-
-	game.draw();
 	requestAnimationFrame(gameLoop);
+	game.draw();
+
 
 
     })();
