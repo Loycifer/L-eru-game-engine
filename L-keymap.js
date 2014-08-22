@@ -3,7 +3,7 @@ L.input = {};
 
 L.input.keyCodeFromString = function(string)
 {
-    var upString = string.toUpperCase();
+    var upString = string.toUpperCase().replace(" ", "");
     if (upString.match(/^[A-Z0-9]$/))
     {
 	return upString.charCodeAt(0);
@@ -65,7 +65,6 @@ L.input.keyCodeFromString = function(string)
 
 	case "CAPS":
 	case "CAPSLOCK":
-	case "CAPS LOCK":
 	    return 20;
 	    break;
 
@@ -81,13 +80,11 @@ L.input.keyCodeFromString = function(string)
 
 	case "PGUP":
 	case "PAGEUP":
-	case "PAGE UP":
 	    return 33;
 	    break;
 
 	case "PGDN":
 	case "PAGEDOWN":
-	case "PAGE DOWN":
 	    return 34;
 	    break;
 
@@ -101,25 +98,21 @@ L.input.keyCodeFromString = function(string)
 
 	case "LEFT":
 	case "LEFTARROW":
-	case "LEFT ARROW":
 	    return 37;
 	    break;
 
 	case "UP":
 	case "UPARROW":
-	case "UP ARROW":
 	    return 38;
 	    break;
 
 	case "RIGHT":
 	case "RIGHTARROW":
-	case "RIGHT ARROW":
 	    return 39;
 	    break;
 
 	case "DOWN":
 	case "DOWNARROW":
-	case "DOWN ARROW":
 	    return 40;
 	    break;
 
@@ -132,19 +125,16 @@ L.input.keyCodeFromString = function(string)
 	    break;
 
 	case "NUMLOCK":
-	case "NUM LOCK":
 	    return 144;
 	    break;
 
 	case "SCRLK":
 	case "SCROLLLOCK":
-	case "SCROLL LOCK":
 	    return 145;
 	    break;
 
 	case "PAUSE":
 	case "PAUSEBREAK":
-	case "PAUSE BREAK":
 	    return 19;
 	    break;
 
