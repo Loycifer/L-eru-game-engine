@@ -19,17 +19,17 @@ L.start = function() {
     window.removeEventListener('load', L.start);
     var game = L.game;
     var system = L.system;
-    L.globals = new game.globals();
-    game.globals = null;
+    //L.globals = new game.globals();
+    //game.globals = null;
 
     game.settings();
     system.setup();
     game.resources();
-    game.initialise();
+    game.main();
 
     (function gameLoop() {
 	var system = L.system;
-	var game = L.game;
+	//var game = L.game;
 
 	var now = system.now = window.performance.now();
 	var dt = system.dt = (system.now - system.then) / 1000;
@@ -38,9 +38,13 @@ L.start = function() {
 	    system.dt = 1 / system.frameCap;
 	}
 	system.then = now;
-	game.update(system.dt);
+	//game.update(system.dt);
+	system.currentScene.update(dt);
 	requestAnimationFrame(gameLoop);
-	game.draw();
+	//game.draw();
+	system.currentScene.draw();
+
+
 
 
 

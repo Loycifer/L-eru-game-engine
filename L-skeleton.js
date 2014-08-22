@@ -1,4 +1,23 @@
 var L;
+
+var Bone = function(textureName, options) {
+    L.objects.Sprite.call(this, textureName, options);
+    this.x = 6;
+
+};
+Bone.prototype = new L.objects.Sprite;
+Bone.constructor = Bone;
+
+var qoo = new Bone();
+alert(qoo.constructor);
+alert(qoo.x);
+alert(qoo instanceof Bone);
+
+
+
+
+
+
 L.objects.Skeleton = function()
 {
     this.name = "";
@@ -14,6 +33,7 @@ L.objects.Skeleton = function()
     this.allBones = {};
     this.isClickable = true;
 };
+L.objects.Skeleton.prototype = new L.objects.Sprite;
 
 L.objects.Skeleton.prototype.getBone = function(name)
 {
@@ -59,20 +79,7 @@ L.objects.Skeleton.prototype.updateBones = function(dt)
     }
 };
 
-L.objects.Skeleton.prototype.handleClick = function(mouseX, mouseY)
-{
-    var bones = this.bones;
-    for (var bone in bones)
-    {
-	//if (this.bones.hasOwnProperty(bone))
-	//{
-	if (this.isClickable)
-	{
-	    return this.bones[bone].handleClick(mouseX, mouseY);
-	}
-	//}
-    }
-};
+
 
 L.objects.Bone = function(name, sprite, parent, skeleton)
 {
@@ -93,7 +100,7 @@ L.objects.Bone = function(name, sprite, parent, skeleton)
     inheritPosition = true;
     inheritAngle = true;
 };
-
+L.objects.Bone.prototype = new L.objects.Sprite;
 L.objects.Bone.prototype.addBone = function(name, sprite)
 {
     var newBone = new L.objects.Bone(name, sprite, this, this.skeleton);
@@ -154,23 +161,3 @@ L.objects.Bone.prototype.draw = function(layer)
     }
 };
 
-L.objects.Bone.prototype.handleClick = function(mouseX, mouseY)
-{
-
-    return this.sprite.handleClick(mouseX, mouseY);
-//    var bones = this.bones;
-//    for (var bone in bones)
-//    {
-//	//if (this.bones.hasOwnProperty(bone))
-//	//{
-//
-//
-//
-//	if (this.isClickable)
-//	{
-//	    this.bones[bone].handleClick(mouseX, mouseY);
-//	}
-//
-//	//}
-//    }
-};
