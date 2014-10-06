@@ -50,5 +50,5 @@ function addFile(sources)
     xmlhttp.send();
 }
 files = ["L-preload", "L", "L-setup", "L-display", "L-sprite", "L-layer", "L-scene", "L-textbox", "L-transition",
-    "L-keymap"];
+    "L-keymap", "L-audio"];
 addFile(files);

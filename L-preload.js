@@ -165,6 +165,11 @@ Math.jordanCurve = function(x, y, vertices)
     return isInPoly;
 };
 
+Math.log10 = function(x)
+{
+    return (Math.log(x) / Math.LN10);
+};
+
 Math.degToRad = function(deg)
 {
     return (deg * (Math.PI / 180));

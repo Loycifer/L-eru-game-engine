@@ -2,38 +2,37 @@ var L;
 
 var Bone = function(textureName, options) {
     L.objects.Sprite.call(this, textureName, options);
-    this.x = 6;
+    this.ingeritPosition = true;
+    this.inheritAngle = true;
+    this.joint = {
+	x: 0,
+	y: 0
+    };
+
 
 };
 Bone.prototype = new L.objects.Sprite;
 Bone.constructor = Bone;
 
-var qoo = new Bone();
-alert(qoo.constructor);
-alert(qoo.x);
-alert(qoo instanceof Bone);
 
 
 
 
 
 
-L.objects.Skeleton = function()
+
+L.objects.Skeleton = function(textureName, options)
 {
-    this.name = "";
-    this.x = 0;
-    this.y = 0;
-    this.angle = 0;
-    Object.defineProperty(this, "realAngle", {
-	get: function() {
-	    return this.angle;
-	}.bind(this)
-    });
+    L.objects.Sprite.call(this, textureName, options);
+
+
     this.bones = {};
     this.allBones = {};
-    this.isClickable = true;
+
 };
+
 L.objects.Skeleton.prototype = new L.objects.Sprite;
+L.objects.Skeleton.constructor = L.objects.Skeleton;
 
 L.objects.Skeleton.prototype.getBone = function(name)
 {

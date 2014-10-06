@@ -2,21 +2,25 @@ var L;
 L.objects.Sprite = function(textureName, options)
 {
     var L = window.L;
+
     this.animations =
     {
 	idle: []
     };
+
     this.animations.idle[0] =
     {
 	img: L.texture[textureName],
 	length: 1000
     };
+
     if (this.animations.idle[0].img)
     {
 	L.log("Created Sprite from texture \'" + textureName + "\'.");
     }
 
     this.texture = L.texture[textureName];
+
     if (this.texture && this.texture.width > 0)
     {
 	this.width = this.texture.width;
@@ -46,6 +50,8 @@ L.objects.Sprite = function(textureName, options)
 	x: 0,
 	y: 0
     };
+
+
 
 
     this.nudeTop = 0 - this.handle.y;
@@ -130,10 +136,10 @@ L.objects.Sprite.prototype.autoDraw = function(layer)
 	    layer.save();
 	    layer.translate(this.x, this.y);
 	    layer.rotate(-radians);
-	    layer.drawImage(this.animations.idle[this.currentFrame].img, -this.handle.x, -this.handle.y);
+	    layer.drawImage(this.animations[this.currentAnimation][this.currentFrame].img, -this.handle.x, -this.handle.y);
 	    layer.restore();
 	} else {
-	    layer.drawImage(this.animations.idle[this.currentFrame].img, this.x - this.handle.x, this.y - this.handle.y);
+	    layer.drawImage(this.animations[this.currentAnimation][this.currentFrame].img, this.x - this.handle.x, this.y - this.handle.y);
 	}
     }
 };
@@ -205,6 +211,7 @@ L.objects.Sprite.prototype.handleClick = function(mouseX, mouseY)
 	}
     }
 };
+
 L.objects.Sprite.prototype.isClickedPrecise = function(mouseX, mouseY)
 {
     var layer = L.system.pixelContext[0];
@@ -216,14 +223,29 @@ L.objects.Sprite.prototype.isClickedPrecise = function(mouseX, mouseY)
     var pixelData = layer.getImageData(0, 0, 1, 1).data;
     return (pixelData[3] !== 0);
 };
+
+
+L.objects.Sprite.prototype.addBone = function(textureName, options)
+{
+    if (this.bones === undefined)
+    {
+	this.bones = [];
+    }
+    var newBone = new Bone(textureName, options);
+    newBone.parent = this;
+    this.bones.push(newBone);
+};
+
 L.objects.Sprite.prototype.getSpeedX = function()
 {
     return Math.vectorX(this.speed, this.direction);
 };
+
 L.objects.Sprite.prototype.getSpeedY = function()
 {
     return Math.vectorY(this.speed, this.direction);
 };
+
 L.objects.Sprite.prototype.applyForce = function(speed, direction)
 {
     var x1 = this.getSpeedX();
@@ -243,6 +265,7 @@ L.objects.Sprite.prototype.applyForce = function(speed, direction)
     this.direction = angle;
     this.speed = length;
 };
+
 L.objects.Sprite.prototype.moveTo = function(coords)
 {
     this.x = coords.x;
