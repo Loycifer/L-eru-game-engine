@@ -5,35 +5,44 @@ L.transitions.instant = {};
 
 L.transitions.instant.play = function(lastScene, nextScene, callback)
 {
-    if (lastScene.exit) {lastScene.exit();}
-    if (callback) {callback(nextScene);}
-    
-    L.system.currentScene = nextScene;    
+    if (lastScene.exit) {
+	lastScene.exit();
+    }
+    if (callback) {
+	callback(nextScene);
+    }
+
+    L.system.currentScene = nextScene;
 };
 
 
 
 
 L.transitions.fadeToColor =
-	{
-	    lastScene: {},
-	    nextScreen: {},
-	    timer: 0,
-	    state: "start"
-	};
+{
+    lastScene: {},
+    nextScreen: {},
+    timer: 0,
+    state: "start"
+};
 L.transitions.fadeToColor.play = function(lastScene, nextScene, fadeOut, pause, fadeIn, color, callback)
 {
     this.lastScene = lastScene;
     this.nextScene = nextScene;
+    this.camera = lastScene.camera;
     this.currentScene = lastScene;
+    this.activeLayer = lastScene.activeLayer;
     this.fadeOut = fadeOut;
     this.pause = pause;
     this.fadeIn = fadeIn;
     this.timer = fadeOut;
     this.state = "start";
     this.color = color || "#000000";
-    this.callback = callback || function(){};
+    this.callback = callback || function() {
+    };
     L.system.currentScene = this;
+
+
 };
 
 L.transitions.fadeToColor.update = function(dt)
@@ -59,6 +68,7 @@ L.transitions.fadeToColor.update = function(dt)
 	    this.timer -= dt;
 	    if (this.timer <= 0)
 	    {
+		this.camera = this.nextScene.camera;
 		this.timer = this.fadeIn;
 		this.state = "fadeIn";
 	    }
@@ -89,7 +99,7 @@ L.transitions.fadeToColor.draw = function()
 	    L.system.renderContext[0].fillRect(0, 0, L.system.width, L.system.height);
 	    break;
 	case "pause":
-	     L.system.renderContext[0].fillStyle = this.color;
+	    L.system.renderContext[0].fillStyle = this.color;
 	    L.system.renderContext[0].globalAlpha = 1;
 	    L.system.renderContext[0].fillRect(0, 0, L.system.width, L.system.height);
 	    break;

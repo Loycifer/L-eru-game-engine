@@ -9,6 +9,13 @@ L.objects.Scene = function(name)
     this.bgFill = "blueviolet";
     this.motionBlur = 1;
     this.keymap = {};
+    this.camera = {
+	x: 0,
+	y: 0,
+	angle: 0,
+	zoom: 1
+    };
+    this.activeLayer = {};
 
 };
 
@@ -38,8 +45,11 @@ L.objects.Scene.prototype.autoUpdate = function(dt)
     var layerOrder = this.layerOrder;
     var length = layerOrder.length;
     for (var i = 0; i < length; i++)
+
     {
-	this.layers[layerOrder[i]].update(dt);
+	var currentLayer = this.layers[layerOrder[i]];
+	this.activeLayer = currentLayer;
+	currentLayer.update(dt);
     }
 
 };
@@ -60,7 +70,9 @@ L.objects.Scene.prototype.autoDraw = function()
     var length = layerOrder.length;
     for (var i = 0; i < length; i++)
     {
-	this.layers[layerOrder[i]].draw();
+	var currentLayer = this.layers[layerOrder[i]];
+	this.activeLayer = currentLayer;
+	currentLayer.draw();
     }
     L.system.bufferContext[0].globalAlpha = 1;
     L.system.renderContext[0].globalAlpha = this.motionBlur;

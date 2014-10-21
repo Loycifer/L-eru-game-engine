@@ -120,27 +120,47 @@ L.objects.Sprite.prototype.isClickable = true;
 
 
 //Sprite methods
-
+L.objects.Sprite.prototype.getWorldX = function()
+{
+    return this.x;
+};
+L.objects.Sprite.prototype.getWorldY = function()
+{
+    return this.y;
+};
+L.objects.Sprite.prototype.getScreenX = function()
+{
+    var currentScene = L.system.currentScene;
+    return this.x - (currentScene.camera.x * currentScene.activeLayer.scrollRateX);
+};
+L.objects.Sprite.prototype.getScreenY = function()
+{
+    var currentScene = L.system.currentScene;
+    return this.y - (currentScene.camera.y * currentScene.activeLayer.scrollRateY);
+};
 L.objects.Sprite.prototype.draw = function(layer)
 {
     this.autoDraw(layer);
 };
 L.objects.Sprite.prototype.autoDraw = function(layer)
 {
+    if (!this.visible && (this.alpha) <= 0.0) {
+	return;
+    }
+    var angle = this.angle;
+    var screenX = this.getScreenX();
+    var screenY = this.getScreenY();
     layer.globalAlpha = this.alpha;
-    if (this.alpha > 0.0 && this.visible)
+
+    if (angle !== 0)
     {
-	if (this.angle !== 0)
-	{
-	    var radians = this.angle;
-	    layer.save();
-	    layer.translate(this.x, this.y);
-	    layer.rotate(-radians);
-	    layer.drawImage(this.animations[this.currentAnimation][this.currentFrame].img, -this.handle.x, -this.handle.y);
-	    layer.restore();
-	} else {
-	    layer.drawImage(this.animations[this.currentAnimation][this.currentFrame].img, this.x - this.handle.x, this.y - this.handle.y);
-	}
+	layer.save();
+	layer.translate(screenX, screenY);
+	layer.rotate(-angle);
+	layer.drawImage(this.animations[this.currentAnimation][this.currentFrame].img, -this.handle.x, -this.handle.y);
+	layer.restore();
+    } else {
+	layer.drawImage(this.animations[this.currentAnimation][this.currentFrame].img, this.x - this.handle.x, this.y - this.handle.y);
     }
 };
 L.objects.Sprite.prototype.autoDrawCustom = function(layer, options)
@@ -193,11 +213,13 @@ L.objects.Sprite.prototype.handleClick = function(mouseX, mouseY)
 {
     if (this.isClickable)
     {
+	var screenX = this.getScreenX();
+	var screenY = this.getScreenY();
 	if ((this.angle === 0 &&
-	mouseX >= this.x + this.offset.x - this.handle.x &&
-	mouseX <= this.x + this.width + this.offset.x - this.handle.x &&
-	mouseY >= this.y + this.offset.y - this.handle.y &&
-	mouseY <= this.y + this.height + this.offset.y - this.handle.y
+	mouseX >= screenX + this.offset.x - this.handle.x &&
+	mouseX <= screenX + this.width + this.offset.x - this.handle.x &&
+	mouseY >= screenY + this.offset.y - this.handle.y &&
+	mouseY <= screenY + this.height + this.offset.y - this.handle.y
 	) || (
 	this.angle !== 0 &&
 	Math.jordanCurve(mouseX, mouseY, this.getVertices())))
@@ -317,16 +339,17 @@ L.objects.Sprite.prototype.pushPosition = function(obj)
 L.objects.Sprite.prototype.getVertices = function()
 {
     var Math = window.Math;
-    var xTransform = this.x + this.offset.x;
-    var yTransform = this.y + this.offset.y;
+    var xTransform = this.getScreenX() + this.offset.x;
+    var yTransform = this.getScreenY() + this.offset.y;
     var length = this.nudeVertices.length;
-    if (this.angle !== 0)
+    var angle = this.angle;
+    if (angle !== 0)
     {
 	for (var i = 0; i < length; i++)
 	{
 	    this.vertices[i] = [
-		this.nudeVertices[i][0] * Math.cos(-this.angle) - this.nudeVertices[i][1] * Math.sin(-this.angle),
-		this.nudeVertices[i][0] * Math.sin(-this.angle) + this.nudeVertices[i][1] * Math.cos(-this.angle)
+		this.nudeVertices[i][0] * Math.cos(-angle) - this.nudeVertices[i][1] * Math.sin(-angle),
+		this.nudeVertices[i][0] * Math.sin(-angle) + this.nudeVertices[i][1] * Math.cos(-angle)
 	    ];
 	}
     }

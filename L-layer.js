@@ -10,6 +10,8 @@ L.objects.Layer = function(name)
     this.targetContext = L.system.bufferContext[0];
     this.layerAlpha = 1;
     this.isClickable = true;
+    this.scrollRateX = 1;
+    this.scrollRateY = 1;
 };
 
 L.objects.Layer.prototype.draw = function()
