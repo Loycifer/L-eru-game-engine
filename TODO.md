@@ -16,7 +16,7 @@
   - [ ] State Machine Scene / Hub Scene
 - [X] Layers
   - [X] Change layers from numeric to named
-  - [ ] Scroll Rate (requires camera completion)
+  - [X] Scroll Rate
   - [ ] Zoom Rate {requires camera completion)
 - [X] Sprites
   - [ ] Implement sprite layers
@@ -48,6 +48,7 @@
 - [ ] Skeletal animation
 - [ ] Built-in customizable loadscreen
 - [ ] Cameras
+  - [ ] Camera-dependent positioning
   - [ ] Camera Transitions
 - [ ] Save/Load module
   - [ ] Web Storage version
@@ -55,7 +56,7 @@
   - [ ] File API?
 - [X] Move JordanCurve() to Math object
 - [ ] Add option to turn off image smoothing
-- [ ] Move critical properties to object prototype
+- [X] Move critical properties to object prototype
 - [X] Move scope of user vars out of global context
 - [ ] Keepalive boolean for onblur handling
 
