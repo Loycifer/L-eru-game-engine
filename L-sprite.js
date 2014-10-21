@@ -27,11 +27,20 @@ L.objects.Sprite = function(textureName, options)
 	this.height = this.texture.height;
 	L.log("Setting Sprite dimensions to " + this.width + " by " + this.height + ".");
     }
-
+    this.handle = {
+	x: 0,
+	y: 0
+    };
+    this.offset = {
+	x: 0,
+	y: 0
+    };
     for (var propertyName in options)
     {
-	L.log("Adding property " + propertyName + " to Sprite object with with value " + JSON.stringify(options[propertyName]) + ".");
-	this[propertyName] = options[propertyName];
+	if (options.hasOwnProperty(propertyName)) {
+	    L.log("Adding property " + propertyName + " to Sprite object with with value " + JSON.stringify(options[propertyName]) + ".");
+	    this[propertyName] = options[propertyName];
+	}
     }
 
     Object.defineProperty(this, "center", {
@@ -42,14 +51,7 @@ L.objects.Sprite = function(textureName, options)
 	    };
 	}.bind(this)
     });
-    this.handle = {
-	x: 0,
-	y: 0
-    };
-    this.offset = {
-	x: 0,
-	y: 0
-    };
+
 
 
 
@@ -97,6 +99,10 @@ L.objects.Sprite = function(textureName, options)
     this.time = 0;
     this.bounces = 0;
     this.landingTime = (this.v * Math.sin(this.direction) + Math.sqrt(Math.pow((this.v * Math.sin(this.direction)), 2) + (2 * this.g * this.y0))) / this.g;
+
+
+
+
 };
 
 //Sprite Properties
