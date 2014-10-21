@@ -33,6 +33,7 @@
   - [ ] Rect & Square
   - [ ] Circle & Ellipse
   - [ ] N-sided equal poly
+  - [ ] N-sided equal star
   - [ ] Custom-vertex poly
 - [X] Keymap
   - [X] Create string label for each button
