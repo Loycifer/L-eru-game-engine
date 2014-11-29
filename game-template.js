@@ -21,7 +21,7 @@ L.game.resources = function() {
     //Sounds and music are similarly stored in L.sound[x] and
     //L.music[x]
 
-    //eg. L.loadTexture.fromFile("littleDude", "little-dude.png");
+    //eg. L.load.texture("littleDude.png", "little-dude");
 
 };
 
