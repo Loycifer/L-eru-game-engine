@@ -246,3 +246,14 @@ Math.Vector.prototype.addVector = function(vector)
     this.magnitude = newMagnitude;
     this.direction = newDirection;
 };
+
+Math.rotatePoint = function(x,y,angle)
+{
+
+    var cos = Math.cos(angle);
+    var sin = Math.sin(angle);
+
+    var x1 = (cos * x) + (sin * y );
+    var y1 = -(sin * x)+ (cos * y);
+    return {x:x1,y:y1};
+};

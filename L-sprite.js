@@ -21,6 +21,7 @@ L.objects.Sprite = function(textureName, options)
 
     this.texture = L.texture[textureName];
 
+
     if (this.texture && this.texture.width > 0)
     {
 	this.width = this.texture.width;
@@ -56,8 +57,8 @@ L.objects.Sprite = function(textureName, options)
 
 
 
-    this.nudeTop = 0 - this.handle.y;
-    this.nudeLeft = 0 - this.handle.x;
+    this.nudeTop = 0;
+    this.nudeLeft = 0;
     this.nudeRight = this.nudeLeft + this.width;
     this.nudeBottom = this.nudeTop + this.height;
     this.nudeTopLeft = [this.nudeLeft, this.nudeTop];
@@ -219,6 +220,7 @@ L.objects.Sprite.prototype.handleClick = function(mouseX, mouseY)
 {
     if (this.isClickable)
     {
+
 	var screenX = this.getScreenX();
 	var screenY = this.getScreenY();
 	if ((this.angle === 0 &&
@@ -233,7 +235,9 @@ L.objects.Sprite.prototype.handleClick = function(mouseX, mouseY)
 
 	    if (this.isClickedPrecise(mouseX, mouseY))
 	    {
+
 		this.onClick();
+
 		return true;
 	    }
 	}
@@ -242,6 +246,7 @@ L.objects.Sprite.prototype.handleClick = function(mouseX, mouseY)
 
 L.objects.Sprite.prototype.isClickedPrecise = function(mouseX, mouseY)
 {
+
     var layer = L.system.pixelContext[0];
     layer.clearRect(-1, -1, 3, 3);
     layer.save();
@@ -252,18 +257,18 @@ L.objects.Sprite.prototype.isClickedPrecise = function(mouseX, mouseY)
     return (pixelData[3] !== 0);
 };
 
-
-L.objects.Sprite.prototype.addBone = function(textureName, options)
-{
-    if (this.bones === undefined)
-    {
-	this.bones = [];
-    }
-    var newBone = new Bone(textureName, options);
-    newBone.parent = this;
-    this.bones.push(newBone);
-};
-
+/*
+ L.objects.Sprite.prototype.addBone = function(textureName, options)
+ {
+ if (this.bones === undefined)
+ {
+ this.bones = [];
+ }
+ var newBone = new Bone(textureName, options);
+ newBone.parent = this;
+ this.bones.push(newBone);
+ };
+ */
 L.objects.Sprite.prototype.getSpeedX = function()
 {
     return Math.vectorX(this.speed, this.direction);
@@ -354,8 +359,8 @@ L.objects.Sprite.prototype.getVertices = function()
 	for (var i = 0; i < length; i++)
 	{
 	    this.vertices[i] = [
-		this.nudeVertices[i][0] * Math.cos(-angle) - this.nudeVertices[i][1] * Math.sin(-angle),
-		this.nudeVertices[i][0] * Math.sin(-angle) + this.nudeVertices[i][1] * Math.cos(-angle)
+		(this.nudeVertices[i][0]-this.handle.x) * Math.cos(-angle) - (this.nudeVertices[i][1]-this.handle.y) * Math.sin(-angle),
+		(this.nudeVertices[i][0]-this.handle.x) * Math.sin(-angle) + (this.nudeVertices[i][1]-this.handle.y) * Math.cos(-angle)
 	    ];
 	}
     }
@@ -363,7 +368,7 @@ L.objects.Sprite.prototype.getVertices = function()
     {
 	for (var i = 0; i < length; i++)
 	{
-	    this.vertices[i] = [this.nudeVertices[i][0], this.nudeVertices[i][0]];
+	    this.vertices[i] = [this.nudeVertices[i][0] - this.handle.x, this.nudeVertices[i][1]-this.handle.y];
 	}
     }
 
