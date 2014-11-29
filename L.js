@@ -25,6 +25,25 @@ L.start = function() {
     game.settings();
     system.setup();
     game.resources();
+
+    if (L.system.loadScreen === undefined)
+    {
+	L.system.loadScreen = new L.objects.Scene();
+	L.system.loadScreen.bgFill = "#000000";
+	var text = new L.objects.Textbox("loading", L.system.width/2, L.system.height/2-30);
+	text.alignment = "center";
+	text.backgroundFill = "";
+	text.textFill = "#FFFFFF";
+	text.autoSize();
+	L.system.loadScreen.layers["background"].addObject(
+	text
+	);
+    }
+L.system.loadScreen.draw();
+
+
+
+
     game.main();
 
     (function gameLoop() {
