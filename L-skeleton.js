@@ -30,15 +30,15 @@ L.objects.Bone.prototype.updateBone = function(dt)
     {
 	if (this.parent.angle === 0)
 	{
-	    this.x = this.parent.x + this.joint.x;
-	    this.y = this.parent.y + this.joint.y;
+	    this.x = this.parent.x + this.joint.x - this.parent.handle.x;
+	    this.y = this.parent.y + this.joint.y - this.parent.handle.y;
 	}
 	else
 	{
 	    var parentX = this.parent.x;
 	    var parentY = this.parent.y;
-	    var jointX = this.joint.x;
-	    var jointY = this.joint.y;
+	    var jointX = this.joint.x  - this.parent.handle.x;
+	    var jointY = this.joint.y  - this.parent.handle.y;
 	    var newPosition = Math.rotatePoint(jointX, jointY, this.parent.angle);
 	    this.x = newPosition.x + parentX;
 	    this.y = newPosition.y + parentY;

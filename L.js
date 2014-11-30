@@ -30,7 +30,7 @@ L.start = function() {
     {
 	L.system.loadScreen = new L.objects.Scene();
 	L.system.loadScreen.bgFill = "#000000";
-	var text = new L.objects.Textbox("loading", L.system.width/2, L.system.height/2-30);
+	var text = new L.objects.Textbox("loading", L.system.width / 2, L.system.height / 2 - 30);
 	text.alignment = "center";
 	text.backgroundFill = "";
 	text.textFill = "#FFFFFF";
@@ -39,12 +39,20 @@ L.start = function() {
 	text
 	);
     }
-L.system.loadScreen.draw();
+    L.system.loadScreen.setScene();
+   // while (L.system.expectedResources > L.system.loadedResources)
+L.system.loadScreen.update = function(dt)
+{
+   if (L.system.expectedResources === L.system.loadedResources)
+   {
+       game.main();
+   }
+};
 
 
 
 
-    game.main();
+   // game.main();
 
     (function gameLoop() {
 	var system = L.system;
@@ -148,6 +156,8 @@ L.load.texture = function(file, textureName)
 
     thisTexture.onload = function() {
 	L.system.loadedResources += 1;
+	thisTexture.onload = undefined;
+	thisTexture.error = undefined;
     };
 
     thisTexture.onerror = function() {
@@ -157,6 +167,10 @@ L.load.texture = function(file, textureName)
     thisTexture.src = L.system.resourcePath + L.system.texturePath + file;
 
     L.texture[name] = thisTexture;
+    if (thisTexture.complete)
+    {
+	thisTexture.onload();
+    }
     return thisTexture;
 };
 
