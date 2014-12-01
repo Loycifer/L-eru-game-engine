@@ -70,7 +70,7 @@ L.system.setup = function()
     L.system.handleClick = function(e)
     {
 	if (e.targetTouches) {
-	    var isTouch = true;
+	    var isTouch = L.system.isTouch = true;
 	}
 
 	var mouseX = ((isTouch ? e.targetTouches[0].pageX : e.pageX) - L.system.canvasX) / L.system.canvasRatio;
@@ -84,8 +84,15 @@ L.system.setup = function()
 
     L.system.setMouseCoords = function(e)
     {
-	L.system.mouseX = (e.pageX - L.system.canvasX) / L.system.canvasRatio;
-	L.system.mouseY = (e.pageY - L.system.canvasY) / L.system.canvasRatio;
+	if (e.type !== 'touchmove')
+	{
+	    L.system.mouseX = (e.pageX - L.system.canvasX) / L.system.canvasRatio;
+	    L.system.mouseY = (e.pageY - L.system.canvasY) / L.system.canvasRatio;
+	} else {
+	L.system.mouseX = (e.targetTouches[0].pageX - L.system.canvasX) / L.system.canvasRatio;
+	L.system.mouseY = (e.targetTouches[0].pageY - L.system.canvasY) / L.system.canvasRatio;
+	}
+
     };
 
 
@@ -95,6 +102,12 @@ L.system.setup = function()
 	(
 	'touchstart',
 	L.system.handleClick
+	);
+
+	L.system.renderCanvas[0].addEventListener
+	(
+	'touchmove',
+	L.system.setMouseCoords
 	);
 //
 //         jQueryDocument.on("touchstart", onTouchEvent);
@@ -111,13 +124,17 @@ L.system.setup = function()
 	'mousedown',
 	L.system.handleClick
 	);
+
+	L.system.renderCanvas[0].addEventListener
+	(
+	'mousemove',
+	L.system.setMouseCoords
+	);
     }
 
-    L.system.renderCanvas[0].addEventListener
-    (
-    'mousemove',
-    L.system.setMouseCoords
-    );
+
+
+
 
     window.addEventListener("keydown", doKeyDown, true);
     function doKeyDown(event) {
