@@ -127,6 +127,10 @@ L.objects.Sprite.prototype.isClickable = true;
 
 
 //Sprite methods
+L.objects.Sprite.prototype.setHandleXY = function(x,y)
+{
+    this.handle = {x:x,y:y};
+};
 L.objects.Sprite.prototype.getWorldX = function()
 {
     return this.x;
