@@ -66,7 +66,7 @@ var mouseY = 0;
 
     }
 
-    if (L.system.currentScene.handleClick)
+    if (L.system.currentScene.handleClick && targetButton.name === 'left')
     {
 	L.system.currentScene.handleClick(mouseX, mouseY, e);
     }

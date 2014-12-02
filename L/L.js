@@ -100,8 +100,8 @@ L.system.fullscreen = true;
 L.system.canvasRatio = 1;
 L.system.timeScale = 1;
 L.system.frameCap = 30;
-L.system.mouseX = 0;
-L.system.mouseY = 0;
+//L.system.mouseX = 0;
+//L.system.mouseY = 0;
 L.system.now, L.system.then = window.performance.now();
 L.system.dt = 0;
 
@@ -156,6 +156,7 @@ L.load.texture = function(file, textureName)
 
     thisTexture.onload = function() {
 	L.system.loadedResources += 1;
+	console.log("Succesfully loaded texture " + file + ".");
 	thisTexture.onload = undefined;
 	thisTexture.error = undefined;
     };

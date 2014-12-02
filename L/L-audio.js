@@ -3,19 +3,25 @@ var L;
 L.system.checkAudio = function() // Checks for client-supported audio type
 {
     var dummyAudio = document.createElement('audio');
-    if (dummyAudio.canPlayType('audio/wav'))
+
+    if (dummyAudio.canPlayType('audio/ogg'))
     {
-	L.system.audioType = ".wav";
-	L.log("Using .wav files");
+	L.system.audioType = ".ogg";
+	L.log("Using .ogg files");
     }
     else if (dummyAudio.canPlayType('audio/mp4'))
     {
 	L.system.audioType = ".m4a";
 	L.log("Using .m4a files");
     }
+    else if (dummyAudio.canPlayType('audio/wav'))
+    {
+	L.system.audioType = ".wav";
+	L.log("Using .wav files");
+    }
     else
     {
-	L.alert("Your browser doesn't support .wav or .m4a files.");
+	L.alert("Your browser doesn't support .wav, .ogg, or .m4a audio files.");
     }
 };
 

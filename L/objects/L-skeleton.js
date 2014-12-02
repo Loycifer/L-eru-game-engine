@@ -6,6 +6,7 @@ L.objects.Bone = function(textureName, options) {
     L.objects.Sprite.call(this, textureName, options);
     this.inheritPosition = true;
     this.inheritAngle = true;
+    this.inheritScale = true;
     this.joint = {
 	x: 0,
 	y: 0
@@ -25,24 +26,31 @@ L.objects.Bone.prototype.draw = function(layer)
 
 L.objects.Bone.prototype.updateBone = function(dt)
 {
-
+if (this.inheritScale)
+{
+    var parentScale = this.parent.scale;
+    this.scale = {x:parentScale.x,y:parentScale.y};
+}
     if (this.inheritPosition)
     {
 	var parent = this.parent;
 	var parentX = parent.x;
 	var parentY = parent.y;
-	var jointX = this.joint.x - parent.handle.x;
-	var jointY = this.joint.y - parent.handle.y;
+	var scale = this.parent.scale;
+	//var jointX = scale.x * (this.joint.x - parent.handle.x);
+	//var jointY = scale.y * (this.joint.y - parent.handle.y);
+	var jointX = (this.joint.x - parent.handle.x);
+	var jointY = (this.joint.y - parent.handle.y);
 	if (parent.angle === 0)
 	{
-	    this.x = this.parent.x + this.joint.x - this.parent.handle.x;
-	    this.y = this.parent.y + this.joint.y - this.parent.handle.y;
+	    this.x = parentX + scale.x * (this.joint.x - parent.handle.x);
+	    this.y = parentY + scale.y * (this.joint.y - parent.handle.y);
 	}
 	else
 	{
 	    var newPosition = Math.rotatePoint(jointX, jointY, this.parent.angle);
-	    this.x = newPosition.x + parentX;
-	    this.y = newPosition.y + parentY;
+	    this.x = newPosition.x*scale.x + parentX;
+	    this.y = newPosition.y*scale.y + parentY;
 	}
     }
     if (this.inheritAngle)
@@ -138,6 +146,7 @@ L.objects.Skeleton.prototype.draw = function(layer)
 	if (this === currentSprite)
 	{
 	    this.autoDraw(layer);
+	    this.drawBoundingBox(layer);
 	}
 	else
 	{

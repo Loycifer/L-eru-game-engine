@@ -36,6 +36,10 @@ L.objects.Sprite = function(textureName, options)
 	x: 0,
 	y: 0
     };
+    this.scale = {
+	x: 1,
+	y: 1
+    };
     for (var propertyName in options)
     {
 	if (options.hasOwnProperty(propertyName)) {
@@ -114,7 +118,7 @@ L.objects.Sprite.prototype.z = 0;
 L.objects.Sprite.prototype.width = 0;
 L.objects.Sprite.prototype.height = 0;
 
-L.objects.Sprite.prototype.scale = 1;
+//L.objects.Sprite.prototype.scale = 1;
 L.objects.Sprite.prototype.angle = 0;
 L.objects.Sprite.prototype.rotation = 0;
 L.objects.Sprite.prototype.alpha = 1;
@@ -127,9 +131,35 @@ L.objects.Sprite.prototype.isClickable = true;
 
 
 //Sprite methods
-L.objects.Sprite.prototype.setHandleXY = function(x,y)
+L.objects.Sprite.prototype.setHandleXY = function(x, y)
 {
-    this.handle = {x:x,y:y};
+    this.handle = {
+	x: x,
+	y: y
+    };
+};
+L.objects.Sprite.prototype.setScale = function(x)
+{
+    this.scale = {
+	x: x,
+	y: x
+    };
+};
+L.objects.Sprite.prototype.multiplyScale = function(x)
+{
+    this.scale = {
+	x: x*this.scale.x,
+	y: x*this.scale.y
+    };
+};
+
+L.objects.Sprite.prototype.flipHorizontal = function()
+{
+    this.scale.x *= -1;
+};
+L.objects.Sprite.prototype.flipVertical = function()
+{
+    this.scale.y *= -1;
 };
 L.objects.Sprite.prototype.getWorldX = function()
 {
@@ -161,20 +191,27 @@ L.objects.Sprite.prototype.autoDraw = function(layer)
     var angle = this.angle;
     var screenX = this.getScreenX();
     var screenY = this.getScreenY();
+    var scale = this.scale;
+    //var unscale = 1/this.scale;
     layer.globalAlpha = this.alpha;
 
-    if (angle !== 0)
+    if (true)
     {
 	layer.save();
 	layer.translate(screenX, screenY);
+layer.scale(scale.x, scale.y);
 	layer.rotate(-angle);
+
+
 	layer.drawImage(this.animations[this.currentAnimation][this.currentFrame].img, -this.handle.x, -this.handle.y);
 	layer.restore();
     } else {
+	// layer.scale(1/this.scale,1/this.scale);
 	layer.drawImage(this.animations[this.currentAnimation][this.currentFrame].img, this.x - this.handle.x, this.y - this.handle.y);
+	//layer.scale(this.scale,this.scale);
     }
 };
-L.objects.Sprite.prototype.autoDrawCustom = function(layer, options)
+L.objects.Sprite.prototype.autoDrawCustom = function(layer, options) // do not use
 {
     layer.globalAlpha = (options && options.opacity !== undefined) ? options.opacity : this.alpha;
     if (this.alpha > 0.0 && this.visible)
@@ -184,10 +221,13 @@ L.objects.Sprite.prototype.autoDrawCustom = function(layer, options)
 	    layer.save();
 	    layer.translate(this.x, this.y);
 	    layer.rotate(-this.angle);
+
 	    layer.drawImage((options && options.texture !== undefined) ? options.texture : this.animations.idle[this.currentFrame].img, -this.handle.x, -this.handle.y);
 	    layer.restore();
 	} else {
+
 	    layer.drawImage((options && options.texture !== undefined) ? options.texture : this.animations.idle[this.currentFrame].img, this.x - this.handle.x, this.y - this.handle.y);
+
 	}
     }
 };
@@ -224,17 +264,49 @@ L.objects.Sprite.prototype.handleClick = function(mouseX, mouseY)
 {
     if (this.isClickable)
     {
-
+	var scale = this.scale;
 	var screenX = this.getScreenX();
 	var screenY = this.getScreenY();
-	if ((this.angle === 0 &&
-	mouseX >= screenX + this.offset.x - this.handle.x &&
-	mouseX <= screenX + this.width + this.offset.x - this.handle.x &&
-	mouseY >= screenY + this.offset.y - this.handle.y &&
-	mouseY <= screenY + this.height + this.offset.y - this.handle.y
-	) || (
+	if (this.angle === 0)
+	{
+	    var left = screenX + this.offset.x - (scale.x * this.handle.x);
+	    var right = left + (scale.x * this.width);
+	    var top = screenY + this.offset.y - (scale.y * this.handle.y);
+	    var bottom = top + (scale.y * this.height);
+
+	    if (left > right)
+	    {
+		var temp = left;
+		left = right;
+		right = temp;
+	    }
+
+	    if (top > bottom)
+	    {
+		var temp = top;
+		top = bottom;
+		bottom = temp;
+	    }
+
+	    if (
+	    mouseX >= left &&
+	    mouseX <= right &&
+	    mouseY >= top &&
+	    mouseY <= bottom
+	    )
+	    {
+		 if (this.isClickedPrecise(mouseX, mouseY))
+	    {
+
+		this.onClick();
+
+		return true;
+	    }
+	    }
+	}
+	else if (
 	this.angle !== 0 &&
-	Math.jordanCurve(mouseX, mouseY, this.getVertices())))
+	Math.jordanCurve(mouseX, mouseY, this.getVertices()))
 	{
 
 	    if (this.isClickedPrecise(mouseX, mouseY))
@@ -255,7 +327,7 @@ L.objects.Sprite.prototype.isClickedPrecise = function(mouseX, mouseY)
     layer.clearRect(-1, -1, 3, 3);
     layer.save();
     layer.translate(-mouseX, -mouseY);
-    this.draw(layer);
+    this.autoDraw(layer);
     layer.restore();
     var pixelData = layer.getImageData(0, 0, 1, 1).data;
     return (pixelData[3] !== 0);
@@ -358,13 +430,14 @@ L.objects.Sprite.prototype.getVertices = function()
     var yTransform = this.getScreenY() + this.offset.y;
     var length = this.nudeVertices.length;
     var angle = this.angle;
+    var scale = this.scale;
     if (angle !== 0)
     {
 	for (var i = 0; i < length; i++)
 	{
 	    this.vertices[i] = [
-		(this.nudeVertices[i][0]-this.handle.x) * Math.cos(-angle) - (this.nudeVertices[i][1]-this.handle.y) * Math.sin(-angle),
-		(this.nudeVertices[i][0]-this.handle.x) * Math.sin(-angle) + (this.nudeVertices[i][1]-this.handle.y) * Math.cos(-angle)
+		(this.nudeVertices[i][0] - this.handle.x) * Math.cos(-angle) - (this.nudeVertices[i][1] - this.handle.y) * Math.sin(-angle),
+		(this.nudeVertices[i][0] - this.handle.x) * Math.sin(-angle) + (this.nudeVertices[i][1] - this.handle.y) * Math.cos(-angle)
 	    ];
 	}
     }
@@ -372,13 +445,13 @@ L.objects.Sprite.prototype.getVertices = function()
     {
 	for (var i = 0; i < length; i++)
 	{
-	    this.vertices[i] = [this.nudeVertices[i][0] - this.handle.x, this.nudeVertices[i][1]-this.handle.y];
+	    this.vertices[i] = [this.nudeVertices[i][0] - this.handle.x, this.nudeVertices[i][1] - this.handle.y];
 	}
     }
 
     this.vertices.mapQuick(function(entry) {
-	entry[0] += xTransform;
-	entry[1] += yTransform;
+	entry[0] = (entry[0] * scale.x) + xTransform;
+	entry[1] = (entry[1] * scale.y) + yTransform;
     });
     return this.vertices;
 };
