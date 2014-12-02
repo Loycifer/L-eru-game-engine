@@ -66,73 +66,7 @@ L.system.setup = function()
 	}
     });
 
-
-    L.system.handleClick = function(e)
-    {
-	if (e.targetTouches) {
-	    var isTouch = L.system.isTouch = true;
-	}
-
-	var mouseX = ((isTouch ? e.targetTouches[0].pageX : e.pageX) - L.system.canvasX) / L.system.canvasRatio;
-	var mouseY = ((isTouch ? e.targetTouches[0].pageY : e.pageY) - L.system.canvasY) / L.system.canvasRatio;
-	if (L.system.currentScene.handleClick)
-	{
-	    L.system.currentScene.handleClick(mouseX, mouseY, e);
-	}
-	e.preventDefault();
-    };
-
-    L.system.setMouseCoords = function(e)
-    {
-	if (e.type !== 'touchmove')
-	{
-	    L.system.mouseX = (e.pageX - L.system.canvasX) / L.system.canvasRatio;
-	    L.system.mouseY = (e.pageY - L.system.canvasY) / L.system.canvasRatio;
-	} else {
-	L.system.mouseX = (e.targetTouches[0].pageX - L.system.canvasX) / L.system.canvasRatio;
-	L.system.mouseY = (e.targetTouches[0].pageY - L.system.canvasY) / L.system.canvasRatio;
-	}
-
-    };
-
-
-    if ('ontouchstart' in document.documentElement)
-    {
-	L.system.renderCanvas[0].addEventListener
-	(
-	'touchstart',
-	L.system.handleClick
-	);
-
-	L.system.renderCanvas[0].addEventListener
-	(
-	'touchmove',
-	L.system.setMouseCoords
-	);
-//
-//         jQueryDocument.on("touchstart", onTouchEvent);
-//        jQueryDocument.on("touchmove", onTouchEvent);
-//        jQueryDocument.on("touchend", onTouchEvent);
-    } else {
-
-
-
-
-
-	L.system.renderCanvas[0].addEventListener
-	(
-	'mousedown',
-	L.system.handleClick
-	);
-
-	L.system.renderCanvas[0].addEventListener
-	(
-	'mousemove',
-	L.system.setMouseCoords
-	);
-    }
-
-
+L.mouse.setupEventListeners();
 
 
 

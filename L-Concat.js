@@ -18,7 +18,7 @@ function addFile(sources)
 	    var response = xmlhttp.responseText.replace("var L;", "");
 	    //var response = xmlhttp.responseText;
 	    //combinedFiles += "<pre><code>" + response + "</code></pre>";
-	    combinedFiles += response;
+	    combinedFiles += response + "<br>";
 	    if (length > 1)
 	    {
 		sources.shift();
@@ -46,9 +46,22 @@ function addFile(sources)
 	}
 
     };
-    xmlhttp.open("GET", sources[0] + ".js", true);
+    xmlhttp.open("GET", "L/" + sources[0] + ".js", true);
     xmlhttp.send();
 }
-files = ["L-preload", "L", "L-setup", "L-display", "L-sprite", "L-layer", "L-scene", "L-textbox", "L-transition",
-    "L-keymap", "L-audio"];
+files = [
+    "L-preload",
+    "L",
+    "L-setup",
+    "L-mouse",
+    "L-display",
+    "L-audio",
+    "objects/L-sprite",
+    "objects/L-layer",
+    "objects/L-scene",
+    "objects/L-textbox",
+    "L-transition",
+    "L-keymap",
+    "objects/L-skeleton",
+    "objects/L-polygons"];
 addFile(files);
