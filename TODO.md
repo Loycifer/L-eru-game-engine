@@ -19,8 +19,8 @@
   - [X] Scroll Rate
   - [ ] Zoom Rate {requires camera completion)
 - [X] Sprites
-  - [ ] Implement sprite layers
-  - [ ] Add scaling to sprite logic
+  - [X] ~~Implement sprite layers~~ Implement Skeletons (sprites with layers and bone animation)
+  - [X] Add scaling to sprite logic
   - [ ] Bounding precision option (rect, poly, circle, ellipse)
   - [ ] Add support for atlas source
 - [ ] SoundFX & Music Objects
@@ -42,14 +42,16 @@
 - [X] Mouse input
   - [X] ~~Add option in setup for mouse/touch~~ Automatically detects input method
   - [ ] Refine mouse event handlers
-  - [ ] Create object which holds mouse state
+  - [X] Create object which holds mouse state
   - [X] Add touchscreen interface
 - [X] Transitions
   - [ ] Add callback applicable to previous scene
-- [ ] Skeletal animation
-- [ ] Built-in customizable loadscreen
-- [ ] Cameras
-  - [ ] Camera-dependent positioning
+- [X] Skeletal animation
+  - [ ] Implement keyframes
+- [X] Built-in customizable loadscreen
+  - [ ] Make more user-friendly
+- [X] Cameras
+  - [X] Camera-dependent positioning
   - [ ] Camera Transitions
 - [ ] Save/Load module
   - [ ] Web Storage version
