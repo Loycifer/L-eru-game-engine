@@ -1,4 +1,4 @@
-L-eru-game-engine
+Ludix.js Game Engine
 =================
 
 A traditional game engine in a JavaScript environment
