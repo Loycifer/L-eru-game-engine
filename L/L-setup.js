@@ -66,7 +66,7 @@ L.system.setup = function()
 	}
     });
 
-L.mouse.setupEventListeners();
+    L.mouse.setupEventListeners();
 
 
 
@@ -96,4 +96,147 @@ L.mouse.setupEventListeners();
     }
 
 
+};
+
+L.system.setLoadScreen = function()
+{
+    var system = L.system;
+    var width = system.width;
+    var height = system.height;
+    var objects = L.objects;
+    var mainColour = "#eeeeee";
+
+    var loadScreen = new objects.Scene();
+    loadScreen.bgFill = "#000000";
+    var text = new objects.Textbox("Ludix", width / 2, height / 2 - 75);
+    text.alignment = "center";
+    text.backgroundFill = "";
+    text.textFill = mainColour;
+    text.fontSize = 50;
+    text.autoSize();
+
+    var iMake = new objects.Textbox("https://github.com/Loycifer/Ludix.js", width / 2, height / 2);
+    iMake.alignment = "center";
+
+    iMake.textFill = mainColour;
+    iMake.backgroundFill = "";
+    iMake.fontSize = 20;
+    iMake.visible = false;
+    iMake.autoSize();
+    loadScreen.layers["background"].addObject(text);
+    var screenTimer = {
+	state: "loading",
+	timer: 4
+    };
+    screenTimer.update = function(dt)
+    {
+	var timer = this.timer;
+	switch (this.state)
+	{
+	    case "loading":
+		if (system.expectedResources === system.loadedResources)
+		{
+		    //L.game.main();
+		    this.state = "ready";
+		    iMake.visible = true;
+		}
+		break;
+	    case "ready":
+		if (timer <= 0)
+		{
+		    this.timer = 3;
+		    this.state = "fadeOut";
+		}
+		if (progressBar.alpha > 0)
+		{
+		    progressBar.alpha -= 0.5 * dt;
+		}
+		if (progressBar.alpha < 0)
+		{
+		    progressBar.alpha = 0;
+		}
+		if (lineObject.alpha > 0)
+		{
+		    lineObject.alpha -= 0.5 * dt;
+		}
+		if (lineObject.alpha < 0)
+		{
+		    lineObject.alpha = 0;
+		}
+		this.timer -= 1 * dt;
+		break;
+	    case "fadeOut":
+		if (timer <= 0)
+		{
+		    L.game.main();
+		}
+		if (text.alpha > 0)
+		{
+		    text.alpha -= 1 * dt;
+		}
+		if (text.alpha < 0)
+		{
+		    text.alpha = 0;
+		}
+		if (iMake.alpha > 0)
+		{
+		    iMake.alpha -= 1 * dt;
+		}
+		if (iMake.alpha < 0)
+		{
+		    iMake.alpha = 0;
+		}
+		this.timer -= 1 * dt;
+		break;
+	    default:
+		break;
+	}
+
+    };
+    var progressBar = {
+	alpha: 1
+    };
+    progressBar.draw = function(layer)
+    {
+	var left = width * 0.25;
+
+	var ratio = system.loadedResources / system.expectedResources;
+	layer.globalAlpha = this.alpha;
+	layer.beginPath();
+	layer.lineWidth = 3;
+	layer.strokeStyle = mainColour;
+	layer.fillStyle = mainColour;
+	layer.rect(left, height / 2, left * 2, 30);
+	layer.stroke();
+	layer.fillRect(left + 4, height / 2 + 4, ratio * (left * 2 - 8), 30 - 8);
+    };
+    progressBar.update = function(dt)
+    {
+
+    };
+
+    var lineObject = {
+	alpha: 1
+    };
+    lineObject.draw = function(layer)
+    {
+	if (this.alpha > 0)
+	{
+	layer.globalAlpha = this.alpha;
+	layer.lineWidth = 1;
+	layer.strokeStyle = "#000000";
+	layer.beginPath();
+	for (var i = 0.5, h = height, w = width; i < h; i += 2)
+	{
+	    layer.moveTo(0, i);
+	    layer.lineTo(w, i);
+	}
+	layer.stroke();
+    }
+    };
+    loadScreen.layers["background"].addObject(progressBar);
+    loadScreen.layers["background"].addObject(iMake);
+    loadScreen.layers["background"].addObject(screenTimer);
+    loadScreen.layers["background"].addObject(lineObject);
+    loadScreen.setScene();
 };
