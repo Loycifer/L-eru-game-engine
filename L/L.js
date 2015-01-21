@@ -16,7 +16,7 @@ L.game = {};
 
 L.start = function() {
 
-    window.removeEventListener('load', L.start);
+    //window.removeEventListener('load', L.start);
     var game = L.game;
     var system = L.system;
     //L.globals = new game.globals();
@@ -25,7 +25,8 @@ L.start = function() {
     game.settings();
     system.setup();
     game.resources();
-
+    system.setLoadScreen();
+/*
     if (L.system.loadScreen === undefined)
     {
 	L.system.loadScreen = new L.objects.Scene();
@@ -48,7 +49,7 @@ L.system.loadScreen.update = function(dt)
        game.main();
    }
 };
-
+*/
 
 
 
@@ -56,6 +57,7 @@ L.system.loadScreen.update = function(dt)
 
     (function gameLoop() {
 	var system = L.system;
+	var thisScene = system.currentScene;
 	//var game = L.game;
 
 	var now = system.now = window.performance.now();
@@ -66,10 +68,11 @@ L.system.loadScreen.update = function(dt)
 	}
 	system.then = now;
 	//game.update(system.dt);
-	system.currentScene.update(dt);
+	thisScene.update(dt);
+	thisScene.draw();
 	requestAnimationFrame(gameLoop);
 	//game.draw();
-	system.currentScene.draw();
+
 
 
 
