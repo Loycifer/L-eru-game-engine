@@ -43,13 +43,25 @@ L.system.handleClick = function(e)
 {
 var mouseX = 0;
 var mouseY = 0;
+var type = e.type;
     if (e.targetTouches) {
 
 	mouseX = (e.targetTouches[0].pageX - L.system.canvasX) / L.system.canvasRatio;
 	mouseY = (e.targetTouches[0].pageY - L.system.canvasY) / L.system.canvasRatio;
+	var targetButton = L.mouse.buttons[0];
+	if (type === 'touchstart')
+	{
+	    targetButton.isDown = true;
+	    targetButton.lastDown.x = mouseX;
+	    targetButton.lastDown.y = mouseY;
+	}
+	if (type === 'touchend')
+	{
+	    targetButton.isDown = false;
+	}
     } else
     {
-	var type = e.type;
+
 	var targetButton = L.mouse.buttons[e.button];
 	mouseX = (e.pageX - L.system.canvasX) / L.system.canvasRatio;
 	mouseY = (e.pageY - L.system.canvasY) / L.system.canvasRatio;
