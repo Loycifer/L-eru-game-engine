@@ -57,6 +57,7 @@ L.objects.Textbox = function(text, x, y, width, height, wordwrap)
     this.marginRight = 5;
     this.marginBottom = 5;
 
+this.visible = true;
     this.isClickable = true;
 };
 
@@ -68,9 +69,9 @@ L.objects.Textbox.prototype.draw = function(layer)
 
 L.objects.Textbox.prototype.autoDraw = function(layer)
 {
-
+if (!this.visible){return;}
     layer.globalAlpha = this.alpha;
-    layer.fillStyle = this.color;
+    var drawBox = (this.backgroundFill !== "" && this.borderWodth >0);
     layer.textAlign = "left";//this.alignment;
     layer.font = this.fontSize + "px " + this.font;
     if (!this.height)
@@ -85,17 +86,22 @@ L.objects.Textbox.prototype.autoDraw = function(layer)
 	layer.translate(this.x, this.y);
 	layer.rotate(-radians);
 
+if (drawBox){
 
 	layer.beginPath();
-	layer.fillStyle = this.backgroundFill;
+
 	layer.rect(-this.handle.x, -this.handle.y, this.width + this.marginLeft + this.marginRight, this.height + this.marginTop + this.marginBottom + (this.fontSize * (arrayLength - 1) * this.lineSpacing));
-	layer.fill();
+	if (this.backgroundFill !== "")
+	{
+	    layer.fillStyle = this.backgroundFill;
+	    layer.fill();
+	}
 	if (this.borderWidth > 0)
 	{
 	    layer.strokeStyle = this.borderFill;
 	    layer.lineWidth = this.borderWidth;
 	    layer.stroke();
-	}
+	}}
 	layer.fillStyle = this.textFill;
 	layer.textBaseline = "bottom";
 	for (var i = 0; i < arrayLength; i++)
@@ -108,16 +114,21 @@ L.objects.Textbox.prototype.autoDraw = function(layer)
 	//layer.fillText(this.text, 0, 0);
 	layer.restore();
     } else {
-
+if (drawBox)
+{
 	layer.beginPath();
-	layer.fillStyle = this.backgroundFill;
 	layer.rect(this.x - this.handle.x, this.y - this.handle.y, this.width + this.marginLeft + this.marginRight, this.height + this.marginTop + this.marginBottom + (this.fontSize * (arrayLength - 1) * this.lineSpacing));
-	layer.fill();
+	if (this.backgroundFill !== "")
+	{
+	    layer.fillStyle = this.backgroundFill;
+	    layer.fill();
+	}
 	if (this.borderWidth > 0)
 	{
 	    layer.strokeStyle = this.borderFill;
 	    layer.lineWidth = this.borderWidth;
 	    layer.stroke();
+	}
 	}
 	layer.fillStyle = this.textFill;
 	layer.textBaseline = "bottom";
