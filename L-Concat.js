@@ -28,7 +28,7 @@ function addFile(sources)
 		//combinedFiles = combinedFiles.replace(/\s{2,}/g, ' ');
 		var buildDate = new Date();
 		var dateVersion = buildDate.getFullYear() + "." + buildDate.getMonth() + "." + buildDate.getDate() + "." + buildDate.getHours() + "." + buildDate.getMinutes();
-		output.innerHTML = "// L ('eru) Game Engine Automatic Instant build compiled at " + buildDate.toUTCString() + "<br>"
+		output.innerHTML = "// Ludix.js Game Engine Automatic Instant build compiled at " + buildDate.toUTCString() + "<br>"
 		+ "// For a stable release, check <a href='https://github.com/Loycifer/L-eru-game-engine/tree/master/release'>https://github.com/Loycifer/L-eru-game-engine/tree/master/release</a>" + "<br>"
 		+ "// Save this page as a plain-text file or copy the page's contents to your clipboard."
 		+ "<br><pre><code>" + combinedFiles + "</code></pre>";
