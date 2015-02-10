@@ -54,10 +54,11 @@ catch (e) {
 function setupWebAudio() {
     L.load.audio = function(file, audioName)
     {
+
 	L.system.expectedResources += 1;
 	var request = new XMLHttpRequest();
 	var name = (audioName === undefined) ? file.substr(0, file.lastIndexOf(".")) : audioName;
-	request.open('GET', (L.system.resourcePath + L.system.soundPath + file), true);
+	request.open('GET', (L.system.resourcePath + L.system.soundPath + file + L.system.audioType), true);
 	request.responseType = 'arraybuffer';
 
 	// Decode asynchronously
@@ -80,6 +81,10 @@ function setupWebAudio() {
 
     L.objects.soundFX = function(audioBuffer)
     {
+	if (audioBuffer === undefined)
+	{
+	    alert("Error accessing soundbuffer " + audioBuffer);
+	}
 	this.buffer = audioBuffer;
 	// tell the source which sound to play
 
