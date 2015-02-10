@@ -49,20 +49,23 @@ L.objects.Layer.prototype.autoUpdate = function(dt)
 };
 
 
-L.objects.Layer.prototype.handleClick = function(mouseX, mouseY)
+L.objects.Layer.prototype.handleClick = function(mouseX, mouseY, e)
 {
 
     if (this.isClickable)
     {
-	this.objects.handleClick(mouseX, mouseY);
+	this.objects.handleClick(mouseX, mouseY, e);
     }
 };
 
-L.objects.Layer.prototype.addObject = function(object)
+L.objects.Layer.prototype.addObject = function(object, scene)
 {
     this.objects.push(object);
 };
-
+/**
+ * @deprecated May be rewritten
+ *
+ */
 L.objects.Layer.prototype.addObjects = function()
 {
     var objectsLength = arguments.length;
@@ -71,3 +74,4 @@ L.objects.Layer.prototype.addObjects = function()
 	this.addObject(arguments[i]);
     }
 };
+

@@ -1,7 +1,7 @@
 var L;
 L.objects.Sprite = function(textureName, options)
 {
-    var L = window.L;
+    //var L = window.L;
 
     this.animations =
     {
@@ -148,8 +148,8 @@ L.objects.Sprite.prototype.setScale = function(x)
 L.objects.Sprite.prototype.multiplyScale = function(x)
 {
     this.scale = {
-	x: x*this.scale.x,
-	y: x*this.scale.y
+	x: x * this.scale.x,
+	y: x * this.scale.y
     };
 };
 
@@ -179,13 +179,10 @@ L.objects.Sprite.prototype.getScreenY = function()
     var currentScene = L.system.currentScene;
     return this.y - (currentScene.camera.y * currentScene.activeLayer.scrollRateY);
 };
-L.objects.Sprite.prototype.draw = function(layer)
-{
-    this.autoDraw(layer);
-};
+
 L.objects.Sprite.prototype.autoDraw = function(layer)
 {
-    if (!this.visible && (this.alpha) <= 0.0) {
+    if (!this.visible || (this.alpha) <= 0.0) {
 	return;
     }
     var angle = this.angle;
@@ -199,7 +196,7 @@ L.objects.Sprite.prototype.autoDraw = function(layer)
     {
 	layer.save();
 	layer.translate(screenX, screenY);
-layer.scale(scale.x, scale.y);
+	layer.scale(scale.x, scale.y);
 	layer.rotate(-angle);
 
 
@@ -211,6 +208,8 @@ layer.scale(scale.x, scale.y);
 	//layer.scale(this.scale,this.scale);
     }
 };
+L.objects.Sprite.prototype.draw = L.objects.Sprite.prototype.autoDraw;
+
 L.objects.Sprite.prototype.autoDrawCustom = function(layer, options) // do not use
 {
     layer.globalAlpha = (options && options.opacity !== undefined) ? options.opacity : this.alpha;
@@ -245,7 +244,7 @@ L.objects.Sprite.prototype.drawBoundingBox = function(layer)
     layer.lineWidth = 2;
     layer.stroke();
 };
-L.objects.Sprite.prototype.update = function(dt)
+L.objects.Sprite.prototype.update2 = function(dt)
 {
     this.autoUpdate(dt);
 };
@@ -260,7 +259,7 @@ L.objects.Sprite.prototype.autoUpdate = function(dt)
     this.angle += this.rotation * dt * timeScale;
 };
 
-L.objects.Sprite.prototype.handleClick = function(mouseX, mouseY)
+L.objects.Sprite.prototype.handleClick = function(mouseX, mouseY, e)
 {
     if (this.isClickable)
     {
@@ -295,13 +294,15 @@ L.objects.Sprite.prototype.handleClick = function(mouseX, mouseY)
 	    mouseY <= bottom
 	    )
 	    {
-		 if (this.isClickedPrecise(mouseX, mouseY))
-	    {
+		if (this.isClickedPrecise(mouseX, mouseY))
+		{
+		    if (e.type === "mousedown")
+		    {
+			this.onClick(mouseX, mouseY, e);
 
-		this.onClick();
-
-		return true;
-	    }
+			return true;
+		    }
+		}
 	    }
 	}
 	else if (
@@ -402,6 +403,14 @@ L.objects.Sprite.prototype.moveY = function(y)
 	x: 0,
 	y: y
     });
+};
+
+L.objects.Sprite.prototype.centerHandle = function()
+{
+    this.handle = {
+	x: this.center.x,
+	y: this.center.y
+    };
 };
 
 L.objects.Sprite.prototype.pushProperties = function(obj, propertiesArray)

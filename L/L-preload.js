@@ -35,18 +35,24 @@ if (!window.performance.now)
 //    return arrayCopy.slice(0);
 //};
 
+
+/**
+ * Array.mapQuick() - Array map function for arrays containing mutable objects.  When using shallow arrays containing numbers, strings, or bools, you will need to directly access the source array in your callback.  Modifies and returns original array without creating a new Array object.  Works faster than JavaScript's immutable Array.map().
+ * @method
+ * @param {Function} callback
+ * @returns {Array}
+ */
 Array.prototype.mapQuick = function(callback)
 {
-
-
     var length = this.length;
-
     for (var i = 0; i < length; i++)
     {
 	callback(this[i], i);
     }
-    //return this;
+    return this;
 };
+
+
 
 Array.prototype.sortBy = function(sorter, order)
 {
@@ -117,14 +123,14 @@ Array.prototype.update = function(dt)
     }
 };
 
-Array.prototype.handleClick = function(mouseX, mouseY)
+Array.prototype.handleClick = function(mouseX, mouseY, e)
 {
     var length = this.length;
 
     for (var i = length - 1; i >= 0; i--)
     {
 
-	if (this[i].handleClick && this[i].handleClick(mouseX, mouseY))
+	if (this[i].handleClick && this[i].handleClick(mouseX, mouseY, e))
 	{
 	    return true;
 	}

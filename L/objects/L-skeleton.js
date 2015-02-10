@@ -26,14 +26,18 @@ L.objects.Bone.prototype.draw = function(layer)
 
 L.objects.Bone.prototype.updateBone = function(dt)
 {
-if (this.inheritScale)
-{
-    var parentScale = this.parent.scale;
-    this.scale = {x:parentScale.x,y:parentScale.y};
-}
+    var parent = this.parent;
+    // this.sceneMap = parent.sceneMap;
+    if (this.inheritScale)
+    {
+	var parentScale = parent.scale;
+	this.scale = {
+	    x: parentScale.x,
+	    y: parentScale.y
+	};
+    }
     if (this.inheritPosition)
     {
-	var parent = this.parent;
 	var parentX = parent.x;
 	var parentY = parent.y;
 	var scale = this.parent.scale;
@@ -49,8 +53,8 @@ if (this.inheritScale)
 	else
 	{
 	    var newPosition = Math.rotatePoint(jointX, jointY, this.parent.angle);
-	    this.x = newPosition.x*scale.x + parentX;
-	    this.y = newPosition.y*scale.y + parentY;
+	    this.x = newPosition.x * scale.x + parentX;
+	    this.y = newPosition.y * scale.y + parentY;
 	}
     }
     if (this.inheritAngle)
@@ -84,24 +88,24 @@ L.objects.Skeleton = function(textureName, options)
 L.objects.Skeleton.prototype = new L.objects.Sprite;
 L.objects.Skeleton.constructor = L.objects.Skeleton;
 
-L.objects.Skeleton.prototype.handleClick = function(mouseX, mouseY)
+L.objects.Skeleton.prototype.handleClick = function(mouseX, mouseY, e)
 {
     var numberOfBones = this.drawOrder.length;
 
 
     for (var i = numberOfBones - 1; i >= 0; i--)
     {
-var currentBone = this.drawOrder[i];
-var clickResult;
+	var currentBone = this.drawOrder[i];
+	var clickResult;
 	if (this !== currentBone)
 
 	{
-	    clickResult = currentBone.handleClick(mouseX, mouseY);
+	    clickResult = currentBone.handleClick(mouseX, mouseY, e);
 
 	}
 	else
 	{
-	    clickResult = L.objects.Sprite.prototype.handleClick.call(this.drawOrder[i], mouseX, mouseY);
+	    clickResult = L.objects.Sprite.prototype.handleClick.call(this.drawOrder[i], mouseX, mouseY, e);
 	}
 	if (clickResult)
 	{
