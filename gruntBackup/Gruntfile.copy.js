@@ -58,9 +58,10 @@ module.exports = function(grunt) {
 	},
 	uglify: {
 	    minifying: {
-		files: {
-		    'eru-game-engine/build/Ludix/Ludix.min.js': [outPath + 'Ludix.js']
-		}
+		files: [{
+			dest: outPath + 'Ludix.min.js',
+			src: outPath + 'Ludix.js'
+		    }]
 	    },
 	    options: {
 		//compress: {
@@ -75,7 +76,6 @@ module.exports = function(grunt) {
 			expand: true,
 			src: ['Gruntfile.js'],
 			dest: gruntOutPath,
-
 			rename: function(dest, src) {
 			    return dest + src.replace('.js', '.copy.js');
 			}
