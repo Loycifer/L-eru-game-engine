@@ -75,8 +75,9 @@ module.exports = function(grunt) {
 			expand: true,
 			src: ['Gruntfile.js'],
 			dest: gruntOutPath,
+
 			rename: function(dest, src) {
-			    return dest + src + '.bak';
+			    return dest + src.replace('.js', '.copy.js');
 			}
 		    },
 		    {
@@ -84,7 +85,7 @@ module.exports = function(grunt) {
 			src: ['package.json'],
 			dest: gruntOutPath,
 			rename: function(dest, src) {
-			    return dest + src + '.bak';
+			    return dest + src.replace('.json', '.copy.json');
 			}
 		    }
 		]

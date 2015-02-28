@@ -1,8 +1,17 @@
 {
     "name": "Ludix",
-    "version":"0.0.1",
-    "description": "A JavaScript game engine",
+    "version": "0.0.1",
+    "description": "An HTML5 game engine using JavaScript and Canvas",
     "author": "Loy Clements",
+    "repository":
+    {
+	"type": "git",
+	"url": "https://github.com/Loycifer/Ludix.js.git"
+    },
+    "bugs":
+    {
+	"url": "https://github.com/Loycifer/Ludix.js/issues"
+    },
     "devDependencies": {
 	"grunt-contrib-copy": ">=0.4.x",
 	"grunt-contrib-clean": ">=0.4.x",
