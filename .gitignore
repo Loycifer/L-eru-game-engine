@@ -242,3 +242,4 @@ intelxdk.config.windows8.xml
 !/build/
 !/gruntBackup/Gruntfile.js.bak
 !/gruntBackup/package.json.bak
+/L-Concat.old.js
