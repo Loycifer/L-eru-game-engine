@@ -4,7 +4,7 @@ module.exports = function(grunt) {
     var projectPath = 'eru-game-engine/';
     var sourcePath = projectPath + 'source/';
     var tempPath = 'tempGrunt/';
-    var outPath = projectPath + 'build/';
+    var outPath = projectPath + 'build/Ludix/';
     var gruntOutPath = projectPath + 'gruntBackup/';
 
     var fileNames = [
@@ -59,7 +59,7 @@ module.exports = function(grunt) {
 	uglify: {
 	    minifying: {
 		files: {
-		    'eru-game-engine/build/Ludix.min.js': [outPath + 'Ludix.js']
+		    'eru-game-engine/build/Ludix/Ludix.min.js': [outPath + 'Ludix.js']
 		}
 	    },
 	    options: {

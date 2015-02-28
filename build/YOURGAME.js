@@ -1,3 +1,11 @@
+/**
+ *
+ * The .settings, .resources, and .main functions can be placed in seperate files if desired. Make sure to prepend each file with a declaration for variable L, like so : var L;
+ */
+
+
+
+
 var L;    //Do not remove this line or overwrite global variable L
 
 
