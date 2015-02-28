@@ -1,7 +1,7 @@
 
 module.exports = function(grunt) {
     // Project configuration.
-    var projectPath = 'eru-game-engine/';
+    var projectPath = 'Ludix.js/';
     var sourcePath = projectPath + 'source/';
     var tempPath = 'tempGrunt/';
     var outPath = projectPath + 'build/Ludix/';
