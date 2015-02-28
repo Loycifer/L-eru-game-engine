@@ -1,0 +1,14 @@
+{
+    "name": "Ludix",
+    "version":"0.0.1",
+    "description": "A JavaScript game engine",
+    "author": "Loy Clements",
+    "devDependencies": {
+	"grunt-contrib-copy": ">=0.4.x",
+	"grunt-contrib-clean": ">=0.4.x",
+	"grunt-contrib-concat": ">=0.4.x",
+	"grunt-text-replace": ">=0.4.x",
+	"grunt-contrib-clean": ">=0.4.x",
+	"grunt-contrib-uglify": ">=0.4.x"
+    }
+}

@@ -8,9 +8,11 @@ var L = {};
  * Core Structuring
  */
 
-L.system = {};
-L.objects = {};
-L.game = {};
+
+L.system = {};  // Namespace with system variables and functions
+L.objects = {};  // Namespace with all game objects
+L.game = {};  // Namespace holding game data
+L.pipe = {};  // Namespace for holding 'global' objects
 
 
 
