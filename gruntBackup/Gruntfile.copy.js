@@ -23,8 +23,8 @@ module.exports = function(grunt) {
 	'L-skeleton.js',
 	'L-polygon.js'
     ];
-
-    for (var filename = 0; filename < fileNames.length; filename++)
+    var numberOfFiles = fileNames.length;
+    for (var filename = 0; filename < numberOfFiles; filename++)
     {
 	fileNames[filename] = tempPath + fileNames[filename];
     }
@@ -35,8 +35,8 @@ module.exports = function(grunt) {
 	    options:
 	    {
 		separator: ";" + grunt.util.linefeed,
-		banner: "(function(globalScope){",
-		footer: ";globalScope['L'] = L;})(window);"
+		banner: "(function(globalScope,nameSpace){",
+		footer: ";globalScope[nameSpace] = L;})(window,'L');"
 	    },
 	    dist: {
 		src: fileNames,

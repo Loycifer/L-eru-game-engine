@@ -1,4 +1,4 @@
-(function(globalScope){/*
+(function(globalScope,nameSpace){/*
  * Monkeypatches. Ook ook.
  */
 
@@ -2709,4 +2709,4 @@ L.objects.Skeleton.prototype.updateBones = function(dt)
 
     }
 };
-;globalScope['L'] = L;})(window);
+;globalScope[nameSpace] = L;})(window,'L');
