@@ -2,8 +2,8 @@
 module.exports = function(grunt) {
     // Project configuration.
     var projectPath = 'eru-game-engine/';
-    var sourcePath = projectPath + 'L/';
-    var tempPath = 'tempGrunt/L/';
+    var sourcePath = projectPath + 'source/';
+    var tempPath = 'tempGrunt/';
     var outPath = projectPath + 'build/';
     var gruntOutPath = projectPath + 'gruntBackup/';
 
