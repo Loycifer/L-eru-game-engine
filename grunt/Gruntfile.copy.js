@@ -5,7 +5,7 @@ module.exports = function(grunt) {
     var sourcePath = projectPath + 'source/';
     var tempPath = 'tempGrunt/';
     var outPath = projectPath + 'build/Ludix/';
-    var gruntOutPath = projectPath + 'gruntBackup/';
+    var gruntOutPath = projectPath + 'grunt/';
 
     var fileNames = [
 	'L-preload.js',
