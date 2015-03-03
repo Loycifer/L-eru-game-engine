@@ -21,7 +21,8 @@ module.exports = function(grunt) {
 	'L-transition.js',
 	'L-keymap.js',
 	'L-skeleton.js',
-	'L-polygon.js'
+	'L-polygon.js',
+	'L-timeline.js'
     ];
     var numberOfFiles = fileNames.length;
     for (var filename = 0; filename < numberOfFiles; filename++)

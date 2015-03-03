@@ -1,6 +1,7 @@
 {
     "name": "Ludix",
     "version": "0.0.1",
+    "private" : true,
     "description": "An HTML5 game engine using JavaScript and Canvas",
     "author": "Loy Clements",
     "repository":
