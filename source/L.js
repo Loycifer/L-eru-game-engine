@@ -1,5 +1,5 @@
 /*
- * L ('ɛrɥ) Game Engine Core
+ * Ludix.js Game Engine Core
  */
 
 var L = {};
