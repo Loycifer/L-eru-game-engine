@@ -21,41 +21,11 @@ L.start = function() {
     //window.removeEventListener('load', L.start);
     var game = L.game;
     var system = L.system;
-    //L.globals = new game.globals();
-    //game.globals = null;
 
     game.settings();
     system.setup();
     game.resources();
     system.setLoadScreen();
-/*
-    if (L.system.loadScreen === undefined)
-    {
-	L.system.loadScreen = new L.objects.Scene();
-	L.system.loadScreen.bgFill = "#000000";
-	var text = new L.objects.Textbox("loading", L.system.width / 2, L.system.height / 2 - 30);
-	text.alignment = "center";
-	text.backgroundFill = "";
-	text.textFill = "#FFFFFF";
-	text.autoSize();
-	L.system.loadScreen.layers["background"].addObject(
-	text
-	);
-    }
-    L.system.loadScreen.setScene();
-   // while (L.system.expectedResources > L.system.loadedResources)
-L.system.loadScreen.update = function(dt)
-{
-   if (L.system.expectedResources === L.system.loadedResources)
-   {
-       game.main();
-   }
-};
-*/
-
-
-
-   // game.main();
 
     (function gameLoop() {
 	var system = L.system;
@@ -69,17 +39,10 @@ L.system.loadScreen.update = function(dt)
 	    system.dt = 1 / system.frameCap;
 	}
 	system.then = now;
-	//game.update(system.dt);
 	thisScene.update(dt);
 	thisScene.draw();
 	requestAnimationFrame(gameLoop);
-	//game.draw();
-
-
-
-
-
-
+	//thisScene.draw();
     })();
 };
 
@@ -105,16 +68,14 @@ L.system.fullscreen = true;
 L.system.canvasRatio = 1;
 L.system.timeScale = 1;
 L.system.frameCap = 30;
-//L.system.mouseX = 0;
-//L.system.mouseY = 0;
 L.system.now, L.system.then = window.performance.now();
 L.system.dt = 0;
 
 
 
 L.system.resourcePath = "resources/";		    // Holds path to resource folder
-L.system.soundPath = "sounds/";			    // Holds path to sound files
-L.system.texturePath = "textures/";		    // Holds path to image files
+L.system.soundPath = "sounds/";			    // Holds path to sound folder in resources folder
+L.system.texturePath = "textures/";		    // Holds path to image folder in resources folder
 L.system.expectedResources = 0;
 L.system.loadedResources = 0;
 
@@ -185,7 +146,6 @@ L.load.texture = function(file, textureName)
 L.sound = {};
 L.music = {};
 
-//window.onload = L.start;
 window.addEventListener('load', L.start);
 
 
