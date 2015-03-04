@@ -161,23 +161,23 @@ L.objects.Sprite.prototype.flipVertical = function()
 {
     this.scale.y *= -1;
 };
-L.objects.Sprite.prototype.getWorldX = function()
+L.objects.Sprite.prototype.getX = function()
 {
-    return this.x;
+    return this.x + this.offset.x;
 };
-L.objects.Sprite.prototype.getWorldY = function()
+L.objects.Sprite.prototype.getY = function()
 {
-    return this.y;
+    return this.y+ this.offset.y;
 };
 L.objects.Sprite.prototype.getScreenX = function()
 {
     var currentScene = L.system.currentScene;
-    return this.x - (currentScene.camera.x * currentScene.activeLayer.scrollRateX);
+    return this.x + this.offset.x - (currentScene.camera.x * currentScene.activeLayer.scrollRateX);
 };
 L.objects.Sprite.prototype.getScreenY = function()
 {
     var currentScene = L.system.currentScene;
-    return this.y - (currentScene.camera.y * currentScene.activeLayer.scrollRateY);
+    return this.y + this.offset.y- (currentScene.camera.y * currentScene.activeLayer.scrollRateY);
 };
 
 L.objects.Sprite.prototype.autoDraw = function(layer)
@@ -268,9 +268,9 @@ L.objects.Sprite.prototype.handleClick = function(mouseX, mouseY, e)
 	var screenY = this.getScreenY();
 	if (this.angle === 0)
 	{
-	    var left = screenX + this.offset.x - (scale.x * this.handle.x);
+	    var left = screenX - (scale.x * this.handle.x);
 	    var right = left + (scale.x * this.width);
-	    var top = screenY + this.offset.y - (scale.y * this.handle.y);
+	    var top = screenY  - (scale.y * this.handle.y);
 	    var bottom = top + (scale.y * this.height);
 
 	    if (left > right)
