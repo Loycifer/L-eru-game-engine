@@ -79,7 +79,7 @@ Array.prototype.sortBy = function(sorter, order)
 
 Array.prototype.getRandomElement = function()
 {
-    return Math.floor(Math.random() * this.length);
+    return this[Math.floor(Math.random() * this.length)];
 };
 
 Array.prototype.removeElement = function(element)
@@ -1129,23 +1129,23 @@ L.objects.Sprite.prototype.flipVertical = function()
 {
     this.scale.y *= -1;
 };
-L.objects.Sprite.prototype.getWorldX = function()
+L.objects.Sprite.prototype.getX = function()
 {
-    return this.x;
+    return this.x + this.offset.x;
 };
-L.objects.Sprite.prototype.getWorldY = function()
+L.objects.Sprite.prototype.getY = function()
 {
-    return this.y;
+    return this.y+ this.offset.y;
 };
 L.objects.Sprite.prototype.getScreenX = function()
 {
     var currentScene = L.system.currentScene;
-    return this.x - (currentScene.camera.x * currentScene.activeLayer.scrollRateX);
+    return this.x + this.offset.x - (currentScene.camera.x * currentScene.activeLayer.scrollRateX);
 };
 L.objects.Sprite.prototype.getScreenY = function()
 {
     var currentScene = L.system.currentScene;
-    return this.y - (currentScene.camera.y * currentScene.activeLayer.scrollRateY);
+    return this.y + this.offset.y- (currentScene.camera.y * currentScene.activeLayer.scrollRateY);
 };
 
 L.objects.Sprite.prototype.autoDraw = function(layer)
@@ -1236,9 +1236,9 @@ L.objects.Sprite.prototype.handleClick = function(mouseX, mouseY, e)
 	var screenY = this.getScreenY();
 	if (this.angle === 0)
 	{
-	    var left = screenX + this.offset.x - (scale.x * this.handle.x);
+	    var left = screenX - (scale.x * this.handle.x);
 	    var right = left + (scale.x * this.width);
-	    var top = screenY + this.offset.y - (scale.y * this.handle.y);
+	    var top = screenY  - (scale.y * this.handle.y);
 	    var bottom = top + (scale.y * this.height);
 
 	    if (left > right)
@@ -2679,6 +2679,7 @@ L.objects.Timeline = function()
     this.nextEvent = 0;
     this.preserveEvents = true;
     this.autoSort = true;
+    this.stopAfterEvent = 6;
 };
 
 L.objects.Timeline.prototype.update = function(dt)
@@ -2689,23 +2690,41 @@ L.objects.Timeline.prototype.update = function(dt)
 	this.timer += dt;
 	while ((this.nextEvent < eventListLength) && (this.timer >= this.eventList[this.nextEvent][0]))
 	{
-	    this.eventList[this.currentEvent][1]();
+	    this.eventList[this.nextEvent][1]();
 	    this.nextEvent++;
+	    if (this.stopAfterEvent !== 0 && this.nextEvent > this.stopAfterEvent-1)
+	    {
+		this.paused=true;
+	    }
 	}
     }
 };
 
 L.objects.Timeline.prototype.addEvent = function(time, callback)
 {
+    var eventList = this.eventList;
     var eventListLength = this.eventList.length;
-    for (var i = 0; i < eventListLength; i++)
+    if (eventListLength === 0 || eventList[eventListLength-1][0] <= time)
     {
-	if (time > this.eventList[i][0])
+	eventList.push([time, callback]);
+	return this;
+    }
+    else
+    {
+	for (var i = eventListLength-1; i >= 0; i--)
 	{
-	    this.eventList.splice(i+1,0,[time, callback]);
+	    if (i === 0)
+	    {
+		eventList.unshift([time,callback]);
+		return this;
+	    }
+	    if (time < eventList[i][0] && time >= eventList[i-1][0])
+	    {
+		eventList.splice(i,0,[time, callback]);
+		return this;
+	    }
 	}
     }
-    this.eventlist.push([time, callback]);
 
 };
 
@@ -2723,4 +2742,11 @@ L.objects.Timeline.prototype.togglePause = function()
 {
   this.paused = !this.paused;
 };
-;globalScope[nameSpace] = L;})(window,'L');
+
+L.objects.Timeline.prototype.reset = function()
+{
+  this.paused=true;
+  this.timer = 0;
+  this.nextEvent=0;
+
+};;globalScope[nameSpace] = L;})(window,'L');
