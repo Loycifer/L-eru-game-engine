@@ -64,4 +64,3 @@
 - [ ] Keepalive boolean for onblur handling
 
 ##Bugfixes
-- [ ] Check that L.display.width and .height getter return internal width of canvas instead of styling.
