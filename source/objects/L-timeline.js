@@ -3,11 +3,12 @@ L.objects.Timeline = function()
 {
     this.paused = true;
     this.timer = 0;
+    this.length = 0;
     this.eventList = [];
     this.nextEvent = 0;
     this.preserveEvents = true;
-    this.autoSort = true;
     this.stopAfterEvent = 6;
+    this.stopAtTime = 0;
 };
 
 L.objects.Timeline.prototype.update = function(dt)

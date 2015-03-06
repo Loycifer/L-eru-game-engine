@@ -1281,9 +1281,12 @@ L.objects.Sprite.prototype.handleClick = function(mouseX, mouseY, e)
 	    if (this.isClickedPrecise(mouseX, mouseY))
 	    {
 
-		this.onClick();
+		if (e.type === "mousedown")
+		    {
+			this.onClick(mouseX, mouseY, e);
 
-		return true;
+			return true;
+		    }
 	    }
 	}
     }
@@ -2675,11 +2678,12 @@ L.objects.Timeline = function()
 {
     this.paused = true;
     this.timer = 0;
+    this.length = 0;
     this.eventList = [];
     this.nextEvent = 0;
     this.preserveEvents = true;
-    this.autoSort = true;
     this.stopAfterEvent = 6;
+    this.stopAtTime = 0;
 };
 
 L.objects.Timeline.prototype.update = function(dt)

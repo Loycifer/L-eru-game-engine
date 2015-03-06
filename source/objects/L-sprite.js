@@ -313,9 +313,12 @@ L.objects.Sprite.prototype.handleClick = function(mouseX, mouseY, e)
 	    if (this.isClickedPrecise(mouseX, mouseY))
 	    {
 
-		this.onClick();
+		if (e.type === "mousedown")
+		    {
+			this.onClick(mouseX, mouseY, e);
 
-		return true;
+			return true;
+		    }
 	    }
 	}
     }
