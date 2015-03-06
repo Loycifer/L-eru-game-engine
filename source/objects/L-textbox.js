@@ -34,6 +34,7 @@ L.objects.Textbox = function(text, x, y, width, height, wordwrap)
     this.handle.y = 0;
 
     this.angle = 0;
+    this.scale = 1;
 
     this.speedX = 0;
     this.speedY = 0;
@@ -42,9 +43,12 @@ L.objects.Textbox = function(text, x, y, width, height, wordwrap)
     this.rotation = 0;
 
     this.textFill = "#000000";
+    this.textStrokeStyle = "";
+    this.textLineWidth = "2";
     this.wrap = true;
     this.alignment = "left";
     this.alignmentY = "top";
+    //this.textBaseline = "bottom";
 
 
 
@@ -57,7 +61,7 @@ L.objects.Textbox = function(text, x, y, width, height, wordwrap)
     this.marginRight = 5;
     this.marginBottom = 5;
 
-this.visible = true;
+    this.visible = true;
     this.isClickable = true;
 };
 
@@ -69,9 +73,11 @@ L.objects.Textbox.prototype.draw = function(layer)
 
 L.objects.Textbox.prototype.autoDraw = function(layer)
 {
-if (!this.visible){return;}
+    if (!this.visible) {
+	return;
+    }
     layer.globalAlpha = this.alpha;
-    var drawBox = (this.backgroundFill !== "" && this.borderWodth >0);
+    var drawBox = (this.backgroundFill !== "" && this.borderWodth > 0);
     layer.textAlign = "left";//this.alignment;
     layer.font = this.fontSize + "px " + this.font;
     if (!this.height)
@@ -86,27 +92,49 @@ if (!this.visible){return;}
 	layer.translate(this.x, this.y);
 	layer.rotate(-radians);
 
-if (drawBox){
+	if (drawBox) {
 
-	layer.beginPath();
+	    layer.beginPath();
 
-	layer.rect(-this.handle.x, -this.handle.y, this.width + this.marginLeft + this.marginRight, this.height + this.marginTop + this.marginBottom + (this.fontSize * (arrayLength - 1) * this.lineSpacing));
-	if (this.backgroundFill !== "")
-	{
-	    layer.fillStyle = this.backgroundFill;
-	    layer.fill();
+	    layer.rect(-this.handle.x, -this.handle.y, this.width + this.marginLeft + this.marginRight, this.height + this.marginTop + this.marginBottom + (this.fontSize * (arrayLength - 1) * this.lineSpacing));
+	    if (this.backgroundFill !== "")
+	    {
+		layer.fillStyle = this.backgroundFill;
+		layer.fill();
+	    }
+	    if (this.borderWidth > 0)
+	    {
+		layer.strokeStyle = this.borderFill;
+		layer.lineWidth = this.borderWidth;
+		layer.stroke();
+	    }
 	}
-	if (this.borderWidth > 0)
-	{
-	    layer.strokeStyle = this.borderFill;
-	    layer.lineWidth = this.borderWidth;
-	    layer.stroke();
-	}}
 	layer.fillStyle = this.textFill;
 	layer.textBaseline = "bottom";
 	for (var i = 0; i < arrayLength; i++)
 	{
-	    layer.fillText(this.textArray[i], this.marginLeft - this.handle.x, this.marginTop + this.fontSize - this.handle.y + (this.fontSize * i * this.lineSpacing));
+	    var text = this.textArray[i];
+	    var xPos = this.marginLeft - this.handle.x;
+	    var yPos = this.marginTop + this.fontSize - this.handle.y + (this.fontSize * i * this.lineSpacing);
+	    if (this.scale !== 1)
+	    {
+		layer.save();
+		layer.translate(this.x, this.y);
+		layer.scale(this.scale, this.scale);
+		layer.translate(-this.x, -this.y);
+	    }
+
+	    if (this.textStrokeStyle !== "")
+	    {
+		layer.lineWidth = this.textLineWidth;
+		layer.strokeStyle = this.textStrokeStyle;
+		layer.strokeText(text, xPos, yPos);
+	    }
+	    layer.fillText(text, xPos, yPos);
+	    if (this.scale !== 1)
+	    {
+		layer.restore();
+	    }
 	}
 
 
@@ -114,27 +142,50 @@ if (drawBox){
 	//layer.fillText(this.text, 0, 0);
 	layer.restore();
     } else {
-if (drawBox)
-{
-	layer.beginPath();
-	layer.rect(this.x - this.handle.x, this.y - this.handle.y, this.width + this.marginLeft + this.marginRight, this.height + this.marginTop + this.marginBottom + (this.fontSize * (arrayLength - 1) * this.lineSpacing));
-	if (this.backgroundFill !== "")
+	if (drawBox)
 	{
-	    layer.fillStyle = this.backgroundFill;
-	    layer.fill();
-	}
-	if (this.borderWidth > 0)
-	{
-	    layer.strokeStyle = this.borderFill;
-	    layer.lineWidth = this.borderWidth;
-	    layer.stroke();
-	}
+	    layer.beginPath();
+	    layer.rect(this.x - this.handle.x, this.y - this.handle.y, this.width + this.marginLeft + this.marginRight, this.height + this.marginTop + this.marginBottom + (this.fontSize * (arrayLength - 1) * this.lineSpacing));
+	    if (this.backgroundFill !== "")
+	    {
+		layer.fillStyle = this.backgroundFill;
+		layer.fill();
+	    }
+	    if (this.borderWidth > 0)
+	    {
+		layer.strokeStyle = this.borderFill;
+		layer.lineWidth = this.borderWidth;
+		layer.stroke();
+	    }
 	}
 	layer.fillStyle = this.textFill;
 	layer.textBaseline = "bottom";
 
 	for (var i = 0; i < arrayLength; i++)
-	    layer.fillText(this.textArray[i], this.x + this.marginLeft - this.handle.x, this.y + this.marginTop + this.fontSize - this.handle.y + (this.fontSize * i * this.lineSpacing));
+	{
+	    var text = this.textArray[i];
+	    var xPos = this.x + this.marginLeft - this.handle.x;
+	    var yPos = this.y + this.marginTop + this.fontSize - this.handle.y + (this.fontSize * i * this.lineSpacing);
+	    if (this.scale !== 1)
+	    {
+		layer.save();
+		layer.translate(this.x, this.y);
+		layer.scale(this.scale, this.scale);
+		layer.translate(-this.x, -this.y);
+	    }
+
+	    if (this.textStrokeStyle !== "")
+	    {
+		layer.lineWidth = this.textLineWidth;
+		layer.strokeStyle = this.textStrokeStyle;
+		layer.strokeText(text, xPos, yPos);
+	    }
+	    layer.fillText(text, xPos, yPos);
+	    if (this.scale !== 1)
+	    {
+		layer.restore();
+	    }
+	}
     }
 };
 
@@ -324,11 +375,21 @@ L.objects.Textbox.prototype.getVertices = function()
     var Math = window.Math;
     var xTransform = this.x;// + this.offset.x;
     var yTransform = this.y;// + this.offset.y;
+    var scale = this.scale;
     var top = 0 - this.handle.y;
     var left = 0 - this.handle.x;
     var right = left + this.width + this.marginLeft + this.marginRight;
     var bottom = top + this.height + this.marginTop + this.marginBottom + (this.fontSize * (this.textArray.length - 1) * this.lineSpacing);
     var vertices = [[left, top], [right, top], [right, bottom], [left, bottom]];
+
+    if (this.scale !== 1)
+    {
+	vertices.mapQuick(function(entry) {
+	    entry[0] *= scale;
+	    entry[1] *= scale;
+	});
+
+    }
     if (this.angle !== 0)
     {
 	var length = vertices.length;
