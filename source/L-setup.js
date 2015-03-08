@@ -123,76 +123,141 @@ L.system.setLoadScreen = function()
     iMake.fontSize = 20;
     iMake.visible = false;
     iMake.autoSize();
-    loadScreen.layers["background"].addObject(text);
-    var screenTimer = {
-	state: "loading",
-	timer: 4
+    //loadScreen.layers["background"].addObject(text);
+
+
+    var progressOrb = {
+	x: system.width / 2,
+	y: system.height / 2,
+	radius: system.width / 8,
+	maxRadius: Math.sqrt(Math.pow(system.width, 2) + Math.pow(system.height, 2)),
+	orbRatio: 0,
+	orbAlpha: 1,
+	orbColor: "white",
+	lineAlpha: 1,
+	lineColor: "white",
+	lineWidth: 4,
+	growthRatioPerSecond: 0.33,
+	divisions: 0,
+	divisionColor: "white",
+	rainbowWidth: system.width / 16,
+	rainbowColors: ["red", "orange", "yellow", "green", "blue", "indigo", "violet", "white"],
+	rainbowTimer: 0
+
     };
-    screenTimer.update = function(dt)
+
+    progressOrb.updateLoading = function(dt)
     {
-	var timer = this.timer;
-	switch (this.state)
+	var potentialRatio = system.loadedResources / system.expectedResources;
+	if (this.orbRatio < potentialRatio)
 	{
-	    case "loading":
-		if (system.expectedResources === system.loadedResources)
-		{
-		    //L.game.main();
-		    this.state = "ready";
-		    iMake.visible = true;
-		}
-		break;
-	    case "ready":
-		if (timer <= 0)
-		{
-		    this.timer = 3;
-		    this.state = "fadeOut";
-		}
-		if (progressBar.alpha > 0)
-		{
-		    progressBar.alpha -= 0.5 * dt;
-		}
-		if (progressBar.alpha < 0)
-		{
-		    progressBar.alpha = 0;
-		}
-		if (lineObject.alpha > 0)
-		{
-		    lineObject.alpha -= 0.5 * dt;
-		}
-		if (lineObject.alpha < 0)
-		{
-		    lineObject.alpha = 0;
-		}
-		this.timer -= 1 * dt;
-		break;
-	    case "fadeOut":
-		if (timer <= 0)
-		{
-		    L.game.main();
-		}
-		if (text.alpha > 0)
-		{
-		    text.alpha -= 1 * dt;
-		}
-		if (text.alpha < 0)
-		{
-		    text.alpha = 0;
-		}
-		if (iMake.alpha > 0)
-		{
-		    iMake.alpha -= 1 * dt;
-		}
-		if (iMake.alpha < 0)
-		{
-		    iMake.alpha = 0;
-		}
-		this.timer -= 1 * dt;
-		break;
-	    default:
-		break;
+	    this.orbRatio += this.growthRatioPerSecond * dt;
+	}
+	if (this.orbRatio >= 1)
+	{
+	    this.orbRatio = 1;
+	    this.update = this.updateAnimating;
+	    this.draw = this.drawAnimating;
 	}
 
     };
+
+    progressOrb.updateAnimating = function(dt)
+    {
+	this.rainbowTimer += dt;
+    };
+
+
+    progressOrb.update = progressOrb.updateLoading;
+
+    progressOrb.drawOrb = function(layer, ratio)
+    {
+	layer.globalAlpha = this.orbAlpha;
+	layer.beginPath();
+	layer.arc(this.x, this.y, this.radius * ratio, 0, 2 * Math.PI);
+	layer.fillStyle = this.orbColor;
+	layer.fill();
+    };
+
+    progressOrb.drawCircle = function(layer)
+    {
+	layer.globalAlpha = this.orbAlpha;
+	layer.beginPath();
+	layer.arc(this.x, this.y, this.radius, 0, 2 * Math.PI);
+	layer.strokeStyle = this.lineColor;
+	layer.lineWidth = this.lineWidth;
+
+	layer.stroke();
+    };
+
+
+
+    progressOrb.drawDivisions = function(layer)
+    {
+	if (this.divisions > 0)
+	{
+	    var denominator = this.divisions + 1;
+	    layer.globalAlpha = this.lineAlpha;
+	    layer.strokeStyle = "white";
+	    layer.lineWidth = this.lineWidth / 2;
+
+	    for (var i = 0; i < this.divisions; i++)
+	    {
+		layer.beginPath();
+		layer.arc(this.x, this.y, this.radius * ((i + 1) / denominator), 0, 2 * Math.PI);
+		layer.stroke();
+	    }
+
+
+	}
+    };
+
+    progressOrb.drawRainbow = function(layer)
+    {
+	var potentialRadius = Math.pow(this.rainbowTimer, 2) * 100;
+	var width = this.rainbowWidth;
+	layer.globalAlpha = 1;
+	layer.strokeStyle = this.lineColor;
+	layer.lineWidth = this.lineWidth;
+	for (var i = 0; i < 8; i++)
+	{
+	    var currentRadius = potentialRadius - (i * width);
+	    if (currentRadius < 0)
+	    {
+		break;
+	    }
+	    layer.beginPath();
+
+	    var radius = (currentRadius < this.maxRadius) ? currentRadius : this.maxRadius;
+	    layer.arc(this.x, this.y, radius, 0, 2 * Math.PI);
+	    layer.fillStyle = this.rainbowColors[i];
+	    layer.fill();
+
+	    layer.stroke();
+	}
+
+    };
+
+    progressOrb.drawLoading = function(layer)
+    {
+	this.drawDivisions(layer);
+	this.drawOrb(layer, this.orbRatio);
+	this.drawCircle(layer);
+    };
+
+    progressOrb.drawAnimating = function(layer)
+    {
+	this.drawOrb(layer, this.orbRatio);
+	this.drawCircle(layer);
+	this.drawRainbow(layer);
+    };
+
+
+    progressOrb.draw = progressOrb.drawLoading;
+
+
+
+
     var progressBar = {
 	alpha: 1
     };
@@ -216,27 +281,44 @@ L.system.setLoadScreen = function()
     };
 
     var lineObject = {
-	alpha: 1
+	alpha: 1,
+	colorLineWidth:L.system.width/(400),
+	scanLineWidth:(L.system.height)/(150),
+	colors: ["red", "green", "blue"]
     };
     lineObject.draw = function(layer)
     {
 	if (this.alpha > 0)
 	{
-	layer.globalAlpha = this.alpha;
-	layer.lineWidth = 1;
-	layer.strokeStyle = "#000000";
-	layer.beginPath();
-	for (var i = 0.5, h = height, w = width; i < h; i += 2)
-	{
-	    layer.moveTo(0, i);
-	    layer.lineTo(w, i);
+	    for (var colorNumber = 0; colorNumber < 3; colorNumber++)
+	    {
+		layer.globalAlpha = this.alpha / 3;
+		layer.lineWidth = this.colorLineWidth;
+		layer.strokeStyle = this.colors[colorNumber];
+		layer.beginPath();
+		for (var i = 0.5 + colorNumber*this.colorLineWidth, h = height, w = width; i < w; i += 3*this.colorLineWidth)
+		{
+		    layer.moveTo(i, 0);
+		    layer.lineTo(i, h);
+		}
+		layer.stroke();
+	    }
+	    layer.globalAlpha = this.alpha;
+	    layer.lineWidth = this.scanLineWidth/3;
+	    layer.strokeStyle = "#000000";
+	    layer.beginPath();
+	    for (var i = 0, h = height, w = width; i <= h+1; i += this.scanLineWidth)
+	    {
+		layer.moveTo(0, i);
+		layer.lineTo(w, i);
+	    }
+	    layer.stroke();
 	}
-	layer.stroke();
-    }
     };
-    loadScreen.layers["background"].addObject(progressBar);
+    // loadScreen.layers["background"].addObject(progressBar);
+    loadScreen.layers["background"].addObject(progressOrb);
     loadScreen.layers["background"].addObject(iMake);
-    loadScreen.layers["background"].addObject(screenTimer);
+    //loadScreen.layers["background"].addObject(screenTimer);
     loadScreen.layers["background"].addObject(lineObject);
     loadScreen.setScene();
 };
