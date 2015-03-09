@@ -532,6 +532,7 @@ L.system.setLoadScreen = function()
     var mainColour = "#eeeeee";
 
     var loadScreen = new objects.Scene();
+    loadScreen.motionBlur = 1;
     loadScreen.bgFill = "#000000";
     var text = new objects.Textbox("Ludix", width / 2, height / 2 - 75);
     text.alignment = "center";
@@ -555,7 +556,7 @@ L.system.setLoadScreen = function()
 	x: system.width / 2,
 	y: system.height / 2,
 	radius: system.width / 8,
-	maxRadius: Math.sqrt(Math.pow(system.width, 2) + Math.pow(system.height, 2)),
+	maxRadius: Math.sqrt(Math.pow(system.width, 2) + Math.pow(system.height, 2)) / 2,
 	orbRatio: 0,
 	orbAlpha: 1,
 	orbColor: "white",
@@ -587,10 +588,7 @@ L.system.setLoadScreen = function()
 
     };
 
-    progressOrb.updateAnimating = function(dt)
-    {
-	this.rainbowTimer += dt;
-    };
+
 
 
     progressOrb.update = progressOrb.updateLoading;
@@ -641,6 +639,7 @@ L.system.setLoadScreen = function()
     {
 	var potentialRadius = Math.pow(this.rainbowTimer, 2) * 100;
 	var width = this.rainbowWidth;
+	var maxRadius = this.maxRadius;
 	layer.globalAlpha = 1;
 	layer.strokeStyle = this.lineColor;
 	layer.lineWidth = this.lineWidth;
@@ -648,17 +647,21 @@ L.system.setLoadScreen = function()
 	{
 	    var currentRadius = potentialRadius - (i * width);
 	    if (currentRadius < 0)
+
 	    {
 		break;
 	    }
-	    layer.beginPath();
 
-	    var radius = (currentRadius < this.maxRadius) ? currentRadius : this.maxRadius;
-	    layer.arc(this.x, this.y, radius, 0, 2 * Math.PI);
-	    layer.fillStyle = this.rainbowColors[i];
-	    layer.fill();
+	    if (i === 7 || (currentRadius - width) < maxRadius)
+	    {
+		  layer.beginPath();
+		var radius = (currentRadius < maxRadius) ? currentRadius : maxRadius;
+		layer.arc(this.x, this.y, radius, 0, 2 * Math.PI);
+		layer.fillStyle = this.rainbowColors[i];
+		layer.fill();
 
-	    layer.stroke();
+		layer.stroke();
+	    }
 	}
 
     };
@@ -668,6 +671,7 @@ L.system.setLoadScreen = function()
 	this.drawDivisions(layer);
 	this.drawOrb(layer, this.orbRatio);
 	this.drawCircle(layer);
+
     };
 
     progressOrb.drawAnimating = function(layer)
@@ -675,41 +679,33 @@ L.system.setLoadScreen = function()
 	this.drawOrb(layer, this.orbRatio);
 	this.drawCircle(layer);
 	this.drawRainbow(layer);
+
     };
 
 
     progressOrb.draw = progressOrb.drawLoading;
 
 
+    var vignette = {
+	x: L.system.width / 2,
+	y: L.system.height / 2
 
-
-    var progressBar = {
-	alpha: 1
     };
-    progressBar.draw = function(layer)
+    vignette.draw = function(layer)
     {
-	var left = width * 0.25;
-
-	var ratio = system.loadedResources / system.expectedResources;
-	layer.globalAlpha = this.alpha;
-	layer.beginPath();
-	layer.lineWidth = 3;
-	layer.strokeStyle = mainColour;
-	layer.fillStyle = mainColour;
-	layer.rect(left, height / 2, left * 2, 30);
-	layer.stroke();
-	layer.fillRect(left + 4, height / 2 + 4, ratio * (left * 2 - 8), 30 - 8);
-    };
-    progressBar.update = function(dt)
-    {
-
+	layer.globalAlpha = 1;
+	var gradient = layer.createRadialGradient(this.x, this.y, 0, this.x, this.y, L.system.width / 1.8);
+	gradient.addColorStop(0, "rgba(0,0,0,0)");
+	gradient.addColorStop(1, "black");
+	layer.fillStyle = gradient;
+	layer.fillRect(0, 0, L.system.width, L.system.height);
     };
 
     var lineObject = {
 	alpha: 1,
-	colorLineWidth:L.system.width/(400),
-	scanLineWidth:(L.system.height)/(150),
-	colors: ["red", "green", "blue"]
+	colorLineWidth: L.system.width / (150 * 3),
+	scanLineWidth: (L.system.height + 1) / (200),
+	colors: ["#ff0000", "#00ff00", "#0000ff"]
     };
     lineObject.draw = function(layer)
     {
@@ -717,22 +713,23 @@ L.system.setLoadScreen = function()
 	{
 	    for (var colorNumber = 0; colorNumber < 3; colorNumber++)
 	    {
+		var colorLineWidth = this.colorLineWidth;
 		layer.globalAlpha = this.alpha / 3;
-		layer.lineWidth = this.colorLineWidth;
+		layer.lineWidth = colorLineWidth;
 		layer.strokeStyle = this.colors[colorNumber];
 		layer.beginPath();
-		for (var i = 0.5 + colorNumber*this.colorLineWidth, h = height, w = width; i < w; i += 3*this.colorLineWidth)
+		for (var i = (colorNumber * colorLineWidth) + (colorLineWidth / 2), h = height, w = width; i < w; i += 3 * colorLineWidth)
 		{
 		    layer.moveTo(i, 0);
 		    layer.lineTo(i, h);
 		}
 		layer.stroke();
 	    }
-	    layer.globalAlpha = this.alpha;
-	    layer.lineWidth = this.scanLineWidth/3;
+	    layer.globalAlpha = this.alpha*0.9;
+	    layer.lineWidth = 1;//this.scanLineWidth/3;
 	    layer.strokeStyle = "#000000";
 	    layer.beginPath();
-	    for (var i = 0, h = height, w = width; i <= h+1; i += this.scanLineWidth)
+	    for (var i = 0.5, h = height, w = width; i <= h + 1; i += 2)
 	    {
 		layer.moveTo(0, i);
 		layer.lineTo(w, i);
@@ -740,11 +737,20 @@ L.system.setLoadScreen = function()
 	    layer.stroke();
 	}
     };
+
+
+
+       progressOrb.updateAnimating = function(dt)
+    {
+	this.rainbowTimer += dt;
+	lineObject.alpa -= dt;
+    };
     // loadScreen.layers["background"].addObject(progressBar);
     loadScreen.layers["background"].addObject(progressOrb);
     loadScreen.layers["background"].addObject(iMake);
     //loadScreen.layers["background"].addObject(screenTimer);
     loadScreen.layers["background"].addObject(lineObject);
+    loadScreen.layers["background"].addObject(vignette);
     loadScreen.setScene();
 };
 ;
