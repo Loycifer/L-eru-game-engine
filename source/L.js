@@ -29,6 +29,12 @@ L.start = function() {
 
     (function gameLoop() {
 	var system = L.system;
+
+	if (system.nextScene !== undefined)
+	{
+	    system.currentScene = system.nextScene;
+	    system.nextScene = undefined;
+	}
 	var thisScene = system.currentScene;
 	//var game = L.game;
 
@@ -40,8 +46,9 @@ L.start = function() {
 	}
 	system.then = now;
 	thisScene.update(dt);
-	thisScene.draw();
+
 	requestAnimationFrame(gameLoop);
+	thisScene.draw();
 	//thisScene.draw();
     })();
 };
@@ -103,6 +110,7 @@ Object.defineProperty(L.system, "centerY", {
 
 L.system.layerAlpha = 1;
 L.system.currentScene = {};
+L.system.nextScene;
 L.system.previousScene = {};
 L.scenes = {};
 /**********************************************************************
@@ -140,6 +148,39 @@ L.load.texture = function(file, textureName)
     }
     return thisTexture;
 };
+
+L.load.base64texture = function(file, textureName)
+{
+    L.system.expectedResources += 1;
+    var thisTexture = new Image();
+    if (textureName === undefined)
+    {
+	console.log("Error: cannot load base 64 texture without textureName argument. Please supply a name.");
+	return;
+    }
+    var name = textureName;
+
+    thisTexture.onload = function() {
+	L.system.loadedResources += 1;
+	console.log("Succesfully loaded base64 texture " + textureName + ".");
+	thisTexture.onload = undefined;
+	thisTexture.error = undefined;
+    };
+
+    thisTexture.onerror = function() {
+	L.alert("Something went wrong loading base64 texture " + textureName + ".");
+    };
+
+    thisTexture.src = file;
+
+    L.texture[name] = thisTexture;
+    if (thisTexture.complete)
+    {
+	thisTexture.onload();
+    }
+    return thisTexture;
+};
+
 
 
 

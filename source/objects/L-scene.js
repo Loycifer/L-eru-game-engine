@@ -190,6 +190,6 @@ L.objects.Scene.prototype.setScene = function()
 {
     var system = L.system;
     system.previousScene = system.currentScene;
-    system.currentScene = this;
+    system.nextScene = this;
     return this;
 };
