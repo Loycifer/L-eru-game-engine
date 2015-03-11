@@ -362,9 +362,12 @@ L.objects.Textbox.prototype.handleClick = function(mouseX, mouseY, e)
 	this.angle !== 0 &&
 	Math.jordanCurve(mouseX, mouseY, this.getVertices())))
 	{
-	    this.onClick(mouseX,mouseY,e);
+	    if (e.type === "mousedown" || e.type === "touchstart")
+	    {
+		this.onClick(mouseX, mouseY, e);
 
-	    return true;
+		return true;
+	    }
 
 	}
     }

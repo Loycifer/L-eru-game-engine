@@ -296,7 +296,7 @@ L.objects.Sprite.prototype.handleClick = function(mouseX, mouseY, e)
 	    {
 		if (this.isClickedPrecise(mouseX, mouseY))
 		{
-		    if (e.type === "mousedown")
+		    if (e.type === "mousedown" || e.type === "touchstart")
 		    {
 			this.onClick(mouseX, mouseY, e);
 
@@ -313,7 +313,7 @@ L.objects.Sprite.prototype.handleClick = function(mouseX, mouseY, e)
 	    if (this.isClickedPrecise(mouseX, mouseY))
 	    {
 
-		if (e.type === "mousedown")
+		if (e.type === "mousedown" || e.type === "touchstart")
 		    {
 			this.onClick(mouseX, mouseY, e);
 
