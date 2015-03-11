@@ -349,7 +349,7 @@ L.objects.Textbox.prototype.setMargins = function()
     return this;
 };
 
-L.objects.Textbox.prototype.handleClick = function(mouseX, mouseY)
+L.objects.Textbox.prototype.handleClick = function(mouseX, mouseY, e)
 {
     if (this.isClickable)
     {
@@ -362,7 +362,7 @@ L.objects.Textbox.prototype.handleClick = function(mouseX, mouseY)
 	this.angle !== 0 &&
 	Math.jordanCurve(mouseX, mouseY, this.getVertices())))
 	{
-	    this.onClick();
+	    this.onClick(mouseX,mouseY,e);
 
 	    return true;
 
