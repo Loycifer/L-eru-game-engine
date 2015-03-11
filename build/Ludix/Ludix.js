@@ -613,7 +613,7 @@ L.system.setLoadScreen = function()
     };
 
 
-    var loadingText = new objects.Textbox("0%", width / 2 * 1.03, 3 * height / 4);
+    var loadingText = new objects.Textbox("0%", width / 2 * 1.03, (height/2) + (width / 8) + (width/30));
     loadingText.alignment = "right";
     loadingText.textFill = "white";
     loadingText.backgroundFill = "";
@@ -920,7 +920,7 @@ L.system.setLoadScreen = function()
 	    layer.stroke();
 	}
     };
- 
+
     loadScreen.layers["background"].addObject(progressOrb);
     loadScreen.layers["background"].addObject(iMakeClicker);
 
