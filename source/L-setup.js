@@ -158,6 +158,8 @@ L.system.setLoadScreen = function()
     loadingText.alpha = 0;
 
     var textLogo = new objects.Sprite("base64test");
+    textLogo.width = 402;
+    textLogo.height = 152;
     textLogo.handle = {
 	x: 201,
 	y: 76
@@ -232,8 +234,12 @@ L.system.setLoadScreen = function()
 	{
 	    this.orbRatio += this.growthRatioPerSecond * dt;
 	}
+	if (this.orbRatio > potentialRatio)
+	{
+	    this.orbRatio = potentialRatio;
+	}
 
-	if (currentRatio >= 1)
+	if (this.orbRatio >= 1)
 	{
 	    this.orbRatio = 1;
 	    this.update = this.updateAnimating;
