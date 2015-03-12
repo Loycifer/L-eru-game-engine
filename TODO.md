@@ -63,4 +63,7 @@
 - [X] Move scope of user vars out of global context
 - [ ] Keepalive boolean for onblur handling
 
-##Bugfixes
+##Bugs
+
+- [ ] Local Storage doesn't handle properly when running game from filesystem
+- [ ] Textbox autoSize() sometimes doesn't have the desired result unless called twice
