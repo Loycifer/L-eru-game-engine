@@ -304,7 +304,7 @@ L.start = function() {
 	//var game = L.game;
 
 	var now = system.now = window.performance.now();
-	var dt = system.dt = (system.now - system.then) / 1000;
+	var dt = system.dt = system.timeScale*(system.now - system.then) / 1000;
 	if (dt > 1 / system.frameCap)
 	{
 	    system.dt = 1 / system.frameCap;
@@ -439,7 +439,7 @@ L.load.base64texture = function(file, textureName)
     thisTexture.src = file;
 
     L.texture[name] = thisTexture;
-    if (thisTexture.complete)
+    if (thisTexture.complete && thisTexture.naturalWidth !== 0)
     {
 	thisTexture.onload();
     }
