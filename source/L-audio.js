@@ -79,7 +79,7 @@ function setupWebAudio() {
 
     };
 
-    L.objects.soundFX = function(audioBuffer)
+    L.objects.SoundEffect = function(audioBuffer)
     {
 	if (audioBuffer === undefined)
 	{
@@ -90,13 +90,16 @@ function setupWebAudio() {
 
     };
 
-    L.objects.soundFX.prototype.play = function(gain, panX, panY, panZ)
+    L.objects.soundFX = L.objects.SoundEffect;
+
+    L.objects.SoundEffect.prototype.play = function(gain, panX, panY, panZ)
     {
 	var source = L.audio.context.createBufferSource();
 	source.buffer = L.sound[this.buffer];
 
 	var pannerNode = L.audio.context.createPanner();
 	var gainNode = L.audio.context.createGain();
+	gainNode.gain.value = gain;
 	pannerNode.connect(L.audio.soundFX);
 	pannerNode.panningModel = "equalpower";
 	pannerNode.setPosition(0, 0, 0);
@@ -105,6 +108,47 @@ function setupWebAudio() {
 	source.connect(gainNode);
 	source.start(0);
 	L.log("playing sound");
+	return {
+	    source: source,
+	    gain: gainNode,
+	    pan: pannerNode
+	};
+    };
+
+    L.objects.Music = function(audioBuffer)
+    {
+	if (audioBuffer === undefined)
+	{
+	    alert("Error accessing soundbuffer " + audioBuffer);
+	}
+	this.buffer = audioBuffer;
+
+	// tell the source which sound to play
+
+    };
+
+    L.objects.Music.prototype.play = function(gain, panX, panY, panZ)
+    {
+	var source = L.audio.context.createBufferSource();
+	source.buffer = L.sound[this.buffer];
+	source.loop = true;
+
+	var pannerNode = L.audio.context.createPanner();
+	var gainNode = L.audio.context.createGain();
+	gainNode.gain.value = gain;
+	pannerNode.connect(L.audio.soundFX);
+	pannerNode.panningModel = "equalpower";
+	pannerNode.setPosition(0, 0, 0);
+	gainNode.connect(pannerNode);
+
+	source.connect(gainNode);
+	source.start(0);
+	L.log("playing sound");
+	return {
+	    source: source,
+	    gain: gainNode,
+	    pan: pannerNode
+	};
 
     };
 }

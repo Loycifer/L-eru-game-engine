@@ -304,16 +304,16 @@ L.start = function() {
 	//var game = L.game;
 
 	var now = system.now = window.performance.now();
-	var dt = system.dt = system.timeScale*(system.now - system.then) / 1000;
+	var dt = system.dt = system.timeScale * (system.now - system.then) / 1000;
 	if (dt > 1 / system.frameCap)
 	{
 	    system.dt = 1 / system.frameCap;
 	}
 	system.then = now;
 	thisScene.update(dt);
-
-	requestAnimationFrame(gameLoop);
 	thisScene.draw();
+	requestAnimationFrame(gameLoop);
+
 	//thisScene.draw();
     })();
 };
@@ -439,7 +439,7 @@ L.load.base64texture = function(file, textureName)
     thisTexture.src = file;
 
     L.texture[name] = thisTexture;
-    if (thisTexture.complete && thisTexture.naturalWidth !== 0)
+    if (thisTexture.complete && thisTexture.naturalWidth > 0)
     {
 	thisTexture.onload();
     }
@@ -624,6 +624,8 @@ L.system.setLoadScreen = function()
     loadingText.alpha = 0;
 
     var textLogo = new objects.Sprite("base64test");
+    textLogo.width = 402;
+    textLogo.height = 152;
     textLogo.handle = {
 	x: 201,
 	y: 76
@@ -698,8 +700,12 @@ L.system.setLoadScreen = function()
 	{
 	    this.orbRatio += this.growthRatioPerSecond * dt;
 	}
+	if (this.orbRatio > potentialRatio)
+	{
+	    this.orbRatio = potentialRatio;
+	}
 
-	if (currentRatio >= 1)
+	if (this.orbRatio >= 1)
 	{
 	    this.orbRatio = 1;
 	    this.update = this.updateAnimating;
@@ -1203,7 +1209,7 @@ function setupWebAudio() {
 
     };
 
-    L.objects.soundFX = function(audioBuffer)
+    L.objects.SoundEffect = function(audioBuffer)
     {
 	if (audioBuffer === undefined)
 	{
@@ -1214,13 +1220,16 @@ function setupWebAudio() {
 
     };
 
-    L.objects.soundFX.prototype.play = function(gain, panX, panY, panZ)
+    L.objects.soundFX = L.objects.SoundEffect;
+
+    L.objects.SoundEffect.prototype.play = function(gain, panX, panY, panZ)
     {
 	var source = L.audio.context.createBufferSource();
 	source.buffer = L.sound[this.buffer];
 
 	var pannerNode = L.audio.context.createPanner();
 	var gainNode = L.audio.context.createGain();
+	gainNode.gain.value = gain;
 	pannerNode.connect(L.audio.soundFX);
 	pannerNode.panningModel = "equalpower";
 	pannerNode.setPosition(0, 0, 0);
@@ -1229,6 +1238,39 @@ function setupWebAudio() {
 	source.connect(gainNode);
 	source.start(0);
 	L.log("playing sound");
+return {source:source,gain:gainNode,pan:pannerNode};
+    };
+
+    L.objects.Music = function(audioBuffer)
+    {
+	if (audioBuffer === undefined)
+	{
+	    alert("Error accessing soundbuffer " + audioBuffer);
+	}
+	this.buffer = audioBuffer;
+
+	// tell the source which sound to play
+
+    };
+
+    L.objects.Music.prototype.play = function(gain, panX, panY, panZ)
+    {
+	var source = L.audio.context.createBufferSource();
+	source.buffer = L.sound[this.buffer];
+	source.loop = true;
+
+	var pannerNode = L.audio.context.createPanner();
+	var gainNode = L.audio.context.createGain();
+	gainNode.gain.value = gain;
+	pannerNode.connect(L.audio.soundFX);
+	pannerNode.panningModel = "equalpower";
+	pannerNode.setPosition(0, 0, 0);
+	gainNode.connect(pannerNode);
+
+	source.connect(gainNode);
+	source.start(0);
+	L.log("playing sound");
+	return {source:source,gain:gainNode,pan:pannerNode};
 
     };
 };
