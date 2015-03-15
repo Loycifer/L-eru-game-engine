@@ -20,7 +20,7 @@ local.properties
 *.png
 
 
-resources/
+/resources/
 
 # External tool builders
 .externalToolBuilders/

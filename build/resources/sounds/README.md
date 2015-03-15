@@ -1,0 +1,1 @@
+Place your sound effects and song files in this folder

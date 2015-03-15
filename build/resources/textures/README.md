@@ -1,0 +1,1 @@
+Place your game textures and images in this folder
