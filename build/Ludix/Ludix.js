@@ -353,6 +353,20 @@ L.system.texturePath = "textures/";		    // Holds path to image folder in resour
 L.system.expectedResources = 0;
 L.system.loadedResources = 0;
 
+L.system.pause = function()
+{
+  L.system.isPaused = true;
+};
+
+L.system.resume = function()
+{
+  L.system.isPaused = false;
+};
+
+L.system.togglePause = function()
+{
+    L.system.isPaused = !L.system.isPaused;
+};
 
 L.system.width = 640;
 L.system.height = 480;

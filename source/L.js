@@ -201,7 +201,7 @@ L.load.base64texture = function(file, textureName)
 
 
 L.sound = {};
-L.music = {};
+
 
 window.addEventListener('load', L.start);
 
