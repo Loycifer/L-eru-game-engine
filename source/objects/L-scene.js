@@ -40,11 +40,7 @@ L.objects.Scene = function(name)
  * @param {float} dt
  * @returns {L.objects.Scene}
  */
-L.objects.Scene.prototype.update = function(dt)
-{
-    this.autoUpdate(dt);
-    return this;
-};
+
 
 L.objects.Scene.prototype.doKeyDown = function(event)
 {
@@ -80,6 +76,7 @@ L.objects.Scene.prototype.autoUpdate = function(dt)
     }
     return this;
 };
+L.objects.Scene.prototype.update = L.objects.Scene.prototype.autoUpdate;
 
 L.objects.Scene.prototype.autoDraw = function()
 {

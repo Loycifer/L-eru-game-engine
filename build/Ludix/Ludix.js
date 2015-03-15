@@ -466,7 +466,7 @@ L.load.base64texture = function(file, textureName)
 
 
 L.sound = {};
-L.music = {};
+
 
 window.addEventListener('load', L.start);
 
@@ -1916,10 +1916,7 @@ L.objects.Layer = function(name)
     this.scrollRateY = 1;
 };
 
-L.objects.Layer.prototype.draw = function()
-{
-    this.autoDraw();
-};
+
 
 L.objects.Layer.prototype.autoDraw = function()
 {
@@ -1927,16 +1924,12 @@ L.objects.Layer.prototype.autoDraw = function()
 
 };
 
-L.objects.Layer.prototype.update = function(dt)
-{
+L.objects.Layer.prototype.draw = L.objects.Layer.prototype.autoDraw;
 
-    this.autoUpdate(dt);
-};
+
 
 L.objects.Layer.prototype.autoUpdate = function(dt)
 {
-
-
     this.objects.update(dt);
 
     if (this.sorted)
@@ -1950,6 +1943,8 @@ L.objects.Layer.prototype.autoUpdate = function(dt)
 
 };
 
+L.objects.Layer.prototype.update = L.objects.Layer.prototype.autoUpdate;
+
 
 L.objects.Layer.prototype.handleClick = function(mouseX, mouseY, e)
 {
@@ -1960,14 +1955,11 @@ L.objects.Layer.prototype.handleClick = function(mouseX, mouseY, e)
     }
 };
 
-L.objects.Layer.prototype.addObject = function(object, scene)
+L.objects.Layer.prototype.addObject = function(object)
 {
     this.objects.push(object);
 };
-/**
- * @deprecated May be rewritten
- *
- */
+
 L.objects.Layer.prototype.addObjects = function()
 {
     var objectsLength = arguments.length;
@@ -2020,11 +2012,7 @@ L.objects.Scene = function(name)
  * @param {float} dt
  * @returns {L.objects.Scene}
  */
-L.objects.Scene.prototype.update = function(dt)
-{
-    this.autoUpdate(dt);
-    return this;
-};
+
 
 L.objects.Scene.prototype.doKeyDown = function(event)
 {
@@ -2060,6 +2048,7 @@ L.objects.Scene.prototype.autoUpdate = function(dt)
     }
     return this;
 };
+L.objects.Scene.prototype.update = L.objects.Scene.prototype.autoUpdate;
 
 L.objects.Scene.prototype.autoDraw = function()
 {

@@ -14,10 +14,7 @@ L.objects.Layer = function(name)
     this.scrollRateY = 1;
 };
 
-L.objects.Layer.prototype.draw = function()
-{
-    this.autoDraw();
-};
+
 
 L.objects.Layer.prototype.autoDraw = function()
 {
@@ -25,21 +22,17 @@ L.objects.Layer.prototype.autoDraw = function()
 
 };
 
-L.objects.Layer.prototype.update = function(dt)
-{
+L.objects.Layer.prototype.draw = L.objects.Layer.prototype.autoDraw;
 
-    this.autoUpdate(dt);
-};
+
 
 L.objects.Layer.prototype.autoUpdate = function(dt)
 {
-
-
     this.objects.update(dt);
 
     if (this.sorted)
     {
-	length = this.sortBy.length;
+	var length = this.sortBy.length;
 	for (var i = 0; i < length; i++)
 	{
 	    this.objects.sortBy(this.sortBy[i], this.sortOrder[i]);
@@ -47,6 +40,8 @@ L.objects.Layer.prototype.autoUpdate = function(dt)
     }
 
 };
+
+L.objects.Layer.prototype.update = L.objects.Layer.prototype.autoUpdate;
 
 
 L.objects.Layer.prototype.handleClick = function(mouseX, mouseY, e)
@@ -58,14 +53,11 @@ L.objects.Layer.prototype.handleClick = function(mouseX, mouseY, e)
     }
 };
 
-L.objects.Layer.prototype.addObject = function(object, scene)
+L.objects.Layer.prototype.addObject = function(object)
 {
     this.objects.push(object);
 };
-/**
- * @deprecated May be rewritten
- *
- */
+
 L.objects.Layer.prototype.addObjects = function()
 {
     var objectsLength = arguments.length;
