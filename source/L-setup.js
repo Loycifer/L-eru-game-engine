@@ -2,19 +2,68 @@ var L;
 
 
 
+L.system.setResolution = function(xRes, yRes)
+{
+    if (isNaN(xRes) || isNaN(yRes))
+    {
+	alert("L.system.setResolution() parameters must be numeric.");
+    }
+    L.system.width = xRes;
+    L.system.height = yRes;
+};
+
+L.system.setFullscreen = function(fullscreen)
+{
+    if (fullscreen !== false && fullscreen !== true)
+    {
+	alert("L.system.setFullscreen() parameter must be boolean.");
+    }
+    L.system.fullscreen = fullscreen;
+};
+
+L.system.setOrientation = function(orientation)
+{
+    var lowOrientation = orientation.toLowerCase();
+    if (["auto", "landscape", "portrait"].indexOf(lowOrientation) === -1)
+    {
+	alert("L.system.setOrientation() parameter must be \"auto\", \"landscape\", or \"portrait\".");
+    }
+    L.system.orientation = lowOrientation;
+};
+
+L.system.setAutoPause = function(autoPause)
+{
+    if (autoPause !== false && autoPause !== true)
+    {
+	alert("L.system.setAutoPause() parameter must be boolean.");
+    }
+    L.system.autoPause = autoPause;
+};
+
+L.system.setCanvasLocation = function(DOMElement)
+{
+    if (!(DOMElement instanceof HTMLElement))
+    {
+	alert("L.system.setCanvasLocation() parameter must be a DOM element.");
+    }
+    L.system.canvasLocation = DOMElement;
+};
+
 
 L.system.setup = function()
 {
     var width = L.system.width;
     var height = L.system.height;
     var aspectRatio = L.system.aspectRatio = width / height;
-
-    try {
-	screen.lockOrientation(L.system.orientation);
-    }
-    catch (e)
+    if (L.system.orientation !== "auto")
     {
-	L.log("Warning: Screen orientation could not be locked.");
+	try {
+	    screen.lockOrientation(L.system.orientation);
+	}
+	catch (e)
+	{
+	    L.log("Warning: Screen orientation could not be locked.");
+	}
     }
 
 
@@ -95,6 +144,17 @@ L.system.setup = function()
 	window.addEventListener('resize', L.display.autoResize, true);
     }
 
+    if (L.system.autoPause)
+    {
+	window.addEventListener('blur', function() {
+	    L.system.isPaused = true;
+	    L.system.then = window.performance.now();
+	});
+	window.addEventListener('focus', function() {
+	    L.system.isPaused = false;
+	    L.system.then = window.performance.now();
+	});
+    }
 
 };
 
@@ -147,7 +207,7 @@ L.system.setLoadScreen = function()
     };
 
 
-    var loadingText = new objects.Textbox("0%", width / 2 * 1.03, (height/2) + (width / 8) + (width/30));
+    var loadingText = new objects.Textbox("0%", width / 2 * 1.03, (height / 2) + (width / 8) + (width / 30));
     loadingText.alignment = "right";
     loadingText.textFill = "white";
     loadingText.backgroundFill = "";

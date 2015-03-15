@@ -45,7 +45,7 @@ L.start = function() {
 	    system.dt = 1 / system.frameCap;
 	}
 	system.then = now;
-	thisScene.update(dt);
+	thisScene.update(dt*((L.system.isPaused)?0:1));
 	thisScene.draw();
 	requestAnimationFrame(gameLoop);
 
@@ -77,6 +77,8 @@ L.system.timeScale = 1;
 L.system.frameCap = 30;
 L.system.now, L.system.then = window.performance.now();
 L.system.dt = 0;
+L.system.isPaused = false;
+L.system.autoPause = true;
 
 
 

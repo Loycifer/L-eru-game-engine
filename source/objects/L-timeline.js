@@ -7,7 +7,7 @@ L.objects.Timeline = function()
     this.eventList = [];
     this.nextEvent = 0;
     this.preserveEvents = true;
-    this.stopAfterEvent = 6;
+    this.stopAfterEvent = 0;
     this.stopAtTime = 0;
 };
 

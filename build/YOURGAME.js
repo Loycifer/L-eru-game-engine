@@ -12,12 +12,18 @@ var L;    //Do not remove this line or overwrite global variable L
 L.game.settings = function() {
 
 
-    //This is where to adjust engine settings
-    L.system.width = 900;
-    L.system.height = 600;
-    //L.system.canvasLocation = document.getElementById("YOURDIV");
-    L.system.fullscreen = true;
-    L.system.orientation = "landscape";
+    //This is where you may adjust initial settings
+
+    //Set the internal resolution of your game (width, height)
+    L.system.setResolution(640, 400);
+    //Set the desired DOM location of the game's canvas
+    L.system.setCanvasLocation(document.body);
+    //Set whether the canvas should resize to fullscreen
+    L.system.setFullscreen(true);
+    //Set the screen orientation of the game on handheld devices
+    L.system.setOrientation("landscape");
+    //Set whether the game should pause when switching to other tabs or windows
+    L.system.setAutoPause(true);
 
 
 };
