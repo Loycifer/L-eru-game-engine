@@ -40,7 +40,7 @@ L.game.resources = function() {
 L.game.main = function() {
     //This is where to build game logic such as scenes, sprites,
     //behaviours, and input handling
-    //Scenes are stores in L.scene[x], where x is the name of the scene
+    //Scenes are stored in L.scene[x], where x is the name of the scene
 
     //eg. mainScene = new L.objects.Scene("mainScene");
     //    mainScene.layers.background.addObject(someExistingObject);
