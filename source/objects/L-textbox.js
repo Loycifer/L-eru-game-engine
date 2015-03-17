@@ -1,4 +1,4 @@
-var L;
+/* global L */
 L.objects.Textbox = function(text, x, y, width, height, wordwrap)
 {
 

@@ -1,26 +1,36 @@
-var L;
+/* global L */
+
+/**
+ * Creates a new Sprite
+ * @constructor
+ * @param {image} textureName
+ * @param {object.<string, number|string|array|object>} [options]
+ * @returns {L.objects.Sprite}
+ */
 L.objects.Sprite = function(textureName, options)
 {
-    //var L = window.L;
 
+    /*
+     * Animations properties are placeholders for future implementation of
+     * frame-based animation
+     */
     this.animations =
     {
 	idle: []
     };
-
     this.animations.idle[0] =
     {
 	img: L.texture[textureName],
 	length: 1000
     };
-
     if (this.animations.idle[0].img)
     {
 	L.log("Created Sprite from texture \'" + textureName + "\'.");
     }
 
-    this.texture = L.texture[textureName];
 
+
+    this.texture = L.texture[textureName];
 
     if (this.texture && this.texture.width > 0)
     {
@@ -105,12 +115,12 @@ L.objects.Sprite = function(textureName, options)
     this.bounces = 0;
     this.landingTime = (this.v * Math.sin(this.direction) + Math.sqrt(Math.pow((this.v * Math.sin(this.direction)), 2) + (2 * this.g * this.y0))) / this.g;
 
-
+    return this;
 
 
 };
 
-//Sprite Properties
+//Sprite Instance Properties
 
 L.objects.Sprite.prototype.x = 0;
 L.objects.Sprite.prototype.y = 0;
@@ -130,36 +140,68 @@ L.objects.Sprite.prototype.visible = true;
 L.objects.Sprite.prototype.isClickable = true;
 
 
-//Sprite methods
-L.objects.Sprite.prototype.setHandleXY = function(x, y)
+//Sprite Instance Methods
+
+/**
+ * Sets the sprite's handle coordinates to x and y
+ * @method
+ * @param {number} x
+ * @param {number} y
+ * @returns {L.objects.Sprite}
+ */
+L.objects.Sprite.prototype.setHandle = function(x, y)
 {
     this.handle = {
 	x: x,
 	y: y
     };
+    return this;
 };
-L.objects.Sprite.prototype.setScale = function(x)
+
+//Fix name in personal code
+L.objects.Sprite.prototype.setHandleXY = L.objects.Sprite.prototype.setHandle;
+
+/**
+ * Sets the sprite's proportinal scaling value. Currently only
+ * accepts on value
+ * @method
+ * @param {number} scale
+ * @returns {L.objects.Sprite}
+ */
+L.objects.Sprite.prototype.setScale = function(scale)
 {
     this.scale = {
-	x: x,
-	y: x
+	x: scale,
+	y: scale
     };
+    return this;
 };
-L.objects.Sprite.prototype.multiplyScale = function(x)
+
+/**
+ *
+ * Multiplies the sprite's scale by a scalar
+ * @method
+ * @param {number} scalar
+ * @returns {L.objects.Sprite}
+ */
+L.objects.Sprite.prototype.multiplyScale = function(scalar)
 {
     this.scale = {
-	x: x * this.scale.x,
-	y: x * this.scale.y
+	x: scalar * this.scale.x,
+	y: scalar * this.scale.y
     };
+    return this;
 };
 
 L.objects.Sprite.prototype.flipHorizontal = function()
 {
     this.scale.x *= -1;
+    return this;
 };
 L.objects.Sprite.prototype.flipVertical = function()
 {
     this.scale.y *= -1;
+    return this;
 };
 L.objects.Sprite.prototype.getX = function()
 {
@@ -167,7 +209,7 @@ L.objects.Sprite.prototype.getX = function()
 };
 L.objects.Sprite.prototype.getY = function()
 {
-    return this.y+ this.offset.y;
+    return this.y + this.offset.y;
 };
 L.objects.Sprite.prototype.getScreenX = function()
 {
@@ -177,7 +219,7 @@ L.objects.Sprite.prototype.getScreenX = function()
 L.objects.Sprite.prototype.getScreenY = function()
 {
     var currentScene = L.system.currentScene;
-    return this.y + this.offset.y- (currentScene.camera.y * currentScene.activeLayer.scrollRateY);
+    return this.y + this.offset.y - (currentScene.camera.y * currentScene.activeLayer.scrollRateY);
 };
 
 L.objects.Sprite.prototype.autoDraw = function(layer)
@@ -189,7 +231,7 @@ L.objects.Sprite.prototype.autoDraw = function(layer)
     var screenX = this.getScreenX();
     var screenY = this.getScreenY();
     var scale = this.scale;
-    //var unscale = 1/this.scale;
+    var texture = this.texture;
     layer.globalAlpha = this.alpha;
 
     if (true)
@@ -200,13 +242,14 @@ L.objects.Sprite.prototype.autoDraw = function(layer)
 	layer.rotate(-angle);
 
 
-	layer.drawImage(this.animations[this.currentAnimation][this.currentFrame].img, -this.handle.x, -this.handle.y);
+	layer.drawImage(texture, -this.handle.x, -this.handle.y);
 	layer.restore();
     } else {
 	// layer.scale(1/this.scale,1/this.scale);
 	layer.drawImage(this.animations[this.currentAnimation][this.currentFrame].img, this.x - this.handle.x, this.y - this.handle.y);
 	//layer.scale(this.scale,this.scale);
     }
+    return this;
 };
 L.objects.Sprite.prototype.draw = L.objects.Sprite.prototype.autoDraw;
 
@@ -230,7 +273,7 @@ L.objects.Sprite.prototype.autoDrawCustom = function(layer, options) // do not u
 	}
     }
 };
-L.objects.Sprite.prototype.drawBoundingBox = function(layer)
+L.objects.Sprite.prototype.drawBoundingBox = function(layer, strokeStyle, lineWidth)
 {
     layer.beginPath();
     this.getVertices();
@@ -240,14 +283,12 @@ L.objects.Sprite.prototype.drawBoundingBox = function(layer)
 	layer.lineTo(this.vertices[i][0], this.vertices[i][1]);
     }
     layer.closePath();
-    layer.strokeStyle = "#FFFFFF";
-    layer.lineWidth = 2;
+    layer.strokeStyle = strokeStyle || "#FFFFFF";
+    layer.lineWidth = lineWidth || 2;
     layer.stroke();
+    return this;
 };
-L.objects.Sprite.prototype.update2 = function(dt)
-{
-    this.autoUpdate(dt);
-};
+
 L.objects.Sprite.prototype.autoUpdate = function(dt)
 {
     var timeScale = L.system.timeScale;
@@ -270,7 +311,7 @@ L.objects.Sprite.prototype.handleClick = function(mouseX, mouseY, e)
 	{
 	    var left = screenX - (scale.x * this.handle.x);
 	    var right = left + (scale.x * this.width);
-	    var top = screenY  - (scale.y * this.handle.y);
+	    var top = screenY - (scale.y * this.handle.y);
 	    var bottom = top + (scale.y * this.height);
 
 	    if (left > right)
@@ -314,16 +355,22 @@ L.objects.Sprite.prototype.handleClick = function(mouseX, mouseY, e)
 	    {
 
 		if (e.type === "mousedown" || e.type === "touchstart")
-		    {
-			this.onClick(mouseX, mouseY, e);
+		{
+		    this.onClick(mouseX, mouseY, e);
 
-			return true;
-		    }
+		    return true;
+		}
 	    }
 	}
     }
 };
 
+/**
+ * Checks if a specific sprite pixel is not empty
+ * @param {number} mouseX
+ * @param {number} mouseY
+ * @returns {Boolean}
+ */
 L.objects.Sprite.prototype.isClickedPrecise = function(mouseX, mouseY)
 {
 
@@ -435,6 +482,13 @@ L.objects.Sprite.prototype.pushPosition = function(obj)
     };
 };
 
+/*
+ * Needs rewrite:
+ * Was trying to keep method from creating too many new objects,
+ * but it would be much cleaner to just have this method
+ * return an array of points, so that the method can be near
+ * identical on all polygonal objects
+ */
 L.objects.Sprite.prototype.getVertices = function()
 {
     var Math = window.Math;

@@ -1358,10 +1358,17 @@ function setupWebAudio() {
 
     };
 };
+/* global L */
 
+/**
+ * Creates a new Sprite
+ * @constructor
+ * @param {image} textureName
+ * @param {object.<string, number|string|array|object>} [options]
+ * @returns {L.objects.Sprite}
+ */
 L.objects.Sprite = function(textureName, options)
 {
-    //var L = window.L;
 
     this.animations =
     {
@@ -1465,7 +1472,7 @@ L.objects.Sprite = function(textureName, options)
     this.bounces = 0;
     this.landingTime = (this.v * Math.sin(this.direction) + Math.sqrt(Math.pow((this.v * Math.sin(this.direction)), 2) + (2 * this.g * this.y0))) / this.g;
 
-
+    return this;
 
 
 };
@@ -1491,13 +1498,17 @@ L.objects.Sprite.prototype.isClickable = true;
 
 
 //Sprite methods
-L.objects.Sprite.prototype.setHandleXY = function(x, y)
+L.objects.Sprite.prototype.setHandle = function(x, y)
 {
     this.handle = {
 	x: x,
 	y: y
     };
 };
+//Fix name
+L.objects.Sprite.prototype.setHandleXY = L.objects.Sprite.prototype.setHandle;
+
+
 L.objects.Sprite.prototype.setScale = function(x)
 {
     this.scale = {
@@ -1527,7 +1538,7 @@ L.objects.Sprite.prototype.getX = function()
 };
 L.objects.Sprite.prototype.getY = function()
 {
-    return this.y+ this.offset.y;
+    return this.y + this.offset.y;
 };
 L.objects.Sprite.prototype.getScreenX = function()
 {
@@ -1537,7 +1548,7 @@ L.objects.Sprite.prototype.getScreenX = function()
 L.objects.Sprite.prototype.getScreenY = function()
 {
     var currentScene = L.system.currentScene;
-    return this.y + this.offset.y- (currentScene.camera.y * currentScene.activeLayer.scrollRateY);
+    return this.y + this.offset.y - (currentScene.camera.y * currentScene.activeLayer.scrollRateY);
 };
 
 L.objects.Sprite.prototype.autoDraw = function(layer)
@@ -1549,7 +1560,7 @@ L.objects.Sprite.prototype.autoDraw = function(layer)
     var screenX = this.getScreenX();
     var screenY = this.getScreenY();
     var scale = this.scale;
-    //var unscale = 1/this.scale;
+    var texture = this.texture;
     layer.globalAlpha = this.alpha;
 
     if (true)
@@ -1560,7 +1571,7 @@ L.objects.Sprite.prototype.autoDraw = function(layer)
 	layer.rotate(-angle);
 
 
-	layer.drawImage(this.animations[this.currentAnimation][this.currentFrame].img, -this.handle.x, -this.handle.y);
+	layer.drawImage(texture, -this.handle.x, -this.handle.y);
 	layer.restore();
     } else {
 	// layer.scale(1/this.scale,1/this.scale);
@@ -1590,7 +1601,7 @@ L.objects.Sprite.prototype.autoDrawCustom = function(layer, options) // do not u
 	}
     }
 };
-L.objects.Sprite.prototype.drawBoundingBox = function(layer)
+L.objects.Sprite.prototype.drawBoundingBox = function(layer, strokeStyle, lineWidth)
 {
     layer.beginPath();
     this.getVertices();
@@ -1600,14 +1611,11 @@ L.objects.Sprite.prototype.drawBoundingBox = function(layer)
 	layer.lineTo(this.vertices[i][0], this.vertices[i][1]);
     }
     layer.closePath();
-    layer.strokeStyle = "#FFFFFF";
-    layer.lineWidth = 2;
+    layer.strokeStyle = strokeStyle || "#FFFFFF";
+    layer.lineWidth = lineWidth || 2;
     layer.stroke();
 };
-L.objects.Sprite.prototype.update2 = function(dt)
-{
-    this.autoUpdate(dt);
-};
+
 L.objects.Sprite.prototype.autoUpdate = function(dt)
 {
     var timeScale = L.system.timeScale;
@@ -1630,7 +1638,7 @@ L.objects.Sprite.prototype.handleClick = function(mouseX, mouseY, e)
 	{
 	    var left = screenX - (scale.x * this.handle.x);
 	    var right = left + (scale.x * this.width);
-	    var top = screenY  - (scale.y * this.handle.y);
+	    var top = screenY - (scale.y * this.handle.y);
 	    var bottom = top + (scale.y * this.height);
 
 	    if (left > right)
@@ -1674,11 +1682,11 @@ L.objects.Sprite.prototype.handleClick = function(mouseX, mouseY, e)
 	    {
 
 		if (e.type === "mousedown" || e.type === "touchstart")
-		    {
-			this.onClick(mouseX, mouseY, e);
+		{
+		    this.onClick(mouseX, mouseY, e);
 
-			return true;
-		    }
+		    return true;
+		}
 	    }
 	}
     }
@@ -1795,6 +1803,13 @@ L.objects.Sprite.prototype.pushPosition = function(obj)
     };
 };
 
+/*
+ * Needs rewrite:
+ * Was trying to keep method from creating too many new objects,
+ * but it would be much cleaner to just have this method
+ * return an array of points, so that the method can be near
+ * identical on all polygonal objects
+ */
 L.objects.Sprite.prototype.getVertices = function()
 {
     var Math = window.Math;
@@ -1934,7 +1949,7 @@ L.objects.Layer.prototype.autoUpdate = function(dt)
 
     if (this.sorted)
     {
-	length = this.sortBy.length;
+	var length = this.sortBy.length;
 	for (var i = 0; i < length; i++)
 	{
 	    this.objects.sortBy(this.sortBy[i], this.sortOrder[i]);
@@ -2162,7 +2177,7 @@ L.objects.Scene.prototype.setScene = function()
     system.nextScene = this;
     return this;
 };;
-
+/* global L */
 L.objects.Textbox = function(text, x, y, width, height, wordwrap)
 {
 
@@ -2699,7 +2714,7 @@ L.transitions.fadeToColor.draw = function()
 };;
 
 L.input = {};
-
+L.keyboard = L.input;
 L.input.keyCodeFromString = function(string)
 {
     var upString = string.toUpperCase().replace(" ", "");
