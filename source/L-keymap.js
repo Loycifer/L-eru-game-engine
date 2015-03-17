@@ -1,6 +1,6 @@
 var L;
 L.input = {};
-
+L.keyboard = L.input;
 L.input.keyCodeFromString = function(string)
 {
     var upString = string.toUpperCase().replace(" ", "");
