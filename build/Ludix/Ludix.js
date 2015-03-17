@@ -279,7 +279,8 @@ L.objects = {};  // Namespace with all game objects
 L.game = {};  // Namespace holding game data
 L.pipe = {};  // Namespace for holding 'global' objects
 
-
+L.log = console.log;
+L.alert = alert;
 
 L.start = function() {
 
@@ -1370,24 +1371,27 @@ function setupWebAudio() {
 L.objects.Sprite = function(textureName, options)
 {
 
+    /*
+     * Animations properties are placeholders for future implementation of
+     * frame-based animation
+     */
     this.animations =
     {
 	idle: []
     };
-
     this.animations.idle[0] =
     {
 	img: L.texture[textureName],
 	length: 1000
     };
-
     if (this.animations.idle[0].img)
     {
 	L.log("Created Sprite from texture \'" + textureName + "\'.");
     }
 
-    this.texture = L.texture[textureName];
 
+
+    this.texture = L.texture[textureName];
 
     if (this.texture && this.texture.width > 0)
     {
@@ -1477,7 +1481,7 @@ L.objects.Sprite = function(textureName, options)
 
 };
 
-//Sprite Properties
+//Sprite Instance Properties
 
 L.objects.Sprite.prototype.x = 0;
 L.objects.Sprite.prototype.y = 0;
@@ -1497,40 +1501,68 @@ L.objects.Sprite.prototype.visible = true;
 L.objects.Sprite.prototype.isClickable = true;
 
 
-//Sprite methods
+//Sprite Instance Methods
+
+/**
+ * Sets the sprite's handle coordinates to x and y
+ * @method
+ * @param {number} x
+ * @param {number} y
+ * @returns {L.objects.Sprite}
+ */
 L.objects.Sprite.prototype.setHandle = function(x, y)
 {
     this.handle = {
 	x: x,
 	y: y
     };
+    return this;
 };
-//Fix name
+
+//Fix name in personal code
 L.objects.Sprite.prototype.setHandleXY = L.objects.Sprite.prototype.setHandle;
 
-
-L.objects.Sprite.prototype.setScale = function(x)
+/**
+ * Sets the sprite's proportinal scaling value. Currently only
+ * accepts on value
+ * @method
+ * @param {number} scale
+ * @returns {L.objects.Sprite}
+ */
+L.objects.Sprite.prototype.setScale = function(scale)
 {
     this.scale = {
-	x: x,
-	y: x
+	x: scale,
+	y: scale
     };
+    return this;
 };
-L.objects.Sprite.prototype.multiplyScale = function(x)
+
+/**
+ *
+ * Multiplies the sprite's scale by a scalar
+ * @method
+ * @param {number} scalar
+ * @returns {L.objects.Sprite}
+ */
+L.objects.Sprite.prototype.multiplyScale = function(scalar)
 {
     this.scale = {
-	x: x * this.scale.x,
-	y: x * this.scale.y
+	x: scalar * this.scale.x,
+	y: scalar * this.scale.y
     };
+    return this;
 };
 
 L.objects.Sprite.prototype.flipHorizontal = function()
 {
     this.scale.x *= -1;
+    return this;
 };
 L.objects.Sprite.prototype.flipVertical = function()
 {
     this.scale.y *= -1;
+    return this;
 };
 L.objects.Sprite.prototype.getX = function()
 {
@@ -1578,6 +1610,7 @@ L.objects.Sprite.prototype.autoDraw = function(layer)
 	layer.drawImage(this.animations[this.currentAnimation][this.currentFrame].img, this.x - this.handle.x, this.y - this.handle.y);
 	//layer.scale(this.scale,this.scale);
     }
+    return this;
 };
 L.objects.Sprite.prototype.draw = L.objects.Sprite.prototype.autoDraw;
 
@@ -1614,6 +1647,7 @@ L.objects.Sprite.prototype.drawBoundingBox = function(layer, strokeStyle, lineWi
     layer.strokeStyle = strokeStyle || "#FFFFFF";
     layer.lineWidth = lineWidth || 2;
     layer.stroke();
+    return this;
 };
 
 L.objects.Sprite.prototype.autoUpdate = function(dt)
@@ -1692,6 +1726,12 @@ L.objects.Sprite.prototype.handleClick = function(mouseX, mouseY, e)
     }
 };
 
+/**
+ * Checks if non-empty sprite pixels exist at specific screen coordinates
+ * @param {number} mouseX
+ * @param {number} mouseY
+ * @returns {Boolean}
+ */
 L.objects.Sprite.prototype.isClickedPrecise = function(mouseX, mouseY)
 {
 
@@ -1705,18 +1745,7 @@ L.objects.Sprite.prototype.isClickedPrecise = function(mouseX, mouseY)
     return (pixelData[3] !== 0);
 };
 
-/*
- L.objects.Sprite.prototype.addBone = function(textureName, options)
- {
- if (this.bones === undefined)
- {
- this.bones = [];
- }
- var newBone = new Bone(textureName, options);
- newBone.parent = this;
- this.bones.push(newBone);
- };
- */
+
 L.objects.Sprite.prototype.getSpeedX = function()
 {
     return Math.vectorX(this.speed, this.direction);
@@ -2010,7 +2039,7 @@ L.objects.Scene = function(name)
     this.layerOrder = ["background"];
     this.bgFill = "blueviolet";
     this.motionBlur = 1;
-    this.keymap = {};
+    this.keymap = new L.keyboard.Keymap();
 
     this.activeLayer = {};
     this.camera = {
@@ -2715,7 +2744,7 @@ L.transitions.fadeToColor.draw = function()
 
 L.input = {};
 L.keyboard = L.input;
-L.input.keyCodeFromString = function(string)
+L.keyboard.keyCodeFromString = function(string)
 {
     var upString = string.toUpperCase().replace(" ", "");
     if (upString.match(/^[A-Z0-9]$/))
@@ -2735,6 +2764,11 @@ L.input.keyCodeFromString = function(string)
 
     switch (upString)
     {
+	case "ANY":
+	case "ALL":
+	    return 0;
+	    break;
+
 	case "MULTIPLY":
 	    return 106;
 	    break;
@@ -2916,43 +2950,79 @@ L.input.keyCodeFromString = function(string)
     }
 };
 
-L.input.Keymap = function()
+L.keyboard.state = [];
+
+L.keyboard.isKeyDown = function(keyString)
+{
+    var keyboard = L.keyboard;
+    var keyCode = keyboard.keyCodeFromString(keyString);
+    return (keyboard.state.indexOf(keyCode) !== -1);
+
+};
+
+L.keyboard.clearState = function()
+{
+    L.keyboard.state.length = 0;
+};
+
+L.keyboard.Keymap = function()
 {
     this.bindings = {};
 };
 
-L.input.Keymap.prototype.doKeyDown = function(event)
+L.keyboard.Keymap.prototype.doKeyDown = function(event)
 {
     var keyCode = event.keyCode;
     var bindings = this.bindings;
+    var keyboard = L.keyboard;
+    if (keyboard.state.indexOf(keyCode) === -1)
+    {
+	keyboard.state.push(keyCode);
+    }
     if (bindings[keyCode] && bindings[keyCode]["keydown"])
     {
 	bindings[keyCode]["keydown"]();
     }
+    else if (bindings[0] && bindings[0]["keydown"])
+    {
+	bindings[0]["keydown"]();
+    }
 };
 
-L.input.Keymap.prototype.doKeyUp = function(event)
+L.keyboard.Keymap.prototype.doKeyUp = function(event)
 {
     var keyCode = event.keyCode;
     var bindings = this.bindings;
+    var keyboard = L.keyboard;
+    var indexOfKeyCode = keyboard.state.indexOf(keyCode);
+    if (indexOfKeyCode !== -1)
+    {
+	keyboard.state.splice(indexOfKeyCode, 1);
+    }
     if (bindings[keyCode] && bindings[keyCode]["keyup"])
     {
 	bindings[keyCode]["keyup"]();
     }
+    else if (bindings[0] && bindings[0]["keyup"])
+    {
+	bindings[0]["keyup"]();
+    }
+    keyboard.clearState();
+    alert(keyboard.isKeyDown("l"));
 };
 
-L.input.Keymap.prototype.bindKey = function(key, event, callback)
+L.keyboard.Keymap.prototype.bindKey = function(key, event, callback)
 {
     this.bindKeyCode(L.input.keyCodeFromString(key), event, callback);
 };
 
-L.input.Keymap.prototype.bindKeyCode = function(keyCode, event, callback)
+L.keyboard.Keymap.prototype.bindKeyCode = function(keyCode, event, callback)
 {
     if (!this.bindings[keyCode])
     {
 	this.bindings[keyCode] = {};
     }
-    this.bindings[keyCode][event] = callback;
+    this.bindings[keyCode][event.toLowerCase()] = callback;
 };;
 //IN PROGRESS
 

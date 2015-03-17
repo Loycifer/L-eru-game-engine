@@ -23,7 +23,7 @@ L.objects.Scene = function(name)
     this.layerOrder = ["background"];
     this.bgFill = "blueviolet";
     this.motionBlur = 1;
-    this.keymap = {};
+    this.keymap = new L.keyboard.Keymap();
 
     this.activeLayer = {};
     this.camera = {

@@ -1,7 +1,7 @@
 var L;
 L.input = {};
 L.keyboard = L.input;
-L.input.keyCodeFromString = function(string)
+L.keyboard.keyCodeFromString = function(string)
 {
     var upString = string.toUpperCase().replace(" ", "");
     if (upString.match(/^[A-Z0-9]$/))
@@ -21,6 +21,11 @@ L.input.keyCodeFromString = function(string)
 
     switch (upString)
     {
+	case "ANY":
+	case "ALL":
+	    return 0;
+	    break;
+
 	case "MULTIPLY":
 	    return 106;
 	    break;
@@ -202,41 +207,75 @@ L.input.keyCodeFromString = function(string)
     }
 };
 
-L.input.Keymap = function()
+L.keyboard.state = [];
+
+L.keyboard.isKeyDown = function(keyString)
+{
+    var keyboard = L.keyboard;
+    var keyCode = keyboard.keyCodeFromString(keyString);
+    return (keyboard.state.indexOf(keyCode) !== -1);
+
+};
+
+L.keyboard.clearState = function()
+{
+    L.keyboard.state.length = 0;
+};
+
+L.keyboard.Keymap = function()
 {
     this.bindings = {};
 };
 
-L.input.Keymap.prototype.doKeyDown = function(event)
+L.keyboard.Keymap.prototype.doKeyDown = function(event)
 {
     var keyCode = event.keyCode;
     var bindings = this.bindings;
+    var keyboard = L.keyboard;
+    if (keyboard.state.indexOf(keyCode) === -1)
+    {
+	keyboard.state.push(keyCode);
+    }
     if (bindings[keyCode] && bindings[keyCode]["keydown"])
     {
 	bindings[keyCode]["keydown"]();
     }
+    else if (bindings[0] && bindings[0]["keydown"])
+    {
+	bindings[0]["keydown"]();
+    }
 };
 
-L.input.Keymap.prototype.doKeyUp = function(event)
+L.keyboard.Keymap.prototype.doKeyUp = function(event)
 {
     var keyCode = event.keyCode;
     var bindings = this.bindings;
+    var keyboard = L.keyboard;
+    var indexOfKeyCode = keyboard.state.indexOf(keyCode);
+    if (indexOfKeyCode !== -1)
+    {
+	keyboard.state.splice(indexOfKeyCode, 1);
+    }
     if (bindings[keyCode] && bindings[keyCode]["keyup"])
     {
 	bindings[keyCode]["keyup"]();
     }
+    else if (bindings[0] && bindings[0]["keyup"])
+    {
+	bindings[0]["keyup"]();
+    }
 };
 
-L.input.Keymap.prototype.bindKey = function(key, event, callback)
+L.keyboard.Keymap.prototype.bindKey = function(key, event, callback)
 {
     this.bindKeyCode(L.input.keyCodeFromString(key), event, callback);
 };
 
-L.input.Keymap.prototype.bindKeyCode = function(keyCode, event, callback)
+L.keyboard.Keymap.prototype.bindKeyCode = function(keyCode, event, callback)
 {
     if (!this.bindings[keyCode])
     {
 	this.bindings[keyCode] = {};
     }
-    this.bindings[keyCode][event] = callback;
+    this.bindings[keyCode][event.toLowerCase()] = callback;
 };
