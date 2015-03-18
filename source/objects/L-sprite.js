@@ -366,7 +366,8 @@ L.objects.Sprite.prototype.handleClick = function(mouseX, mouseY, e)
 };
 
 /**
- * Checks if a specific sprite pixel is not empty
+ * Checks if non-empty sprite pixels exist at specific screen coordinates
+ * @method
  * @param {number} mouseX
  * @param {number} mouseY
  * @returns {Boolean}
@@ -384,18 +385,7 @@ L.objects.Sprite.prototype.isClickedPrecise = function(mouseX, mouseY)
     return (pixelData[3] !== 0);
 };
 
-/*
- L.objects.Sprite.prototype.addBone = function(textureName, options)
- {
- if (this.bones === undefined)
- {
- this.bones = [];
- }
- var newBone = new Bone(textureName, options);
- newBone.parent = this;
- this.bones.push(newBone);
- };
- */
+
 L.objects.Sprite.prototype.getSpeedX = function()
 {
     return Math.vectorX(this.speed, this.direction);

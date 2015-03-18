@@ -1,9 +1,29 @@
-var L;
-L.input = {};
-L.keyboard = L.input;
-L.keyboard.keyCodeFromString = function(string)
+/* global L*/
+
+/**
+ *
+ * A namespace for keyboard controls
+ * @namespace L.keyboard
+ */
+L.keyboard = {};
+
+/**
+ * In place for backwards compatibility
+ * @deprecated
+ * @type @exp;L@pro;keyboard
+ */
+L.input = L.keyboard;
+
+/**
+ *
+ * Takes a string representing a keyboard button and resturns the corresponding key code.
+ * @function
+ * @param {string} keyString
+ * @returns {Number} Keyboard keycode
+ */
+L.keyboard.keyCodeFromString = function(keyString)
 {
-    var upString = string.toUpperCase().replace(" ", "");
+    var upString = keyString.toUpperCase().replace(" ", "");
     if (upString.match(/^[A-Z0-9]$/))
     {
 	return upString.charCodeAt(0);
@@ -202,13 +222,24 @@ L.keyboard.keyCodeFromString = function(string)
 	    break;
 
 	default:
-	    alert("'" + string + "' is not a valid key identifier.");
+	    alert("'" + keyString + "' is not a valid key identifier.");
 	    break;
     }
 };
 
+/**
+ * Holds an array of pressed keyboard buttons
+ * @type Array
+ */
 L.keyboard.state = [];
 
+
+/**
+ * Checks L.keyboard.state to see if a specific key is down
+ * @function
+ * @param {type} keyString
+ * @returns {Boolean}
+ */
 L.keyboard.isKeyDown = function(keyString)
 {
     var keyboard = L.keyboard;
@@ -217,16 +248,33 @@ L.keyboard.isKeyDown = function(keyString)
 
 };
 
+/**
+ * Resets the state of the keyboard, unpressing all buttons
+ * @function
+ * @returns {L.keyboard}
+ */
 L.keyboard.clearState = function()
 {
     L.keyboard.state.length = 0;
+    return this;
 };
 
+/**
+ * Creates a Keymap instance, a keyboard control scheme
+ * @constructor
+ * @returns {L.keyboard}
+ */
 L.keyboard.Keymap = function()
 {
     this.bindings = {};
+    return this;
 };
 
+/**
+ * This method is called by keymap's parent scene on a keydown event
+ * @method
+ * @param {event} event
+ */
 L.keyboard.Keymap.prototype.doKeyDown = function(event)
 {
     var keyCode = event.keyCode;
@@ -246,6 +294,11 @@ L.keyboard.Keymap.prototype.doKeyDown = function(event)
     }
 };
 
+/**
+ * This method is called by keymap's parent scene on a keyup event
+ * @method
+ * @param {event} event
+ */
 L.keyboard.Keymap.prototype.doKeyUp = function(event)
 {
     var keyCode = event.keyCode;
@@ -266,11 +319,28 @@ L.keyboard.Keymap.prototype.doKeyUp = function(event)
     }
 };
 
+/**
+ * Binds a function to the keyup or keydown event of a keyboard key, specified by name
+ * @method
+ * @param {string} key
+ * @param {string} event
+ * @param {function} callback
+ * @returns {L.keyboard.Keymap}
+ */
 L.keyboard.Keymap.prototype.bindKey = function(key, event, callback)
 {
     this.bindKeyCode(L.input.keyCodeFromString(key), event, callback);
+    return this;
 };
 
+/**
+ * Binds a function to the keyup or keydown event of a keyboard key, specified by key code
+ * @method
+ * @param {number} keyCode
+ * @param {string} event
+ * @param {function} callback
+ * @returns {L.keyboard.Keymap}
+ */
 L.keyboard.Keymap.prototype.bindKeyCode = function(keyCode, event, callback)
 {
     if (!this.bindings[keyCode])
@@ -278,4 +348,5 @@ L.keyboard.Keymap.prototype.bindKeyCode = function(keyCode, event, callback)
 	this.bindings[keyCode] = {};
     }
     this.bindings[keyCode][event.toLowerCase()] = callback;
+    return this;
 };
