@@ -197,7 +197,7 @@ L.load.base64texture = function(file, textureName)
     }
     return thisTexture;
 };
-
+L.load.base64Texture = L.load.base64texture;
 
 
 

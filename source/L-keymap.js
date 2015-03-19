@@ -253,7 +253,7 @@ L.keyboard.isKeyDown = function(keyString)
  * @function
  * @returns {L.keyboard}
  */
-L.keyboard.clearState = function()
+L.keyboard.reset = function()
 {
     L.keyboard.state.length = 0;
     return this;

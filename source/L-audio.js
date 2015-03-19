@@ -57,7 +57,8 @@ function setupWebAudio() {
 
 	L.system.expectedResources += 1;
 	var request = new XMLHttpRequest();
-	var name = (audioName === undefined) ? file.substr(0, file.lastIndexOf(".")) : audioName;
+	//var name = (audioName === undefined) ? file.substr(0, file.lastIndexOf(".")) : audioName;
+	var name = (audioName === undefined) ? file : audioName;
 	request.open('GET', (L.system.resourcePath + L.system.soundPath + file + L.system.audioType), true);
 	request.responseType = 'arraybuffer';
 
