@@ -1,15 +1,10 @@
-/**
- *
- * @namespace {L}
- */
-
-var L;
+/* global L */
 
 /**
- * L.objects.Scene
- * @class
- * @param {String} name - The name of the scene
- * @return {Scene}
+ * Creates a new Scene object.  The scene comes with an empty keymap object and one layer called "background"
+ * @constructor
+ * @param {string} name - The name of the scene
+ * @return {L.objects.Scene}
  */
 L.objects.Scene = function(name)
 {
@@ -34,14 +29,6 @@ L.objects.Scene = function(name)
     };
 };
 
-/**
- * @method
- * @memberOf L.objects.Scene
- * @param {float} dt
- * @returns {L.objects.Scene}
- */
-
-
 L.objects.Scene.prototype.doKeyDown = function(event)
 {
     if (this.keymap.doKeyDown !== undefined)
@@ -59,9 +46,8 @@ L.objects.Scene.prototype.doKeyUp = function(event)
 };
 /**
  * @method
- * @memberOf L.objects.Scene
  * @param {float} dt - Delta time
- * @returns {Scene} Scene
+ * @returns {L.objects.Scene} Scene
  */
 L.objects.Scene.prototype.autoUpdate = function(dt)
 {
@@ -102,7 +88,7 @@ L.objects.Scene.prototype.autoDraw = function()
 
 L.objects.Scene.prototype.draw = L.objects.Scene.prototype.autoDraw;
 
-L.objects.Scene.prototype.addLayer = function(name)
+L.objects.Scene.prototype.newLayer = function(name)
 {
     var newLayer = new L.objects.Layer(name);
     this.layers[name] = newLayer;
@@ -110,6 +96,8 @@ L.objects.Scene.prototype.addLayer = function(name)
     return newLayer;
 
 };
+
+L.objects.Scene.prototype.addLayer = L.objects.Scene.prototype.newLayer;
 
 L.objects.Scene.prototype.addLayerObject = function(layer)
 {
@@ -120,29 +108,14 @@ L.objects.Scene.prototype.addLayerObject = function(layer)
 };
 
 /**
- L.objects.Scene.prototype.addObject = function(object)
- {
- this.layers["background"].addObject(object);
- };
-
- L.objects.Scene.prototype.addObjects = function(objects)
- {
- var arrayLength = arguments.length;
- for (var i = 0; i < arrayLength; i++)
- {
- this.layers["background"].addObject(arguments[i]);
- }
- };
- **/
-/**
  *
  * @param {Object} object
- * @param {Layer} layer
- * @returns {Layer}
+ * @param {string} layerName
+ * @returns {L.objects.Layer}
  */
-L.objects.Scene.prototype.addObjectToLayer = function(object, layer)
+L.objects.Scene.prototype.addObjectToLayer = function(object, layerName)
 {
-    this.layers[layer].addObject(object);
+    this.layers[layerName].addObject(object);
     return this;
 };
 
@@ -180,6 +153,7 @@ L.objects.Scene.prototype.transition.instant = function(nextScene, callback)
 };
 
 /**
+ * Instructs the engine to switch to this scene before the next frame is rendered
  * @method
  * @returns {L.objects.Scene}
  */
