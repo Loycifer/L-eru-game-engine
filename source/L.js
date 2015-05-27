@@ -46,7 +46,7 @@ L.start = function() {
 	    system.dt = 1 / system.frameCap;
 	}
 	system.then = now;
-	thisScene.update(dt*((L.system.isPaused)?0:1));
+	thisScene.update(dt * ((L.system.isPaused) ? 0 : 1));
 	thisScene.draw();
 	requestAnimationFrame(gameLoop);
 
@@ -91,12 +91,12 @@ L.system.loadedResources = 0;
 
 L.system.pause = function()
 {
-  L.system.isPaused = true;
+    L.system.isPaused = true;
 };
 
 L.system.resume = function()
 {
-  L.system.isPaused = false;
+    L.system.isPaused = false;
 };
 
 L.system.togglePause = function()
@@ -149,7 +149,7 @@ L.load.texture = function(file, textureName)
 	L.system.loadedResources += 1;
 	console.log("Succesfully loaded texture " + file + ".");
 	thisTexture.onload = undefined;
-	thisTexture.error = undefined;
+	thisTexture.onerror = undefined;
     };
 
     thisTexture.onerror = function() {
@@ -199,7 +199,77 @@ L.load.base64texture = function(file, textureName)
 };
 L.load.base64Texture = L.load.base64texture;
 
+L.load.INIFile = function(file, nameSpace)
+{
+    if (L.INI === undefined)
+    {
+	L.INI = {};
+    }
+    L.system.expectedResources += 1;
+    var request = new XMLHttpRequest();
+    var url = L.system.resourcePath + file;
+    request.open('GET', url, true);
 
+    request.onload = function() {
+	var textLines = request.responseText.split("\n");
+	var targetNS = L.INI[nameSpace] = {};
+	var textLength = textLines.length;
+	var section = "";
+
+	for (var i = 0; i < textLength; i++)
+	{
+	    var currentLine = textLines[i].trim();
+	    if (currentLine === "")
+	    {
+		continue;
+	    }
+	    var firstChar = currentLine.substring(0, 1);
+	    switch (firstChar)
+	    {
+		case ";":
+		case "#":
+		    continue;
+		    break;
+		case "[":
+		    var closingBracket = currentLine.indexOf("]");
+		    if (closingBracket === -1)
+		    {
+			alert("Section syntax error in INI file " + file + " at line " + i + ".");
+		    }
+		    section = currentLine.substring(1, closingBracket);
+		    targetNS[section] = {};
+		    continue;
+		    break;
+		default:
+		    var statements = currentLine.split("=");
+		    var varName = statements[0].trim();
+		    var assignment = statements[1].trim();
+		    if (!isNaN(assignment))
+		    {
+			assignment = +assignment;
+		    }
+		    if (section !== "")
+		    {
+			targetNS[section][varName] = assignment;
+		    } else
+		    {
+			targetNS[varName] = assignment;
+		    }
+		    break;
+	    }
+	}
+	L.system.loadedResources += 1;
+
+    };
+
+    request.onerror = function()
+    {
+	alert("error " + request.readystate + " " + request.status);
+    };
+
+    request.send();
+
+};
 
 L.sound = {};
 
