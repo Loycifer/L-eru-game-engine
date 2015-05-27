@@ -362,6 +362,14 @@ L.system.setLoadScreen = function()
 
     };
 
+    var loadKeys = new L.keyboard.Keymap();
+    loadKeys.bindKey("esc", "keyup", function() {
+	if (system.loadedResources / system.expectedResources >= 1)
+	{
+	    L.game.main();
+	}
+    });
+    loadScreen.keymap = loadKeys;
 
     progressOrb.update = progressOrb.updateLoading;
 

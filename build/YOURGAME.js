@@ -9,7 +9,7 @@ L.game.settings = function() {
     //This is where you may adjust your initial game settings
 
     //Set the internal resolution of your game (width, height)
-    L.system.setResolution(640, 400);
+    L.system.setResolution(900, 600);
 
     //Set the desired DOM location of the game's canvas
     L.system.setCanvasLocation(document.body);
@@ -30,7 +30,7 @@ L.game.resources = function() {
     //This is where you load resources such as textures and audio
     //Textures are stored in L.texture[x], where x is the texture's name
     //Sounds and music are stored in L.sound[x]
-    
+
     //eg. L.load.texture("littleDude.png", "little-dude");
     //    L.load.audio("audioFile", "audioName");
 
