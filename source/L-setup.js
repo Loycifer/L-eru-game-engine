@@ -206,16 +206,27 @@ L.system.setLoadScreen = function()
 	}
     };
 
+/*
+    var loadingText = new objects.Textbox("0%", width / 2, height / 2 + (width / 30));
 
-    var loadingText = new objects.Textbox("0%", width / 2 * 1.03, (height / 2) + (width / 8) + (width / 30));
-    loadingText.alignment = "right";
     loadingText.textFill = "white";
     loadingText.backgroundFill = "";
     loadingText.fontSize = (width / 30);
-    loadingText.y -= loadingText.fontSize / 2;
+    //loadingText.y -= loadingText.fontSize / 2;
+    loadingText.alignment = "center";
     loadingText.visible = true;
     loadingText.autoSize();
-    loadingText.alpha = 0;
+    loadingText.alpha = 1;
+    */
+
+    var loadingWhite = new objects.Textbox("loading",width/2,height/2);
+    loadingWhite.alignment = "center";
+    loadingWhite.textFill = "white";
+    loadingWhite.backgroundFill = "";
+    loadingWhite.fontSize = (width / 30);
+    loadingWhite.y -= loadingWhite.fontSize / 1.5;
+    loadingWhite.visible = true;
+    loadingWhite.autoSize();
 
     var textLogo = new objects.Sprite("base64test");
     textLogo.width = 402;
@@ -282,14 +293,14 @@ L.system.setLoadScreen = function()
 	var potentialRatio = system.loadedResources / system.expectedResources;
 	var currentRatio = this.orbRatio;
 	this.loadTimer += dt;
-	if (this.loadTimer >= 2 && loadingText.alpha < 1)
+	/* (this.loadTimer >= 1 && loadingText.alpha < 1)
 	{
 	    loadingText.alpha += 5 * dt;
 	}
 	if (loadingText.alpha > 1)
 	{
 	    loadingText.alpha = 1;
-	}
+	}*/
 	if (currentRatio < potentialRatio)
 	{
 	    this.orbRatio += this.growthRatioPerSecond * dt;
@@ -304,14 +315,15 @@ L.system.setLoadScreen = function()
 	    this.orbRatio = 1;
 	    this.update = this.updateAnimating;
 	    this.draw = this.drawAnimating;
-	    loadingText.text = "100%";
+	   // loadingText.text = "100%";
 	}
-	else
+	/*else
 	{
-	    var text = "000" + Math.floor(this.orbRatio * 100) + "%";
+	    var text = Math.floor(this.orbRatio * 100) + "%";
 
-	    loadingText.text = text.substring(text.length - 4, text.length);
+	    loadingText.text = text;
 	}
+	*/
 
 
     };
@@ -319,26 +331,22 @@ L.system.setLoadScreen = function()
     progressOrb.updateAnimating = function(dt)
     {
 	iMake.update(dt);
-	if (loadingText.alpha > 0)
+	/*if (loadingText.alpha > 0)
 	{
 	    loadingText.alpha -= dt * 10;
 	}
 	if (loadingText.alpha < 0)
 	{
 	    loadingText.alpha = 0;
-	}
+	}*/
 	this.rainbowTimer += dt;
 	lineObject.alpha -= dt / 4.5;
 	vignette.alpha -= dt / 32;
 	textLogo.setScale(textLogo.scale.x + (dt * 0.025));
 	if (this.rainbowTimer >= 7)
 	{
-
 	    this.update = this.updateFadeOut;
-
 	}
-
-
     };
 
     progressOrb.updateFadeOut = function(dt)
@@ -375,11 +383,21 @@ L.system.setLoadScreen = function()
 
     progressOrb.drawOrb = function(layer, ratio)
     {
+	loadingWhite.draw(layer);
+	//loadingText.draw(layer);
 	layer.globalAlpha = this.orbAlpha;
 	layer.beginPath();
 	layer.arc(this.x, this.y, this.radius * ratio, 0, 2 * Math.PI);
 	layer.fillStyle = this.orbColor;
 	layer.fill();
+	layer.save();
+	    layer.beginPath();
+	    layer.arc(this.x, this.y, this.radius * ratio, 0, Math.PI * 2, false);
+	    layer.clip();
+	loadingWhite.textFill = "black";
+	loadingWhite.draw(layer);
+	loadingWhite.textFill = "white";
+	layer.restore();
     };
 
     progressOrb.drawCircle = function(layer)
@@ -455,7 +473,7 @@ L.system.setLoadScreen = function()
 	this.drawDivisions(layer);
 	this.drawOrb(layer, this.orbRatio);
 	this.drawCircle(layer);
-	loadingText.draw(layer);
+	//loadingText.draw(layer);
 
     };
 
@@ -463,7 +481,7 @@ L.system.setLoadScreen = function()
     {
 	this.drawOrb(layer, this.orbRatio);
 	this.drawCircle(layer);
-	loadingText.draw(layer);
+	//loadingText.draw(layer);
 	this.drawRainbow(layer);
 
 
