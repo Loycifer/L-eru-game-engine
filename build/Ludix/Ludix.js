@@ -672,7 +672,7 @@ L.system.setup = function()
 
 
 
-    window.addEventListener("keydown", doKeyDown, true);
+    window.addEventListener("keydown", doKeyDown, false);
     function doKeyDown(event) {
 	if (L.system.currentScene.doKeyDown !== undefined)
 	{
@@ -680,7 +680,7 @@ L.system.setup = function()
 	}
     }
 
-    window.addEventListener("keyup", doKeyUp, true);
+    window.addEventListener("keyup", doKeyUp, false);
     function doKeyUp(event) {
 	if (L.system.currentScene.doKeyUp !== undefined)
 	{
@@ -1299,6 +1299,7 @@ L.display.autoResize = function()
     document.body.style.width = "100%";//L.system.renderCanvas[0].style.width;
     //document.body.style.height = canvasHeight * L.system.canvasRatio - 0 + "px";
     document.body.style.height = Math.floor(windowHeight) + "px";
+     document.body.style.marginTop = (Math.floor(windowHeight) - canvasHeight * L.system.canvasRatio)/2 + "px";
 };
 ;
 

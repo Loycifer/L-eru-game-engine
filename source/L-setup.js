@@ -119,20 +119,22 @@ L.system.setup = function()
 
 
 
-    window.addEventListener("keydown", doKeyDown, true);
+    window.addEventListener("keydown", doKeyDown, false);
     function doKeyDown(event) {
 	if (L.system.currentScene.doKeyDown !== undefined)
 	{
 	    L.system.currentScene.doKeyDown(event);
 	}
+	return false;
     }
 
-    window.addEventListener("keyup", doKeyUp, true);
+    window.addEventListener("keyup", doKeyUp, false);
     function doKeyUp(event) {
 	if (L.system.currentScene.doKeyUp !== undefined)
 	{
 	    L.system.currentScene.doKeyUp(event);
 	}
+	return false;
     }
 
     if (L.system.fullscreen) {
