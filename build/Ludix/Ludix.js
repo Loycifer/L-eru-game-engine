@@ -3446,21 +3446,36 @@ L.objects.Timeline.prototype.reset = function()
 
 L.objects.SpriteMask = function (textureName,red,green,blue,alpha,width,height)
 {
-    var texture = L.textures[textureName];
-    var targetWidth = (width === undefined)?texture.width:width;
-    var targetHeight = (height === undefined)?texture.height:height;
+
+    var texture = this.sourceTexture = L.textures[textureName];
+    var targetWidth = this.width = (width === undefined)?texture.width:width;
+    var targetHeight = this.height = (height === undefined)?texture.height:height;
 
     if ((targetWidth === 0) || (targetHeight === 0))
     {
 	alert("Texture '" + texture + "' does not seem to have any dimensions.");
     }
 
-    var maskCanvas = document.createElement("canvas");
+    var maskCanvas = this.texture = document.createElement("canvas");
     maskCanvas.width = targetWidth;
     maskCanvas.height = targetHeight;
-    var ctx = maskCanvas.getContext("2d");
+    var ctx = this.ctx = maskCanvas.getContext("2d");
     ctx.drawImage(texture,0,0);
-    var imageData = ctx.getImageData(0,0,targetWidth,targetHeight);
+    this.setColor(red,green,blue,alpha);
+
+
+};
+
+L.objects.SpriteMask.prototype.saveAs = function(textureName)
+{
+    L.textures[textureName] = this.texture;
+};
+
+L.objects.SpriteMask.prototype.setColor = function(red,green,blue,alpha)
+{
+var width = this.width;
+var height = this.height;
+    var imageData = this.ctx.getImageData(0,0,width,height);
     var dataLength = imageData.data.length;
     for (var i = 0; i < dataLength; i+=4)
     {
@@ -3468,10 +3483,7 @@ L.objects.SpriteMask = function (textureName,red,green,blue,alpha,width,height)
 	imageData.data[i+1] = green;
 	imageData.data[i+2] = blue;
     }
-    ctx.clearRect(-1,-1,targetWidth+1,targetHeight+1);
+    this.ctx.clearRect(-1,-1,width+1,height+1);
 
-   ctx.putImageData(imageData,0,0);
-    return maskCanvas;
-
-
+   this.ctx.putImageData(imageData,0,0);
 };;globalScope[nameSpace] = L;})(window,'L');
