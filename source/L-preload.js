@@ -95,7 +95,7 @@ Array.prototype.removeElement = function(element)
     return this;
 };
 
-Array.prototype.draw = function(targetContext)
+Array.prototype.draw = function(targetContext, camera)
 {
     var length = this.length;
 
@@ -103,7 +103,7 @@ Array.prototype.draw = function(targetContext)
     {
 	if (this[i] && this[i].draw)
 	{
-	    this[i].draw(targetContext);
+	    this[i].draw(targetContext,camera);
 	}
     }
 };

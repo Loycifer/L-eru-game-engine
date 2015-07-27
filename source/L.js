@@ -136,6 +136,7 @@ L.scenes = {};
  */
 
 L.texture = {};
+L.textures = L.texture;
 
 L.load = {};
 

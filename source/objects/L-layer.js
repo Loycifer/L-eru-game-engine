@@ -16,9 +16,21 @@ L.objects.Layer = function(name)
 
 
 
-L.objects.Layer.prototype.autoDraw = function()
+L.objects.Layer.prototype.autoDraw = function(camera)
 {
-    this.objects.draw(this.targetContext);
+    //this.objects.draw(this.targetContext,camera);
+
+    var objectsToDraw = this.objects;
+    var length = objectsToDraw.length;
+    var currentObject={};
+    for (var i = 0; i < length; i++)
+    {
+	currentObject=objectsToDraw[i];
+	if (currentObject && currentObject.draw)
+	{
+	    currentObject.draw(this.targetContext,camera);
+	}
+    }
 
 };
 

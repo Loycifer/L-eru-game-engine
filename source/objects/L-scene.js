@@ -79,7 +79,7 @@ L.objects.Scene.prototype.autoDraw = function()
     {
 	var currentLayer = this.layers[layerOrder[i]];
 	this.activeLayer = currentLayer;
-	currentLayer.draw();
+	currentLayer.draw(this.camera);
     }
     layer.globalAlpha = 1;
     renderContext.globalAlpha = this.motionBlur;

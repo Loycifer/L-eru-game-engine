@@ -95,7 +95,7 @@ Array.prototype.removeElement = function(element)
     return this;
 };
 
-Array.prototype.draw = function(targetContext)
+Array.prototype.draw = function(targetContext, camera)
 {
     var length = this.length;
 
@@ -103,7 +103,7 @@ Array.prototype.draw = function(targetContext)
     {
 	if (this[i] && this[i].draw)
 	{
-	    this[i].draw(targetContext);
+	    this[i].draw(targetContext,camera);
 	}
     }
 };
@@ -401,6 +401,7 @@ L.scenes = {};
  */
 
 L.texture = {};
+L.textures = L.texture;
 
 L.load = {};
 
@@ -678,6 +679,7 @@ L.system.setup = function()
 	{
 	    L.system.currentScene.doKeyDown(event);
 	}
+	return false;
     }
 
     window.addEventListener("keyup", doKeyUp, false);
@@ -686,6 +688,7 @@ L.system.setup = function()
 	{
 	    L.system.currentScene.doKeyUp(event);
 	}
+	return false;
     }
 
     if (L.system.fullscreen) {
@@ -2061,9 +2064,21 @@ L.objects.Layer = function(name)
 
 
 
-L.objects.Layer.prototype.autoDraw = function()
+L.objects.Layer.prototype.autoDraw = function(camera)
 {
-    this.objects.draw(this.targetContext);
+    //this.objects.draw(this.targetContext,camera);
+
+    var objectsToDraw = this.objects;
+    var length = objectsToDraw.length;
+    var currentObject={};
+    for (var i = 0; i < length; i++)
+    {
+	currentObject=objectsToDraw[i];
+	if (currentObject && currentObject.draw)
+	{
+	    currentObject.draw(this.targetContext,camera);
+	}
+    }
 
 };
 
@@ -2194,7 +2209,7 @@ L.objects.Scene.prototype.autoDraw = function()
     {
 	var currentLayer = this.layers[layerOrder[i]];
 	this.activeLayer = currentLayer;
-	currentLayer.draw();
+	currentLayer.draw(this.camera);
     }
     layer.globalAlpha = 1;
     renderContext.globalAlpha = this.motionBlur;
@@ -3424,5 +3439,39 @@ L.objects.Timeline.prototype.reset = function()
   this.paused=true;
   this.timer = 0;
   this.nextEvent=0;
+
+};;
+/* global L */
+
+
+L.objects.SpriteMask = function (textureName,red,green,blue,alpha,width,height)
+{
+    var texture = L.textures[textureName];
+    var targetWidth = (width === undefined)?texture.width:width;
+    var targetHeight = (height === undefined)?texture.height:height;
+
+    if ((targetWidth === 0) || (targetHeight === 0))
+    {
+	alert("Texture '" + texture + "' does not seem to have any dimensions.");
+    }
+
+    var maskCanvas = document.createElement("canvas");
+    maskCanvas.width = targetWidth;
+    maskCanvas.height = targetHeight;
+    var ctx = maskCanvas.getContext("2d");
+    ctx.drawImage(texture,0,0);
+    var imageData = ctx.getImageData(0,0,targetWidth,targetHeight);
+    var dataLength = imageData.data.length;
+    for (var i = 0; i < dataLength; i+=4)
+    {
+	imageData.data[i] = red;
+	imageData.data[i+1] = green;
+	imageData.data[i+2] = blue;
+    }
+    ctx.clearRect(-1,-1,targetWidth+1,targetHeight+1);
+
+   ctx.putImageData(imageData,0,0);
+    return maskCanvas;
+
 
 };;globalScope[nameSpace] = L;})(window,'L');
