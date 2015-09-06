@@ -171,6 +171,11 @@ Math.jordanCurve = function(x, y, vertices)
     return isInPoly;
 };
 
+Math.HSLtoRGB = function(hue,saturation,lightness)
+{
+
+};
+
 Math.log10 = function(x)
 {
     return (Math.log(x) / Math.LN10);
@@ -553,6 +558,56 @@ L.system.fxContext = [];
 L.system.pixelCanvas = [];
 L.system.pixelContext = [];;
 
+L.objects.Camera = function()
+{
+    //2D Settings
+    this.x = 0;
+    this.y = 0;
+    this.angle = 0;
+    this.zoom = 1;
+
+
+    //3D settings
+    this.z = 0;
+    this.yaw = 0;
+    this.pitch = 0;
+    this.focalLength = 1000;
+};
+
+L.objects.Camera.update = function(dt)
+{
+
+};
+
+L.objects.Camera.followObject = function(targetObject)
+{
+    this.x = targetObject.x;
+    this.y = targetObject.y;
+};
+
+
+L.objects.Camera.prototype.setXY = function(x,y)
+{
+  this.x = x;
+  this.y = y;
+};
+L.objects.Camera.prototype.setXYZ = function(x,y,z)
+{
+    this.x = x;
+    this.y = y;
+    this.z = z;
+};
+
+L.objects.Camera.prototype.setViewAngle = function(angle)
+{
+    this.focalLength = L.system.width/angle;
+};
+
+L.objects.Camera.prototype.getViewAngle = function()
+{
+  return L.system.width/this.focalLength;
+};;
+
 
 
 
@@ -725,7 +780,7 @@ L.system.setLoadScreen = function()
 
 
     var loadScreen = new objects.Scene();
-    loadScreen.motionBlur = 1;
+    loadScreen.motionBlur = 0.8;
     loadScreen.bgFill = "#000000";
 
     var iMake = new objects.Textbox("https://github.com/Loycifer/Ludix.js", width / 2, 5 * height / 6);
@@ -2147,7 +2202,7 @@ L.objects.Scene = function(name)
     };
     this.layerOrder = ["background"];
     this.bgFill = "blueviolet";
-    this.motionBlur = 1;
+    this.alpha = 1;
     this.keymap = new L.keyboard.Keymap();
 
     this.activeLayer = {};
@@ -2211,8 +2266,14 @@ L.objects.Scene.prototype.autoDraw = function()
 	this.activeLayer = currentLayer;
 	currentLayer.draw(this.camera);
     }
-    layer.globalAlpha = 1;
-    renderContext.globalAlpha = this.motionBlur;
+    if (layer.globalAlpha !== 1)
+    {
+	layer.globalAlpha = 1;
+    }
+    if (renderContext.globalAlpha !== this.alpha)
+    {
+	renderContext.globalAlpha = this.alpha;
+    }
     renderContext.drawImage(system.bufferCanvas[0], 0, 0, width, height);
 };
 

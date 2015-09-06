@@ -10,6 +10,7 @@ module.exports = function(grunt) {
     var fileNames = [
 	'L-preload.js',
 	'L.js',
+	'L-camera.js',
 	'L-setup.js',
 	'L-mouse.js',
 	'L-display.js',

@@ -17,7 +17,7 @@ L.objects.Scene = function(name)
     };
     this.layerOrder = ["background"];
     this.bgFill = "blueviolet";
-    this.motionBlur = 1;
+    this.alpha = 1;
     this.keymap = new L.keyboard.Keymap();
 
     this.activeLayer = {};
@@ -81,8 +81,14 @@ L.objects.Scene.prototype.autoDraw = function()
 	this.activeLayer = currentLayer;
 	currentLayer.draw(this.camera);
     }
-    layer.globalAlpha = 1;
-    renderContext.globalAlpha = this.motionBlur;
+    if (layer.globalAlpha !== 1)
+    {
+	layer.globalAlpha = 1;
+    }
+    if (renderContext.globalAlpha !== this.alpha)
+    {
+	renderContext.globalAlpha = this.alpha;
+    }
     renderContext.drawImage(system.bufferCanvas[0], 0, 0, width, height);
 };
 
