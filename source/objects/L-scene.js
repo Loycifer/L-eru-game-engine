@@ -71,7 +71,10 @@ L.objects.Scene.prototype.autoDraw = function()
     var renderContext = system.renderContext[0];
     var width = system.width;
     var height = system.height;
+    if (layer.fillStyle !== this.bgFill)
+    {
     layer.fillStyle = this.bgFill;
+    }
     layer.fillRect(0, 0, width, height);
     var layerOrder = this.layerOrder;
     var length = layerOrder.length;
