@@ -28,7 +28,8 @@ L.start = function() {
     game.resources();
     system.setLoadScreen();
 
-    (function gameLoop() {
+    var gameLoop = function() {
+	requestAnimationFrame(gameLoop);
 	var system = L.system;
 
 	if (system.nextScene !== undefined)
@@ -43,15 +44,14 @@ L.start = function() {
 	var dt = system.dt = system.timeScale * (system.now - system.then) / 1000;
 	if (dt > 1 / system.frameCap)
 	{
-	    system.dt = 1 / system.frameCap;
+	    dt = system.dt = 1 / system.frameCap;
 	}
 	system.then = now;
-	thisScene.update(dt * ((L.system.isPaused) ? 0 : 1));
+	thisScene.update(dt * ((system.isPaused) ? 0 : 1));
 	thisScene.draw();
-	requestAnimationFrame(gameLoop);
+    };
+    gameLoop();
 
-	//thisScene.draw();
-    })();
 };
 
 L.log = function(message)

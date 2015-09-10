@@ -171,7 +171,7 @@ L.system.setLoadScreen = function()
 
 
     var loadScreen = new objects.Scene();
-    loadScreen.motionBlur = 1;
+    loadScreen.motionBlur = 0.8;
     loadScreen.bgFill = "#000000";
 
     var iMake = new objects.Textbox("https://github.com/Loycifer/Ludix.js", width / 2, 5 * height / 6);
