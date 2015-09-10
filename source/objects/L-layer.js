@@ -12,6 +12,8 @@ L.objects.Layer = function(name)
     this.isClickable = true;
     this.scrollRateX = 1;
     this.scrollRateY = 1;
+    this.visible = true;
+    this.updating = true;
 };
 
 
@@ -19,7 +21,10 @@ L.objects.Layer = function(name)
 L.objects.Layer.prototype.autoDraw = function(camera)
 {
     //this.objects.draw(this.targetContext,camera);
-
+if (!this.visible)
+{
+    return;
+}
     var objectsToDraw = this.objects;
     var length = objectsToDraw.length;
     var currentObject={};
@@ -40,6 +45,10 @@ L.objects.Layer.prototype.draw = L.objects.Layer.prototype.autoDraw;
 
 L.objects.Layer.prototype.autoUpdate = function(dt)
 {
+    if (!this.updating)
+    {
+	return;
+    }
     this.objects.update(dt);
 
     if (this.sorted)

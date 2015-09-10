@@ -3,12 +3,12 @@
  */
 
 //window.performance.now() polyfill
-if (!window.performance)
+if (window.performance === undefined)
 {
     window.performance = {};
 }
 
-if (!window.performance.now)
+if (window.performance.now === undefined)
 {
     window.performance.now = function() {
 	return Date.now();
@@ -136,7 +136,7 @@ Array.prototype.handleClick = function(mouseX, mouseY, e)
 	}
     }
 };
-/*
+
  Number.prototype.clamp = function(min, max) {
  return Math.min(Math.max(this, min), max);
  };
@@ -146,7 +146,7 @@ Array.prototype.handleClick = function(mouseX, mouseY, e)
  return (this === this.clamp(min,max));
  };
 
- */
+
 
 //Math extended methods
 
@@ -169,6 +169,12 @@ Math.jordanCurve = function(x, y, vertices)
 	}
     }
     return isInPoly;
+};
+
+
+Math.HSLtoRGB = function(hue,saturation,lightness)
+{
+
 };
 
 Math.log10 = function(x)
