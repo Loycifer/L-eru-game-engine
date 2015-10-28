@@ -25,7 +25,8 @@ module.exports = function(grunt) {
 	'L-polygon.js',
 	'L-timeline.js',
 	'L-spriteMask.js',
-	'L-triangle2d.js'
+	'L-triangle2d.js',
+	'L-rcWindow.js'
     ];
     var numberOfFiles = fileNames.length;
     for (var filename = 0; filename < numberOfFiles; filename++)

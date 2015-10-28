@@ -20,6 +20,12 @@ L.objects.Triangle2D = function(verticesArray)
 
 L.objects.Triangle2D.prototype.draw = function(ctx)
 {
+
+    ctx.beginPath();
+    ctx.moveTo(this.x1, this.y1);
+    ctx.lineTo(this.x2, this.y2);
+    ctx.lineTo(this.x3, this.y3);
+    ctx.closePath();
     if (this.stroke)
     {
 	if (this.lineWidth !== ctx.lineWidth)
@@ -30,13 +36,9 @@ L.objects.Triangle2D.prototype.draw = function(ctx)
 	{
 	    ctx.strokeStyle = this.strokeStyle;
 	}
+	ctx.stroke();
     }
-    ctx.beginPath();
-    ctx.moveTo(this.x1, this.y1);
-    ctx.lineTo(this.x2, this.y2);
-    ctx.lineTo(this.x3, this.y3);
-    ctx.closePath();
-    ctx.stroke();
+
 };
 
 L.objects.Triangle2D.prototype.findIncenter = function()
