@@ -42,7 +42,7 @@ module.exports = function(grunt) {
 	    options:
 	    {
 		separator: ";" + grunt.util.linefeed,
-		banner: "(function(globalScope,nameSpace){",
+		banner: "'use strict';(function(globalScope,nameSpace){",
 		footer: ";globalScope[nameSpace] = L;})(window,'L');"
 	    },
 	    dist: {

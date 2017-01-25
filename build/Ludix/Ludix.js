@@ -1,4 +1,5 @@
-(function(globalScope,nameSpace){/*
+'use strict';(function(globalScope,nameSpace){"use strict";
+/*
  * Monkeypatches. Ook ook.
  */
 
