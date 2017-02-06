@@ -1,5 +1,4 @@
-'use strict';(function(globalScope,nameSpace){"use strict";
-/*
+'use strict';(function(globalScope,nameSpace){/*
  * Monkeypatches. Ook ook.
  */
 
@@ -576,12 +575,12 @@ L.objects.Camera = function()
     this.focalLength = 1000;
 };
 
-L.objects.Camera.update = function(dt)
+L.objects.Camera.prototype.update = function(dt)
 {
 
 };
 
-L.objects.Camera.followObject = function(targetObject)
+L.objects.Camera.prototype.followObject = function(targetObject)
 {
     this.x = targetObject.x;
     this.y = targetObject.y;
