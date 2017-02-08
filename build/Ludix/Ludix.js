@@ -1613,7 +1613,7 @@ L.objects.Sprite = function(textureName, options)
 
 
     this.blendMode = "";
-    this.onClick = function() {
+    this.onClick = function(mouseX, mouseY, e) {
 
     };
     this.currentAnimation = "idle";
@@ -1863,8 +1863,7 @@ L.objects.Sprite.prototype.handleClick = function(mouseX, mouseY, e)
 		    }
 		}
 	    }
-	}
-	else if (
+	} else if (
 	this.angle !== 0 &&
 	Math.jordanCurve(mouseX, mouseY, this.getVertices()))
 	{
@@ -1980,14 +1979,17 @@ L.objects.Sprite.prototype.pushProperties = function(obj, propertiesArray)
     }
 };
 
-L.objects.Sprite.prototype.pushPosition = function(obj)
+L.objects.Sprite.prototype.pushPosition = function(obj, pushOffset)
 {
     obj.x = this.x;
     obj.y = this.y;
-    obj.offset = {
-	x: this.offset.x,
-	y: this.offset.y
-    };
+    if (pushOffset)
+    {
+	obj.offset = {
+	    x: this.offset.x,
+	    y: this.offset.y
+	};
+    }
 };
 
 /*
@@ -2014,8 +2016,7 @@ L.objects.Sprite.prototype.getVertices = function()
 		(this.nudeVertices[i][0] - this.handle.x) * Math.sin(-angle) + (this.nudeVertices[i][1] - this.handle.y) * Math.cos(-angle)
 	    ];
 	}
-    }
-    else
+    } else
     {
 	for (var i = 0; i < length; i++)
 	{
@@ -3175,6 +3176,16 @@ L.keyboard.Keymap = function()
     return this;
 };
 
+
+L.keyboard.Keymap.prototype.forceKeyDown = function(keyString)
+{
+    this.doKeyDown({keyCode : (L.keyboard.keyCodeFromString(keyString))});
+};
+
+L.keyboard.Keymap.prototype.forceKeyUp = function(keyString)
+{
+    this.doKeyUp({keyCode : (L.keyboard.keyCodeFromString(keyString))});
+};
 /**
  * This method is called by keymap's parent scene on a keydown event
  * @method

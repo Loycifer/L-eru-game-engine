@@ -270,6 +270,16 @@ L.keyboard.Keymap = function()
     return this;
 };
 
+
+L.keyboard.Keymap.prototype.forceKeyDown = function(keyString)
+{
+    this.doKeyDown({keyCode : (L.keyboard.keyCodeFromString(keyString))});
+};
+
+L.keyboard.Keymap.prototype.forceKeyUp = function(keyString)
+{
+    this.doKeyUp({keyCode : (L.keyboard.keyCodeFromString(keyString))});
+};
 /**
  * This method is called by keymap's parent scene on a keydown event
  * @method
